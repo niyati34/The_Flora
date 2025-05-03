@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garden Shop</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Include Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js">
+	<!-- Replace the previous Bootstrap and Bootstrap JS links with the following for Bootstrap 5 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Chakra+Petch&display=swap">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+
+	
+
+    <style>
+			
+				/* Header Styling */
+        .navbar {
+            background-color: #FFFFFF; /* Green */
+        }
+        .navbar-brand {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        .navbar-brand img {
+            width: 300px;
+            height: 100px;
+            margin-right: 10px;
+        }
+		
+        .navbar .search-bar {
+            margin-right: 50px;
+        }
+        .nav-icons {
+            font-size: 24px;
+        }
+
+        /* Custom CSS for the icons */
+        .nav-icons a i {
+            color: #2B5943; /* Blue color for icons */
+        }
+
+        /* Custom CSS for the search bar */
+        .search-bar {
+            background-color: #FFFFFF; /* Blue background color */
+            border: none; /* Remove the border */
+        }
+
+        .search-bar input[type="text"] {
+            color: #000000; /* Text color (white) */
+        }
+
+        .search-bar button {
+            background-color: #2B5943; /* Button background color (a darker blue) */
+            color: #FFFFFF; /* Button text color (white) */
+        }
+
+        /* Center the logo and website name */
+        .logo-container {
+            text-align: center;
+        }
+
+        /* Custom CSS for navigation links */
+        .navbar-nav .nav-item .nav-link {
+            font-family: "monospace", sans-serif; /* Replace "YourFont" with your desired font-family */
+            color: #000000; /* Change the color to your desired color */
+			font-weight: bold;
+        }
+			
+		/* Custom styles for dropdown menu items */
+		.dropdown-item {
+			font-family:'Chakra Petch'; /* Change the font family to your preferred font */
+			color: #047593; /* Change the color to your preferred color using a color code or name */
+			font-weight: bold;
+		}
+
+
+
+        /* Main Content Styling */
+        .info {
+            background-color: #F5F5F5; /* Light Gray */
+            padding: 50px 0;
+            text-align: center;
+        }
+        .info h2 {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333333; /* Dark Gray */
+        }
+        .info p {
+            font-size: 16px;
+        }
+        .info-buttons {
+            margin-top: 30px;
+        }
+        .info-buttons a {
+            display: inline-block;
+            background-color: #3CB371; /* Green */
+            color: #FFFFFF; /* White */
+            padding: 10px 20px;
+            text-decoration: none;
+            font-weight: bold;
+            border-radius: 5px;
+            margin-right: 10px;
+            transition: background-color 0.3s ease;
+        }
+        .info-buttons a:hover {
+            background-color: #2E8B57; /* Darker Green on hover */
+        }
+        .animation-section {
+            text-align: center;
+        }
+        .gif-animation {
+            max-width: 100%;
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+				/* CSS for the rotating image slider */
+		.image-slider {
+			text-align: center;
+			padding: 20px;
+		}
+
+		.slider {
+			display: flex;
+			overflow: hidden;
+		}
+
+		.slider-image {
+			width: 200%;
+			hight: 40%;
+			display: none;
+		}
+
+		.active {
+			display: block;
+		}
+		#carouselExampleIndicators {
+			max-width: 100%; /* Adjust the maximum width as needed */
+			margin: 0 auto; /* Center the carousel */
+		}
+
+		.carousel-inner img {
+			width: 100%;
+			height: 400px; /* Adjust the height as needed */
+			object-fit: cover; /* Maintain aspect ratio and cover the entire area */
+		}			
+		.carousel-inner {
+			height: 500px; /* Adjust the height as needed */
+		}
+		.carousel-inner img {
+			width: 100%;
+			height: 100%;
+			object-fit: cover;
+		}
+		
+				.gif-animation {
+			max-width: 50%; /* You can adjust the percentage to control the size */
+			height: auto; /* Maintain aspect ratio */
+		}
+				/* CSS for New Launches Section */
+		.new-launches {
+			background-color: #fff;
+			padding: 20px 0;
+			box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+			margin-top: 10px; /* Add some space from the slider */
+		}
+
+		.section-title {
+			text-align: center;
+			font-size: 24px;
+			font-weight: bold;
+			margin-bottom: 20px;
+		}
+
+		.product {
+			border: 1px solid #ccc;
+			padding: 10px;
+			margin-bottom: 20px;
+			overflow: hidden;
+		}
+
+		.product video {
+			max-width: 100%;
+			height: auto;
+		}
+
+		/* Additional Animation (to the right) */
+		.additional-animation {
+			/* Add your styles for the additional animation here */
+		}
+			   /* Custom button styles for "View Product" buttons in "New Launches" product boxes */
+		.btn-primary {
+			background-color: #2B5943; /* Change to your desired button color */
+			color: #FFFFFF; /* Change to your desired text color */
+			font-weight: bold;
+			border: none;
+		}
+				/* Custom button styles for the "View All" button in the "New Launches" section */
+		.btn-custom {
+			background-color:  #2B5943; /* Change to your desired button color */
+			color: #FFFFFF; /* Change to your desired text color */
+			font-weight: bold;
+			/* Add any other styles you want */
+		}
+
+						/* Add this CSS code to your existing <style> section or external CSS file */
+		.what-makes-flora {
+			background-color: #2B5943;
+			color: #fff;
+			padding: 40px 0; /* Adjust padding as needed */
+		}
+
+		.section-title {
+			font-size: 24px;
+			font-weight: bold;
+			margin-bottom: 20px;
+			padding-top: 10px; /* Add padding to the top of the section title */
+			font-family: 'Josefin Slab', sans-serif;
+		}
+
+		.row {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+		}
+
+		.col-md-3 {
+			flex-basis: calc(25% - 10px); /* Adjust column width as needed */
+			margin-right: 10px; /* Add some space between columns */
+			margin-bottom: 20px;
+		}
+
+		.img-fluid {
+			max-width: 100%;
+			height: auto;
+		}
+		.what-makes-flora .column-content p {
+			font-family: 'Josefin Slab', sans-serif; /* Replace 'YourFont' with the chosen font */
+		}
+				.what-makes-flora .column-content img {
+			max-width: 50%; /* Set the maximum width to 50% of the container width */
+			height: auto; /* Maintain the aspect ratio of the images */
+		}
+				
+				.faq .card-header .btn-link {
+                text-decoration: none; /* Remove underline */
+                font-family: 'Chakra Petch', sans-serif; /* Change to your desired font-family */
+                font-size: 18px; /* Change to your desired font size */
+                color: #333; /* Change to your desired font color */
+                font-weight: bold; /* Change to your desired font weight */
+            }
+			 .faq .card-body {
+                color: #2B5943; /* Change to your desired font color for answers */
+                font-family: 'Chakra Petch', sans-serif; /* Change to your desired font-family for answers */
+                font-size: 16px; /* Change to your desired font size for answers */
+            }
+					 /* Sticky header */
+			.sticky {
+				position: fixed;
+				top: -100px;
+				left: 0;
+				width: 100%;
+				background-color: #FFFFFF;
+				transition: top 0.3s;
+				z-index: 1000; /* Ensure it's on top of other elements */
+			}
+			.sticky.show {
+				top: 0;
+				transition: top 0.3s;
+			}
+			/* Add this CSS to your existing styles */
+			.sticky {
+				position: fixed;
+				top: 0;
+				width: 100%;
+				z-index: 1000;
+			}
+
+			#header-placeholder {
+				height: 0;
+			}
+
+			.main-content {
+				padding-top: 120px; /* Adjust this value to match the height of your header */
+			}
+
+						/* Add space to the text within the footer */
+				/* Style the headings in the footer */
+			footer h4 {
+				font-size: 20px;
+				font-weight: bold;
+				font-family: 'Cinzel', serif;
+				color: #6A9304; /* Change to your desired color */
+				margin-top: 20px; /* Add margin to the top of the heading */
+			}
+			     footer p {
+				font-size: 16px;
+				color: #6A9304; /* Change to your desired color */
+				/* Additional styles go here */
+			}
+
+			/* Style the links in the footer */
+			footer ul.list-unstyled {
+				margin-top: 10px; /* Add margin to the top of the list */
+			}
+
+			footer ul.list-unstyled li a {
+				color: #6A9304; /* Change to your desired color */
+				text-decoration: none;
+				transition: color 0.3s ease;
+			}
+
+			footer ul.list-unstyled li a:hover {
+				color: #2B5943; /* Change to the hover color you prefer */
+			}
+
+			/* Style the social media icons */
+			footer ul.list-inline li a {
+				color: #6A9304; /* Change to your desired color */
+				font-size: 24px;
+				margin-right: 10px;
+			}
+
+			/* Change the icon color on hover */
+			footer ul.list-inline li a:hover {
+				color: #2B5943; /* Change to the hover color you prefer */
+			}
+
+			/* Customize the footer copyright text */
+			footer p.copyright {
+				font-size: 14px;
+				margin-top: 20px; /* Add margin to the top of the copyright text */
+			}
+						/* Add space between footer and FAQ section */
+			.faq {
+				margin-top: 40px; /* Adjust the margin-top value to control the space */
+			}
+			/* Add space between footer and FAQ section */
+			footer {
+				margin-top: 20px;
+				padding-top: 20px;
+			}
+
+			section.faq {
+				margin-top: 40px;
+				padding-top: 40px;
+			}
+            main {
+    margin-top: 200px; /* Adjust this value as needed */
+}
+
+
+
+					
+
+
+
+
+				
+
+
+								
+		
+    </style>
+	
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500&family=Josefin+Slab:wght@500&family=Macondo&display=swap');
+</style>  
+
+	
+</head>
+<body>
+    <!-- Header -->
+    <!-- Header -->
+
+ <header class="sticky">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container">
+            <!-- Search Bar (Top Left) -->
+            <form class="form-inline search-bar">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search...">
+                <button class="btn btn-success" type="submit"><i class="fas fa-search"></i></button>
+            </form>
+            <!-- Logo and Website Name (Center) -->
+            <div class="logo-container">
+                <a class="navbar-brand" href="#">
+                    <img src="nm.png" alt="Garden Shop Logo">
+                </a>
+                <!-- Navigation Links (Beneath Logo) -->
+                <ul class="navbar-nav ml-auto">
+				
+                    <li class="nav-item">
+                        <a class="nav-link" href="1.html">Home</a>
+                    </li>
+             
+				    <li class="nav-item dropdown"> <!-- Add 'dropdown' class to create a dropdown menu -->
+						<a class="nav-link dropdown-toggle" href="#" id="plantsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Plants
+						</a>
+						<div class="dropdown-menu" aria-labelledby="plantsDropdown"> <!-- Dropdown menu content -->
+							<a class="dropdown-item" href="Air Purifying Plants.html">Air Purifying Plants</a>
+							<a class="dropdown-item" href="Indoor Plants.html">Indoor Plants</a>
+							<a class="dropdown-item" href="Low Maintenance Plants.html">Low Maintenance Plants</a>
+						</div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Planters.html">Planters</a>
+                    </li>
+					
+					<li class="nav-item">
+                        <a class="nav-link" href="#">Plant-Scanner</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Customer.html">Customer Support</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- Icons (Top Right) -->
+            <div class="nav-icons">
+                <a href="login.html"><i class="fas fa-user"></i></a>
+                <a href="cart.html"><i class="fas fa-shopping-cart"></i></a>
+                <a href="#"><i class="fas fa-wallet"></i></a>
+            </div>
+        </div>
+        </nav>
+   </header>
+	
+
+
+
+
+
+  <!-- Main Content -->
+<main>
+ <div id="header-placeholder"></div>
+    <!-- Information Section -->
+		<section class="info">
+			<div class="container">
+				<div class="row">
+					<div class="col-md-6">
+						<h2 style="font-family: 'Cinzel', serif;">Welcome to The Flora</h2>
+						<p style="font-size: 18px; color: #6A9304;font-family: 'Macondo', cursive; font-weight: bold;">Your one-stop destination for all your gardening needs.</p>
+						<p style="font-size: 18px; color: #6A9304;font-family: 'Macondo', cursive; font-weight: bold;">The Flora is your premier online destination for all things related to gardening and plants. We offer a wide range of products and resources to help you cultivate the garden of your dreams.</p>
+						<p style="font-size: 18px; color: #6A9304;font-family: 'Macondo', cursive; font-weight: bold;">Our mission is to provide garden enthusiasts, both beginners and experts, with the tools, knowledge, and inspiration needed to create and maintain beautiful gardens.</p>
+				   
+						<div class="info-buttons">
+							<a href="#">Get Rewards</a>
+							<a href="#">Scan a Plant</a>
+						</div>
+					</div>
+					<div class="col-md-6">
+						<div class="animation-section">
+							<!-- Add your GIF animation here -->
+							<img src="plant1.gif" alt="Garden Animation" class="gif-animation">
+
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+	
+
+
+		<!-- Update the carousel markup and JavaScript -->
+		<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000"> <!-- Set interval to 3000ms (3 seconds) -->
+		  <ol class="carousel-indicators">
+			<li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active"></li>
+			<li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1"></li>
+			<li data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2"></li>
+		  </ol>
+		  <div class="carousel-inner">
+			<div class="carousel-item active">
+			  <a href="#"><img src="i1.jpg" class="d-block w-100" alt="..."></a>
+			</div>
+			<div class="carousel-item">
+			  <a href="#"><img src="i4.webp" class="d-block w-100" alt="..."></a>
+			</div>
+			<div class="carousel-item">
+			  <a href="#"><img src="i3.webp" class="d-block w-100"  alt="..."></a>
+			</div>
+		  </div>
+		  <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-bs-slide="prev">
+			<span class="carousel-control-prev-icon" aria-hidden="true"></span>
+			<span class="visually-hidden">Previous</span>
+		  </a>
+		  <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-bs-slide="next">
+			<span class="carousel-control-next-icon" aria-hidden="true"></span>
+			<span class="visually-hidden">Next</span>
+		  </a>
+		</div>
+
+					   <!-- New Launches Section -->
+		<section class="new-launches">
+			<div class="container">
+				<h2 class="section-title">New Launches</h2>
+				<div class="row">
+					<div class="col-md-3">
+						<div class="product">
+							<video autoplay muted loop>
+								<source src="v1.mp4" type="video/mp4">
+								Your browser does not support the video tag.
+							</video>
+							<div class="product-details">
+								<p class="product-description">Square Box Tabletop Terrarium<br> ₹399<br>     </p>
+								<a href="#" class="btn btn-primary">View Product</a>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="product">
+							<video autoplay muted loop>
+								<source src="v2.mp4" type="video/mp4">
+								Your browser does not support the video tag.
+							</video>
+							<div class="product-details">
+								<p class="product-description">Floral Printed Pot with Iron Stand<br> ₹299<br></p>
+								<a href="#" class="btn btn-primary">View Product</a>
+								
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="product">
+							<video autoplay muted loop>
+								<source src="v3.mp4" type="video/mp4">
+								Your browser does not support the video tag.
+							</video>
+							<div class="product-details">
+								<p class="product-description">Designer Metallic Round Shape Planter<br> ₹401</p>
+								<a href="#" class="btn btn-primary">View Product</a>
+							</div>
+						</div>
+					</div>
+					<div class="col-md-3">
+						<div class="product">
+							<video autoplay muted loop>
+								<source src="v4.mp4" type="video/mp4">
+								Your browser does not support the video tag.
+							</video>
+							<div class="product-details">
+								<p class="product-description">Sansevieria Golden Hahnii Snake Plant with Pot <br> ₹399</p>
+								<a href="#" class="btn btn-primary">View Product</a>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="text-center mt-4">
+					<a href="#" class="btn btn-custom">View All</a>
+				</div>
+			</div>
+		</section>
+						<!-- Add this section under the "New Launches" section -->
+		<section class="what-makes-flora" style="margin-top: 40px;">
+			<div class="container">
+				<h2 class="section-title ">What Makes The Flora Different?</h2> <!-- Add mt-4 for top margin -->
+				<div class="row">
+					<div class="col-md-3 text-center"> <!-- Add text-center class to center the content -->
+						<div class="column-content">
+							<img src="n3.png" alt="Image 1" class="img-fluid mx-auto"> <!-- Add mx-auto class to center the image horizontally -->
+							<p>Just like you, we're plant lovers too</p>
+						</div>
+					</div>
+					<div class="col-md-3 text-center"> <!-- Add text-center class to center the content -->
+						<div class="column-content">
+							<img src="n2.png" alt="Image 2" class="img-fluid mx-auto"> <!-- Add mx-auto class to center the image horizontally -->
+							<p>Our homegrown plants get the utmost care and attention</p>
+						</div>
+					</div>
+					<div class="col-md-3 text-center"> <!-- Add text-center class to center the content -->
+						<div class="column-content">
+							<img src="n1.png" alt="Image 3" class="img-fluid mx-auto"> <!-- Add mx-auto class to center the image horizontally -->
+							<p>We bring you plant care guides by gardening experts</p>
+						</div>
+					</div>
+					<div class="col-md-3 text-center"> <!-- Add text-center class to center the content -->
+						<div class="column-content">
+							<img src="n.png" alt="Image 4" class="img-fluid mx-auto"> <!-- Add mx-auto class to center the image horizontally -->
+							<p>We ensure quick delivery and hassle-free replacements</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<!-- FAQ Section -->
+		
+<section class="faq" style="margin-top: 60px;">
+    <div class="container">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+        <div class="accordion" id="faqAccordion">
+            <div class="card">
+                <div class="card-header" id="faqHeading1">
+                    <h3 class="mb-0">
+                        <button class="btn btn-link" type="button" data-toggle="collapse" data-target="#faqCollapse1" aria-expanded="true" aria-controls="faqCollapse1">
+                            1. How do I choose the right plants for my garden?
+                        </button>
+                    </h3>
+                </div>
+                <div id="faqCollapse1" class="collapse show" aria-labelledby="faqHeading1" data-parent="#faqAccordion">
+                    <div class="card-body">
+                        To choose the right plants for your garden, consider your local climate, sunlight exposure, soil type, and your personal preferences. Research the specific requirements of each plant before making a selection.
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="faqHeading2">
+                    <h3 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#faqCollapse2" aria-expanded="false" aria-controls="faqCollapse2">
+                            2. How often should I water my plants?
+                        </button>
+                    </h3>
+                </div>
+                <div id="faqCollapse2" class="collapse" aria-labelledby="faqHeading2" data-parent="#faqAccordion">
+                    <div class="card-body">
+                        The frequency of watering depends on the type of plant, the season, and the climate. Most plants prefer to be watered when the top inch of soil is dry. It's essential to avoid overwatering, as it can lead to root rot.
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="faqHeading3">
+                    <h3 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#faqCollapse3" aria-expanded="false" aria-controls="faqCollapse3">
+                            3. What should I do if my plant has pests?
+                        </button>
+                    </h3>
+                </div>
+                <div id="faqCollapse3" class="collapse" aria-labelledby="faqHeading3" data-parent="#faqAccordion">
+                    <div class="card-body">
+                        If your plant has pests, isolate it from other plants to prevent the infestation from spreading. Identify the type of pest and treat it accordingly. Options include insecticidal soap, neem oil, or manual removal.
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="faqHeading4">
+                    <h3 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#faqCollapse4" aria-expanded="false" aria-controls="faqCollapse4">
+                            4. When is the best time to fertilize plants?
+                        </button>
+                    </h3>
+                </div>
+                <div id="faqCollapse4" class="collapse" aria-labelledby="faqHeading4" data-parent="#faqAccordion">
+                    <div class="card-body">
+                        The best time to fertilize plants is during the growing season, typically in the spring and summer. Use a balanced, slow-release fertilizer and follow the recommended dosage on the product label.
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="faqHeading5">
+                    <h3 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#faqCollapse5" aria-expanded="false" aria-controls="faqCollapse5">
+                            5. How can I protect my plants from extreme weather conditions?
+                        </button>
+                    </h3>
+                </div>
+                <div id="faqCollapse5" class="collapse" aria-labelledby="faqHeading5" data-parent="#faqAccordion">
+                    <div class="card-body">
+                        To protect your plants from extreme weather, consider using mulch, shade cloth, or row covers. Water your plants adequately during hot periods and provide frost protection during cold snaps.
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-header" id="faqHeading6">
+                    <h3 class="mb-0">
+                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse" data-target="#faqCollapse6" aria-expanded="false" aria-controls="faqCollapse6">
+                            6. What should I do if my plant's leaves turn yellow?
+                        </button>
+                    </h3>
+                </div>
+                <div id="faqCollapse6" class="collapse" aria-labelledby="faqHeading6" data-parent="#faqAccordion">
+                    <div class="card-body">
+                        Yellowing leaves can be a sign of various issues, including overwatering, underwatering, nutrient deficiency, or pests. Investigate the specific cause and take appropriate measures, such as adjusting watering or providing the necessary nutrients.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+  
+  
+    
+
+ 
+	
+
+    
+</main>
+
+   
+	<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <!-- Column 1: About The Flora -->
+            <div class="col-md-4">
+                <h4>About The Flora</h4>
+                <p>Your one-stop destination for all your gardening needs.</p>
+                <!-- Add social media icons/links here -->
+                <ul class="list-unstyled list-inline">
+                    <li class="list-inline-item"><a href="#"><i class="fab fa-facebook"></i></a></li>
+                    <li class="list-inline-item"><a href="#"><i class="fab fa-twitter"></i></a></li>
+                    <li class="list-inline-item"><a href="#"><i class="fab fa-instagram"></i></a></li>
+                </ul>
+            </div>
+
+            <!-- Column 2: Get in Touch -->
+            <div class="col-md-4">
+                <h4>Get in Touch</h4>
+                <ul class="list-unstyled">
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 3: Quick Links -->
+            <div class="col-md-4">
+                <h4>Quick Links</h4>
+                <ul class="list-unstyled">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Shipping Policy</a></li>
+                    <li><a href="#">Return & Refund</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                    <li><a href="#">Return Request</a></li>
+                    <li><a href="#">Corporate Gifting</a></li>
+                </ul>
+            </div>
+        </div>
+        <p>&copy; 2023 The Flora. All rights reserved.</p>
+    </div>
+</footer>
+
+        
+
+    <!-- Include Bootstrap and FontAwesome libraries -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<!-- JavaScript for the rotating image slider -->
+<script>
+    // Initialize the carousel
+    var myCarousel = new bootstrap.Carousel(document.getElementById('carouselExampleIndicators'), {
+        interval: 5000, // Set the interval (in milliseconds) for auto-rotation (e.g., 2000ms = 2 seconds)
+        wrap: true // Enable looping of the carousel
+    });
+</script>
+
+	<script>
+	// JavaScript to handle scroll behavior for the header
+let prevScrollPos = window.pageYOffset;
+
+window.onscroll = function() {
+    let currentScrollPos = window.pageYOffset;
+    if (prevScrollPos > currentScrollPos) {
+        document.querySelector("header").style.transform = "translateY(0)";
+    } else {
+        document.querySelector("header").style.transform = "translateY(-100%)";
+    }
+    prevScrollPos = currentScrollPos;
+}
+</script>
+
+
+
+</body>
+</html>

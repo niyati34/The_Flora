@@ -1,0 +1,631 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Garden Shop</title>
+    <!-- Include Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <!-- Include Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans">
+	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js">
+	<!-- Replace the previous Bootstrap and Bootstrap JS links with the following for Bootstrap 5 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Chakra+Petch&display=swap">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+
+	
+
+    <style>
+			
+				/* Header Styling */
+        .navbar {
+            background-color: #FFFFFF; /* Green */
+        }
+        .navbar-brand {
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+        }
+        .navbar-brand img {
+            width: 300px;
+            height: 100px;
+            margin-right: 10px;
+        }
+		
+        .navbar .search-bar {
+            margin-right: 50px;
+        }
+        .nav-icons {
+            font-size: 24px;
+        }
+
+        /* Custom CSS for the icons */
+        .nav-icons a i {
+            color: #2B5943; /* Blue color for icons */
+        }
+
+        /* Custom CSS for the search bar */
+        .search-bar {
+            background-color: #FFFFFF; /* Blue background color */
+            border: none; /* Remove the border */
+        }
+
+        .search-bar input[type="text"] {
+            color: #000000; /* Text color (white) */
+        }
+
+        .search-bar button {
+            background-color: #2B5943; /* Button background color (a darker blue) */
+            color: #FFFFFF; /* Button text color (white) */
+        }
+
+        /* Center the logo and website name */
+        .logo-container {
+            text-align: center;
+        }
+
+        /* Custom CSS for navigation links */
+        .navbar-nav .nav-item .nav-link {
+            font-family: "monospace", sans-serif; /* Replace "YourFont" with your desired font-family */
+            color: #000000; /* Change the color to your desired color */
+			font-weight: bold;
+        }
+		/* Custom styles for dropdown menu items */
+		.dropdown-item {
+			font-family:'Chakra Petch'; /* Change the font family to your preferred font */
+			color: #047593; /* Change the color to your preferred color using a color code or name */
+			font-weight: bold;
+		}
+
+
+       
+
+        /* Footer Styling */
+        footer {
+            background-color: #333;
+            color: #fff;
+            text-align: center;
+            padding: 10px 0;
+        }
+				/* CSS for the rotating image slider */
+		.image-slider {
+			text-align: center;
+			padding: 20px;
+		}
+
+		.slider {
+			display: flex;
+			overflow: hidden;
+		}
+
+		.slider-image {
+			width: 200%;
+			hight: 40%;
+			display: none;
+		}
+
+		.active {
+			display: block;
+		}
+		
+			header {
+				position: fixed;
+				top: 0;
+				left: 0;
+				right: 0;
+				background-color: #333;
+				color: #fff;
+				transition: transform 0.3s ease-in-out;
+				z-index: 1000;
+			}
+
+			/* Styles for the navigation menu */
+			nav ul {
+				list-style: none;
+				display: flex;
+				justify-content: space-around;
+				padding: 10px 0;
+			}
+
+			nav li {
+				margin: 0 10px;
+			}
+
+			nav a {
+				text-decoration: none;
+				color: #fff;
+			}
+
+				/* Add space to the text within the footer */
+				/* Style the headings in the footer */
+			footer h4 {
+				font-size: 20px;
+				font-weight: bold;
+				font-family: 'Cinzel', serif;
+				color: #6A9304; /* Change to your desired color */
+				margin-top: 20px; /* Add margin to the top of the heading */
+			}
+			     footer p {
+				font-size: 16px;
+				color: #6A9304; /* Change to your desired color */
+				/* Additional styles go here */
+			}
+
+			/* Style the links in the footer */
+			footer ul.list-unstyled {
+				margin-top: 10px; /* Add margin to the top of the list */
+			}
+
+			footer ul.list-unstyled li a {
+				color: #6A9304; /* Change to your desired color */
+				text-decoration: none;
+				transition: color 0.3s ease;
+			}
+
+			footer ul.list-unstyled li a:hover {
+				color: #2B5943; /* Change to the hover color you prefer */
+			}
+
+			/* Style the social media icons */
+			footer ul.list-inline li a {
+				color: #6A9304; /* Change to your desired color */
+				font-size: 24px;
+				margin-right: 10px;
+			}
+
+			/* Change the icon color on hover */
+			footer ul.list-inline li a:hover {
+				color: #2B5943; /* Change to the hover color you prefer */
+			}
+
+			/* Customize the footer copyright text */
+			footer p.copyright {
+				font-size: 14px;
+				margin-top: 20px; /* Add margin to the top of the copyright text */
+			}
+						/* Add space between footer and FAQ section */
+			.faq {
+				margin-top: 40px; /* Adjust the margin-top value to control the space */
+			}
+			/* Add space between footer and FAQ section */
+			footer {
+				margin-top: 20px;
+				padding-top: 20px;
+			}
+
+			section.faq {
+				margin-top: 40px;
+				padding-top: 40px;
+			}
+			 /* Breadcrumb container styles */
+				 
+				 .breadcrumb-item a {
+				color: #047593; /* Link color for breadcrumb items */
+				text-decoration: none;
+				font-family: 'Prompt', sans-serif;
+			}
+			.breadcrumb-item.active {
+				color: #000; /* Active item color */
+				font-weight: bold; /* Active item font weight */
+			}
+			.breadcrumb-container {
+				padding: 20px;
+				background-color: #FFFFFF; /* Background color for the breadcrumb container */
+			}
+			main {
+				margin-top: 210px; /* Adjust this value as needed */
+			}
+            /* body */
+			
+    .contact-form {
+        max-width: 400px;
+        margin: 0 auto;
+        padding: 20px;
+        background-color: #f5f5f5;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .contact-form h2 {
+        font-size: 24px;
+        margin-bottom: 20px;
+    }
+
+    .contact-form label {
+        font-weight: bold;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+    }
+
+    .form-control {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    textarea {
+        resize: none;
+    }
+
+    .btn-primary {
+        background-color: #2B5943;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+	.btn-secondary {
+        background-color: #2B5943;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+	.custom-heading {
+        font-family: 'Josefin Slab', sans-serif;
+        color:  #2B5943;
+		font-weight: bolder;
+    }
+
+
+/* Reset some default browser styles */
+body, h1, h2, h3, p, ul, li {
+    margin: 0;
+    padding: 0;
+}
+
+/* Set a background color and default font */
+body {
+    background-color: #f2f2f2;
+    font-family: Arial, sans-serif;
+    color: #333;
+}
+
+/* Header Styles */
+header {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+}
+
+.navbar {
+    background-color: #FFFFFF;
+}
+
+.navbar-brand img {
+    width: 300px;
+    height: 100px;
+    margin-right: 10px;
+}
+
+.navbar .search-bar {
+    margin-right: 50px;
+}
+
+/* Center the logo and website name */
+.logo-container {
+    text-align: center;
+}
+
+/* Navigation Links */
+.navbar-nav .nav-item .nav-link {
+    font-family: Arial, sans-serif;
+    color: #000;
+    font-weight: bold;
+}
+
+/* Footer Styles */
+footer {
+    background-color: #333;
+    color: #fff;
+    text-align: center;
+    padding: 10px 0;
+}
+
+footer h4 {
+    font-size: 20px;
+    font-weight: bold;
+    font-family: Arial, sans-serif;
+    color: #6A9304;
+    margin-top: 20px;
+}
+
+footer p {
+    font-size: 16px;
+    color: #6A9304;
+}
+
+footer ul.list-unstyled {
+    margin-top: 10px;
+}
+
+footer ul.list-unstyled li a {
+    color: #6A9304;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+footer ul.list-unstyled li a:hover {
+    color: #2B5943;
+}
+
+footer ul.list-inline li a {
+    color: #6A9304;
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+footer ul.list-inline li a:hover {
+    color: #2B5943;
+}
+
+footer p.copyright {
+    font-size: 14px;
+    margin-top: 20px;
+}
+
+
+					
+
+
+
+
+				
+
+
+								
+		
+    </style>
+	
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@500&family=Josefin+Slab:wght@500&family=Macondo&display=swap');
+</style>  
+
+	
+</head>
+<body>
+    <!-- Header -->
+    <!-- Header -->
+
+ <header class="sticky">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="container">
+            <!-- Search Bar (Top Left) -->
+            <form class="form-inline search-bar">
+                <input class="form-control mr-sm-2" type="text" placeholder="Search...">
+                <button class="btn btn-success" type="submit"><i class="fas fa-search"></i></button>
+            </form>
+            <!-- Logo and Website Name (Center) -->
+            <div class="logo-container">
+                <a class="navbar-brand" href="#">
+                    <img src="nm.png" alt="Garden Shop Logo">
+                </a>
+                <!-- Navigation Links (Beneath Logo) -->
+                <ul class="navbar-nav ml-auto">
+				
+                    <li class="nav-item">
+                        <a class="nav-link" href="1.html">Home</a>
+                    </li>
+             
+				    <li class="nav-item dropdown"> <!-- Add 'dropdown' class to create a dropdown menu -->
+						<a class="nav-link dropdown-toggle" href="#" id="plantsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+							Plants
+						</a>
+						<div class="dropdown-menu" aria-labelledby="plantsDropdown"> <!-- Dropdown menu content -->
+							<a class="dropdown-item" href="Air Purifying Plants.html">Air Purifying Plants</a>
+							<a class="dropdown-item" href="Indoor Plants.html">Indoor Plants</a>
+							<a class="dropdown-item" href="Low Maintenance Plants.html">Low Maintenance Plants</a>
+						</div>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="Planters.html">Planters</a>
+                    </li>
+					<li class="nav-item">
+                        <a class="nav-link" href="#">Plant-Scanner</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">Customer Support</a>
+                    </li>
+                </ul>
+            </div>
+            <!-- Icons (Top Right) -->
+            <div class="nav-icons">
+                <a href="#"><i class="fas fa-user"></i></a>
+                <a href="#"><i class="fas fa-shopping-cart"></i></a>
+                <a href="#"><i class="fas fa-wallet"></i></a>
+            </div>
+        </div>
+        </nav>
+   </header>
+
+
+
+
+
+  <!-- Main Content -->
+<main>
+
+    
+       
+
+
+  <h1 class="text-center custom-heading">Welcome to Our Customer Support</h1>
+    
+   <section class="contact-form">
+    <h2>Contact Us</h2>
+    <form action="/create_ticket" method="POST" onsubmit="return validateForm();">
+        <div class="form-group">
+            <label for="name">Your Name:</label>
+            <input type="text" class="form-control" id="name" name="name" required>
+        </div>
+
+        <div class="form-group">
+            <label for="email">Your Email:</label>
+            <input type="email" class="form-control" id="email" name="email" required>
+        </div>
+
+        <div class="form-group">
+            <label for="subject">Subject:</label>
+            <input type="text" class="form-control" id="subject" name="subject" required>
+        </div>
+
+        <div class="form-group">
+            <label for="message">Message:</label>
+            <textarea class="form-control" id="message" name="message" rows="4" required></textarea>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Submit</button>
+		 <button type="button" class="btn btn-secondary" onclick="clearForm()">Clear</button>
+    </form>
+</section>
+
+
+    
+    
+
+
+		
+</main>
+
+   
+	<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <!-- Column 1: About The Flora -->
+            <div class="col-md-4">
+                <h4>About The Flora</h4>
+                <p>Your one-stop destination for all your gardening needs.</p>
+                <!-- Add social media icons/links here -->
+                <ul class="list-unstyled list-inline">
+                    <li class="list-inline-item"><a href="#"><i class="fab fa-facebook"></i></a></li>
+                    <li class="list-inline-item"><a href="#"><i class="fab fa-twitter"></i></a></li>
+                    <li class="list-inline-item"><a href="#"><i class="fab fa-instagram"></i></a></li>
+                </ul>
+            </div>
+
+            <!-- Column 2: Get in Touch -->
+            <div class="col-md-4">
+                <h4>Get in Touch</h4>
+                <ul class="list-unstyled">
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+
+            <!-- Column 3: Quick Links -->
+            <div class="col-md-4">
+                <h4>Quick Links</h4>
+                <ul class="list-unstyled">
+                    <li><a href="#">About Us</a></li>
+                    <li><a href="#">Privacy Policy</a></li>
+                    <li><a href="#">Shipping Policy</a></li>
+                    <li><a href="#">Return & Refund</a></li>
+                    <li><a href="#">Terms & Conditions</a></li>
+                    <li><a href="#">Return Request</a></li>
+                    <li><a href="#">Corporate Gifting</a></li>
+                </ul>
+            </div>
+        </div>
+        <p>&copy; 2023 The Flora. All rights reserved.</p>
+    </div>
+</footer>
+
+        
+
+    <!-- Include Bootstrap and FontAwesome libraries -->
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+
+<script>
+	// JavaScript to handle scroll behavior for the header
+let prevScrollPos = window.pageYOffset;
+
+window.onscroll = function() {
+    let currentScrollPos = window.pageYOffset;
+    if (prevScrollPos > currentScrollPos) {
+        document.querySelector("header").style.transform = "translateY(0)";
+    } else {
+        document.querySelector("header").style.transform = "translateY(-100%)";
+    }
+    prevScrollPos = currentScrollPos;
+}
+
+</script>
+
+<script>
+    function validateForm() {
+        var name = document.getElementById("name").value;
+        var email = document.getElementById("email").value;
+        var subject = document.getElementById("subject").value;
+        var message = document.getElementById("message").value;
+
+        if (name.trim() === "") {
+            alert("Please enter your name.");
+            return false;
+        }
+
+        if (email.trim() === "") {
+            alert("Please enter your email.");
+            return false;
+        }
+
+        if (subject.trim() === "") {
+            alert("Please enter the subject.");
+            return false;
+        }
+
+        if (message.trim() === "") {
+            alert("Please enter your message.");
+            return false;
+        }
+
+        // You can add more specific validation rules here, such as email format validation.
+
+        return true; // If all validations pass, the form will be submitted.
+    }
+	
+</script>
+<script>
+    function clearForm() {
+        document.getElementById("name").value = "";
+        document.getElementById("email").value = "";
+        document.getElementById("subject").value = "";
+        document.getElementById("message").value = "";
+    }
+</script>
+Please ensure that the JavaScript function is placed within the <script> tags in your HTML document, and that there are no errors in the browser's console. If it's still not working, please provide more details about the issue you are encountering, and I'll be happy to assist you further.
+
+
+
+
+
+
+
+    <!-- Include Bootstrap and other scripts as needed -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+
+</body>
+</html>
