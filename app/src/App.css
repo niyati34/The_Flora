@@ -1,0 +1,30 @@
+main {
+  margin-top: 120px;
+}
+header.sticky {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  background-color: #FFFFFF;
+  z-index: 1000;
+}
+footer {
+  background-color: #333;
+  color: #fff;
+  text-align: center;
+  padding: 10px 0;
+  margin-top: 20px;
+}
+footer h4 {
+  font-size: 20px;
+  font-weight: bold;
+  font-family: 'Cinzel', serif;
+  color: #6A9304;
+  margin-top: 20px;
+}
+footer p,
+footer ul li a,
+footer ul.list-inline li a {
+  color: #6A9304;
+}
