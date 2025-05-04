@@ -25,7 +25,7 @@ export default function Header() {
           <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
             <span className="navbar-toggler-icon"></span>
           </button>
-          <form className="form-inline search-bar d-none d-md-flex">
+          <form className="search-bar d-none d-md-flex align-items-center gap-2">
             <input className="form-control mr-sm-2" type="text" placeholder="Search..." />
             <button className="btn btn-success" type="submit"><i className="fas fa-search" /></button>
           </form>
@@ -35,7 +35,7 @@ export default function Header() {
               <img src="/nm.png" alt="The Flora Logo" style={{ width: 300, height: 100, marginRight: 10 }} />
             </Link>
             <div className="collapse navbar-collapse justify-content-center" id="mainNavbar">
-            <ul className="navbar-nav ml-auto">
+            <ul className="navbar-nav ms-auto">
               <li className="nav-item">
                 <NavLink className="nav-link" to="/">Home</NavLink>
               </li>
