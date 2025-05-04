@@ -1,6 +1,4 @@
-main {
-  margin-top: 120px;
-}
+main { margin-top: 120px; overflow-x: hidden; }
 header.sticky {
   position: fixed;
   top: 0;

@@ -1,10 +1,30 @@
 import { Link, NavLink } from 'react-router-dom'
+import { useEffect } from 'react'
 
 export default function Header() {
+  useEffect(() => {
+    let prevScrollPos = window.pageYOffset
+    const header = document.querySelector('header.sticky')
+    const onScroll = () => {
+      const current = window.pageYOffset
+      if (!header) return
+      if (prevScrollPos > current) {
+        header.style.transform = 'translateY(0)'
+      } else {
+        header.style.transform = 'translateY(-100%)'
+      }
+      prevScrollPos = current
+    }
+    window.addEventListener('scroll', onScroll)
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
   return (
     <header className="sticky">
       <nav className="navbar navbar-expand-lg navbar-light" style={{ backgroundColor: '#FFFFFF' }}>
         <div className="container">
+          <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar" aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
+            <span className="navbar-toggler-icon"></span>
+          </button>
           <form className="form-inline search-bar d-none d-md-flex">
             <input className="form-control mr-sm-2" type="text" placeholder="Search..." />
             <button className="btn btn-success" type="submit"><i className="fas fa-search" /></button>
@@ -14,7 +34,8 @@ export default function Header() {
             <Link className="navbar-brand" to="/">
               <img src="/nm.png" alt="The Flora Logo" style={{ width: 300, height: 100, marginRight: 10 }} />
             </Link>
-            <ul className="navbar-nav ml-auto justify-content-center">
+            <div className="collapse navbar-collapse justify-content-center" id="mainNavbar">
+            <ul className="navbar-nav ml-auto">
               <li className="nav-item">
                 <NavLink className="nav-link" to="/">Home</NavLink>
               </li>
@@ -36,6 +57,7 @@ export default function Header() {
                 <a className="nav-link" href="#">Customer Support</a>
               </li>
             </ul>
+            </div>
           </div>
 
           <div className="nav-icons" style={{ fontSize: 24 }}>
