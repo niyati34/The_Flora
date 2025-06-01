@@ -7,9 +7,11 @@ import Cart from "./pages/Cart";
 import Login from "./pages/Login";
 import Signup from "./pages/Signup";
 import "./App.css";
+
 import AirPurifying from "./pages/AirPurifying";
 import IndoorPlants from "./pages/IndoorPlants";
 import LowMaintenance from "./pages/LowMaintenance";
+import ProductDetail from "./pages/ProductDetail";
 
 export default function App() {
   return (
@@ -25,6 +27,7 @@ export default function App() {
           <Route path="/cart" element={<Cart />} />
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
+          <Route path="/product/:id" element={<ProductDetail />} />
         </Routes>
       </main>
       <Footer />

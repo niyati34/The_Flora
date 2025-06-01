@@ -18,6 +18,7 @@ export default function AirPurifying() {
           </ol>
         </nav>
       </div>
+
       <img
         src="/air.webp"
         alt="plant"
@@ -46,8 +47,8 @@ export default function AirPurifying() {
                 />
                 <h3>Peace Lily Plant With Self Watering Pot</h3>
                 <p>₹325.00</p>
-                <a
-                  href="#"
+                <Link
+                  to="/product/peace-lily"
                   className="view-product-btn btn"
                   style={{
                     backgroundColor: "#2B5943",
@@ -60,7 +61,7 @@ export default function AirPurifying() {
                   }}
                 >
                   View Product
-                </a>
+                </Link>
               </div>
             </div>
             <div className="col-md-3">
