@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Bellefair&family=Cinzel:wght@500&family=Gugi&family=Josefin+Slab:wght@500&family=Macondo&family=Prompt:wght@300&family=Chakra+Petch&display=swap");
+
 main {
   margin-top: 120px;
   overflow-x: hidden;
@@ -208,4 +210,168 @@ section.faq {
 .view-product-btn:hover {
   background-color: #1e412e;
   text-decoration: none;
+}
+
+/* Product Detail Page Styles */
+.product-details {
+  padding: 20px 0;
+}
+
+.product-details h2 {
+  padding-top: 20px;
+  font-family: "Cinzel", serif;
+  font-size: 38px;
+  font-weight: bold;
+  color: #2b5943;
+}
+
+.product-details ul,
+.product-details p {
+  padding-top: 15px;
+  font-family: "Prompt", sans-serif;
+  font-size: 20px;
+  color: #5b4602;
+}
+
+.product-image {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Custom styles for buttons */
+.add-to-cart-btn {
+  background-color: #fcc406;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 80px;
+  margin-right: 30px;
+  cursor: pointer;
+}
+
+.buy-now-btn {
+  background-color: #1e412e;
+  color: #fff;
+  border: none;
+  border-radius: 5px;
+  padding: 10px 80px;
+  cursor: pointer;
+}
+
+.add-to-cart-btn:hover {
+  background-color: #e6b100;
+}
+
+.buy-now-btn:hover {
+  background-color: #0f2819;
+}
+
+/* Styles for color circles */
+.color-options {
+  display: flex;
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+.color-circle {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  margin-right: 10px;
+  cursor: pointer;
+  border: 2px solid black;
+  transition: transform 0.2s ease;
+}
+
+.color-circle:hover {
+  transform: scale(1.1);
+}
+
+.color-circle.selected {
+  border: 3px solid #2b5943;
+  transform: scale(1.2);
+}
+
+/* Add tick mark image as a background for list items */
+.list-styled li {
+  padding-top: 40px;
+  padding-left: 40px;
+  background-image: url("/tick.png");
+  background-repeat: no-repeat;
+  background-position: 0 120%;
+  background-size: 30px;
+  list-style: none;
+  line-height: 0.5;
+  margin-bottom: 5px;
+}
+
+/* CSS for the product about section */
+.product-about-section {
+  background-color: #faedc2;
+  padding: 30px 0;
+  height: 300px;
+}
+
+.product-about-section h3 {
+  padding: 10px;
+  font-size: 30px;
+  text-align: center;
+  font-weight: bold;
+  color: #2b5943;
+  font-family: "Gugi", cursive;
+}
+
+.product-about-section p {
+  font-size: 24px;
+  color: #000;
+  line-height: 1.5;
+  font-family: "Bellefair", serif;
+}
+
+/* Product info section */
+.product-info {
+  margin-top: 40px;
+}
+
+.product-info p {
+  font-size: 18px;
+}
+
+/* FAQ Section styles */
+.faq {
+  background-color: #2b5943;
+  padding: 20px;
+}
+
+.faq-item {
+  margin-bottom: 5px;
+  padding: 5px;
+}
+
+.faq .section-title {
+  text-align: center;
+  font-family: "Chakra Petch", sans-serif;
+  font-size: 30px;
+  font-weight: bold;
+  color: #fff;
+  padding: 15px;
+}
+
+.faq-item .card-header h3 button {
+  font-family: "Chakra Petch", sans-serif;
+  text-decoration: none;
+  font-size: 18px;
+  font-weight: bold;
+  color: #2b5943;
+  background-color: transparent;
+  text-align: left;
+  border: none;
+  width: 100%;
+}
+
+.faq-item .card-body {
+  font-family: "Chakra Petch", sans-serif;
+  font-size: 16px;
+  color: #000;
+  background-color: #fdcc52;
 }

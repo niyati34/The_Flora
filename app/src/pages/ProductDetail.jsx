@@ -1,4 +1,5 @@
 import { useParams, Link } from "react-router-dom";
+import { useState } from "react";
 import { products } from "../data/products";
 
 export default function ProductDetail() {
@@ -11,6 +12,31 @@ export default function ProductDetail() {
         <h2>Product not found</h2>
       </div>
     );
+
+  const [selectedImage, setSelectedImage] = useState(product.image);
+  const [selectedColorIndex, setSelectedColorIndex] = useState(0);
+
+  const colors = ["black", "red", "white", "#757471", "#EEFC09"];
+  const colorNames = ["Black", "Red", "White", "Grey", "Yellow"];
+
+  const handleColorChange = (imageUrl, index) => {
+    setSelectedImage(imageUrl);
+    setSelectedColorIndex(index);
+  };
+
+  // Extract plant name from product name (e.g., "Peace Lily Plant With..." -> "Peace Lily")
+  const getPlantName = (productName) => {
+    const words = productName.split(" ");
+    // Find index of "Plant" and take words before it
+    const plantIndex = words.findIndex(
+      (word) => word.toLowerCase() === "plant"
+    );
+    if (plantIndex > 0) {
+      return words.slice(0, plantIndex).join(" ");
+    }
+    // Fallback: take first two words
+    return words.slice(0, 2).join(" ");
+  };
 
   return (
     <main style={{ marginTop: 180 }}>
@@ -32,7 +58,7 @@ export default function ProductDetail() {
             <div className="col-md-6">
               <img
                 id="product-image"
-                src={product.image}
+                src={selectedImage}
                 alt={product.name}
                 className="product-image"
               />
@@ -54,22 +80,23 @@ export default function ProductDetail() {
                   defaultValue={1}
                   min={1}
                   className="form-control"
+                  style={{
+                    width: "100px",
+                    display: "inline-block",
+                    marginLeft: "10px",
+                  }}
                 />
               </div>
               <div className="color-options">
                 {product.images.map((img, i) => (
                   <div
                     key={i}
-                    className="color-circle"
-                    style={{
-                      backgroundColor: [
-                        "black",
-                        "red",
-                        "white",
-                        "#757471",
-                        "#EEFC09",
-                      ][i],
-                    }}
+                    className={`color-circle ${
+                      selectedColorIndex === i ? "selected" : ""
+                    }`}
+                    style={{ backgroundColor: colors[i] }}
+                    onClick={() => handleColorChange(img, i)}
+                    title={`${colorNames[i]} variant`}
                   ></div>
                 ))}
               </div>
@@ -86,11 +113,11 @@ export default function ProductDetail() {
           </div>
         </div>
       </section>
-      <div className="about-peace-lily" style={{ marginTop: -140 }}>
+      <div className="product-about-section" style={{ marginTop: -140 }}>
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <h3>About The Peace Lily Plant</h3>
+              <h3>About The {getPlantName(product.name)}</h3>
               <p>{product.description}</p>
             </div>
           </div>
@@ -104,7 +131,7 @@ export default function ProductDetail() {
             </div>
             <div className="col-md-6">
               <img
-                src={product.image}
+                src={selectedImage}
                 alt="Product Info"
                 className="img-fluid"
               />
