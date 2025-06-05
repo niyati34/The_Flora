@@ -220,18 +220,30 @@ section.faq {
 .product-details h2 {
   padding-top: 20px;
   font-family: "Cinzel", serif;
-  font-size: 38px;
+  font-size: clamp(28px, 4vw, 38px);
   font-weight: bold;
   color: #2b5943;
 }
 
 .product-details ul,
-.product-details p {
+p {
   padding-top: 15px;
   font-family: "Prompt", sans-serif;
   font-size: 20px;
   color: #5b4602;
 }
+
+/* Improve list and paragraph readability in product details */
+.product-details ul {
+  list-style: disc inside;
+  margin: 8px 0 0;
+  padding-left: 0;
+}
+.product-details li {
+  margin-bottom: 8px;
+  line-height: 1.6;
+}
+/* keep paragraph styling scoped via the combined selector above */
 
 .product-image {
   max-width: 100%;
@@ -308,13 +320,15 @@ section.faq {
 /* CSS for the product about section */
 .product-about-section {
   background-color: #faedc2;
-  padding: 30px 0;
-  height: 300px;
+  padding: 48px 0;
+  margin-top: 40px; /* push below product details */
+  clear: both; /* ensure starts below floated/column content */
+  min-height: 260px;
 }
 
 .product-about-section h3 {
-  padding: 10px;
-  font-size: 30px;
+  padding: 8px 10px 18px;
+  font-size: 32px;
   text-align: center;
   font-weight: bold;
   color: #2b5943;
@@ -322,15 +336,31 @@ section.faq {
 }
 
 .product-about-section p {
-  font-size: 24px;
+  font-size: clamp(18px, 2vw, 20px);
   color: #000;
-  line-height: 1.5;
+  line-height: 1.75;
   font-family: "Bellefair", serif;
+  letter-spacing: 0.15px;
+  hyphens: auto;
+  overflow-wrap: anywhere;
+}
+
+/* Constrain paragraph width like original HTML */
+.product-about-section .about-text {
+  max-width: 980px;
+  margin: 0 auto;
+  padding: 0 24px;
 }
 
 /* Product info section */
 .product-info {
   margin-top: 40px;
+  padding-top: 24px;
+}
+
+.product-info-row {
+  padding-left: 24px;
+  padding-right: 24px;
 }
 
 .product-info p {
@@ -374,4 +404,52 @@ section.faq {
   font-size: 16px;
   color: #000;
   background-color: #fdcc52;
+}
+
+/* Mobile tweaks for better spacing/readability */
+@media (max-width: 576px) {
+  .add-to-cart-btn,
+  .buy-now-btn {
+    width: 100%;
+    padding: 10px 16px;
+    margin-right: 0;
+    margin-bottom: 10px;
+  }
+  .color-circle {
+    width: 24px;
+    height: 24px;
+  }
+  .product-about-section {
+    padding: 32px 0;
+  }
+}
+
+/* Product Rating styles (to match original HTML) */
+.product-rating {
+  padding: 40px 0;
+}
+.product-rating h3 {
+  font-family: "Gugi", cursive;
+  color: #2b5943;
+}
+.rating {
+  unicode-bidi: bidi-override;
+  direction: rtl;
+  text-align: left;
+}
+.rating input {
+  display: none;
+}
+.rating label {
+  display: inline-block;
+  padding: 20px;
+  font-size: 30px;
+  cursor: pointer;
+}
+.rating label::before {
+  content: "\2605";
+}
+.rating input:checked ~ label::before {
+  content: "\2605";
+  color: orange;
 }

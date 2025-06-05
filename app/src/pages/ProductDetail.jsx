@@ -15,6 +15,7 @@ export default function ProductDetail() {
 
   const [selectedImage, setSelectedImage] = useState(product.image);
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
+  const [rating, setRating] = useState(0);
 
   const colors = ["black", "red", "white", "#757471", "#EEFC09"];
   const colorNames = ["Black", "Red", "White", "Grey", "Yellow"];
@@ -113,19 +114,21 @@ export default function ProductDetail() {
           </div>
         </div>
       </section>
-      <div className="product-about-section" style={{ marginTop: -140 }}>
+      <div className="product-about-section">
         <div className="container">
           <div className="row">
             <div className="col-md-12">
-              <h3>About The {getPlantName(product.name)}</h3>
-              <p>{product.description}</p>
+              <h3>About The {getPlantName(product.name)} Plant</h3>
+              <div className="about-text">
+                <p>{product.description}</p>
+              </div>
             </div>
           </div>
         </div>
       </div>
       <section className="product-info">
         <div className="container">
-          <div className="row">
+          <div className="row product-info-row">
             <div className="col-md-6">
               <p>{product.info}</p>
             </div>
@@ -170,6 +173,78 @@ export default function ProductDetail() {
           </div>
         ))}
       </div>
+      <section className="product-rating">
+        <div className="container">
+          <div className="row">
+            <div className="col-md-12">
+              <h3>Product Rating</h3>
+              <div className="form-group">
+                <div className="rating">
+                  <input
+                    type="radio"
+                    id="star5"
+                    name="rating"
+                    value="5"
+                    checked={rating === 5}
+                    onChange={() => setRating(5)}
+                  />
+                  <label htmlFor="star5"></label>
+                  <input
+                    type="radio"
+                    id="star4"
+                    name="rating"
+                    value="4"
+                    checked={rating === 4}
+                    onChange={() => setRating(4)}
+                  />
+                  <label htmlFor="star4"></label>
+                  <input
+                    type="radio"
+                    id="star3"
+                    name="rating"
+                    value="3"
+                    checked={rating === 3}
+                    onChange={() => setRating(3)}
+                  />
+                  <label htmlFor="star3"></label>
+                  <input
+                    type="radio"
+                    id="star2"
+                    name="rating"
+                    value="2"
+                    checked={rating === 2}
+                    onChange={() => setRating(2)}
+                  />
+                  <label htmlFor="star2"></label>
+                  <input
+                    type="radio"
+                    id="star1"
+                    name="rating"
+                    value="1"
+                    checked={rating === 1}
+                    onChange={() => setRating(1)}
+                  />
+                  <label htmlFor="star1"></label>
+                </div>
+              </div>
+              <form id="review-form">
+                <div className="form-group">
+                  <label htmlFor="review">Write a Review:</label>
+                  <textarea
+                    className="form-control"
+                    id="review"
+                    rows={4}
+                    required
+                  ></textarea>
+                </div>
+                <button type="submit" className="btn btn-primary">
+                  Submit Review
+                </button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   );
 }
