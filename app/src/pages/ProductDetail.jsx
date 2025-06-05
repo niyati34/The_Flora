@@ -16,6 +16,8 @@ export default function ProductDetail() {
   const [selectedImage, setSelectedImage] = useState(product.image);
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
   const [rating, setRating] = useState(0);
+  const [review, setReview] = useState("");
+  const [reviewSubmitted, setReviewSubmitted] = useState(false);
 
   const colors = ["black", "red", "white", "#757471", "#EEFC09"];
   const colorNames = ["Black", "Red", "White", "Grey", "Yellow"];
@@ -227,20 +229,33 @@ export default function ProductDetail() {
                   <label htmlFor="star1"></label>
                 </div>
               </div>
-              <form id="review-form">
-                <div className="form-group">
-                  <label htmlFor="review">Write a Review:</label>
-                  <textarea
-                    className="form-control"
-                    id="review"
-                    rows={4}
-                    required
-                  ></textarea>
-                </div>
-                <button type="submit" className="btn btn-primary">
-                  Submit Review
-                </button>
-              </form>
+              {reviewSubmitted ? (
+                <div className="alert alert-success mt-3">Thank you for your review!</div>
+              ) : (
+                <form
+                  id="review-form"
+                  onSubmit={e => {
+                    e.preventDefault();
+                    setReviewSubmitted(true);
+                    setReview("");
+                  }}
+                >
+                  <div className="form-group">
+                    <label htmlFor="review">Write a Review:</label>
+                    <textarea
+                      className="form-control"
+                      id="review"
+                      rows={4}
+                      required
+                      value={review}
+                      onChange={e => setReview(e.target.value)}
+                    ></textarea>
+                  </div>
+                  <button type="submit" className="btn btn-primary">
+                    Submit Review
+                  </button>
+                </form>
+              )}
             </div>
           </div>
         </div>
