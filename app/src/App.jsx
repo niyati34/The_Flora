@@ -12,12 +12,14 @@ import AirPurifying from "./pages/AirPurifying";
 import IndoorPlants from "./pages/IndoorPlants";
 import LowMaintenance from "./pages/LowMaintenance";
 import ProductDetail from "./pages/ProductDetail";
+import { CartProvider } from "./context/CartContext";
 
 export default function App() {
   return (
-    <BrowserRouter>
-      <Header />
-      <main>
+    <CartProvider>
+      <BrowserRouter>
+        <Header />
+        <main>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/plants/air-purifying" element={<AirPurifying />} />
@@ -32,5 +34,6 @@ export default function App() {
       </main>
       <Footer />
     </BrowserRouter>
+    </CartProvider>
   );
 }

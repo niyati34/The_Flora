@@ -1,10 +1,12 @@
 import { useParams, Link } from "react-router-dom";
 import { useState } from "react";
 import { products } from "../data/products";
+import { useCart } from "../context/CartContext";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const product = products.find((p) => p.id === id);
+  const { addToCart } = useCart();
 
   if (!product)
     return (
@@ -18,6 +20,8 @@ export default function ProductDetail() {
   const [rating, setRating] = useState(0);
   const [review, setReview] = useState("");
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
+  const [quantity, setQuantity] = useState(1);
+  const [addedToCart, setAddedToCart] = useState(false);
 
   const colors = ["black", "red", "white", "#757471", "#EEFC09"];
   const colorNames = ["Black", "Red", "White", "Grey", "Yellow"];
@@ -25,6 +29,17 @@ export default function ProductDetail() {
   const handleColorChange = (imageUrl, index) => {
     setSelectedImage(imageUrl);
     setSelectedColorIndex(index);
+  };
+
+  const handleAddToCart = () => {
+    addToCart(product, quantity, selectedImage, colorNames[selectedColorIndex]);
+    setAddedToCart(true);
+    setTimeout(() => setAddedToCart(false), 2000);
+  };
+
+  const handleBuyNow = () => {
+    handleAddToCart();
+    alert('Redirecting to checkout...');
   };
 
   // Extract plant name from product name (e.g., "Peace Lily Plant With..." -> "Peace Lily")
@@ -80,7 +95,8 @@ export default function ProductDetail() {
                   type="number"
                   id="quantity"
                   name="quantity"
-                  defaultValue={1}
+                  value={quantity}
+                  onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
                   min={1}
                   className="form-control"
                   style={{
@@ -104,9 +120,18 @@ export default function ProductDetail() {
                 ))}
               </div>
               <div className="buttons">
-                <button className="btn add-to-cart-btn">Add to Cart</button>
-                <button className="btn buy-now-btn">Buy It Now</button>
+                <button className="btn add-to-cart-btn" onClick={handleAddToCart}>
+                  Add to Cart
+                </button>
+                <button className="btn buy-now-btn" onClick={handleBuyNow}>
+                  Buy It Now
+                </button>
               </div>
+              {addedToCart && (
+                <div className="alert alert-success mt-2">
+                  Added {quantity} {colorNames[selectedColorIndex]} {product.name} to cart!
+                </div>
+              )}
               <ul className="list-styled">
                 <li>Free Shipping</li>
                 <li>Cash on delivery available</li>

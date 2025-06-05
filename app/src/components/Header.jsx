@@ -1,7 +1,11 @@
 import { Link, NavLink } from "react-router-dom";
 import { useEffect } from "react";
+import { useCart } from "../context/CartContext";
 
 export default function Header() {
+  const { getCartCount } = useCart();
+  const cartCount = getCartCount();
+  
   useEffect(() => {
     let prevScrollPos = window.pageYOffset;
     const header = document.querySelector("header.sticky");
@@ -117,8 +121,13 @@ export default function Header() {
             <NavLink to="/login" className="me-3">
               <i className="fas fa-user" />
             </NavLink>
-            <NavLink to="/cart" className="me-3">
+            <NavLink to="/cart" className="me-3 position-relative">
               <i className="fas fa-shopping-cart" />
+              {cartCount > 0 && (
+                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">
+                  {cartCount}
+                </span>
+              )}
             </NavLink>
             <a href="#">
               <i className="fas fa-wallet" />
