@@ -46,8 +46,8 @@ export default function LowMaintenance() {
                 />
                 <h3>Golden Money Plant With Self Watering Pot</h3>
                 <p>₹349.00</p>
-                <a
-                  href="#"
+                <Link
+                  to="/product/golden-money-plant"
                   className="view-product-btn btn"
                   style={{
                     backgroundColor: "#2B5943",
@@ -60,7 +60,7 @@ export default function LowMaintenance() {
                   }}
                 >
                   View Product
-                </a>
+                </Link>
               </div>
             </div>
           </div>

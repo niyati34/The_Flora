@@ -73,8 +73,8 @@ export default function AirPurifying() {
                 />
                 <h3>Spider Plant With Self Watering Pot</h3>
                 <p>₹359.00</p>
-                <a
-                  href="#"
+                <Link
+                  to="/product/spider-plant"
                   className="view-product-btn btn"
                   style={{
                     backgroundColor: "#2B5943",
@@ -87,7 +87,7 @@ export default function AirPurifying() {
                   }}
                 >
                   View Product
-                </a>
+                </Link>
               </div>
             </div>
             <div className="col-md-3">
@@ -99,8 +99,8 @@ export default function AirPurifying() {
                 />
                 <h3>Syngonium Red Plant With Self Watering Pot</h3>
                 <p>₹347.00</p>
-                <a
-                  href="#"
+                <Link
+                  to="/product/syngonium-red"
                   className="view-product-btn btn"
                   style={{
                     backgroundColor: "#2B5943",
@@ -113,7 +113,7 @@ export default function AirPurifying() {
                   }}
                 >
                   View Product
-                </a>
+                </Link>
               </div>
             </div>
             <div className="col-md-3">
@@ -127,8 +127,8 @@ export default function AirPurifying() {
                   Calathea Stromanthe Triostar Plant With Self Watering Pot
                 </h3>
                 <p>₹410.00</p>
-                <a
-                  href="#"
+                <Link
+                  to="/product/triostar"
                   className="view-product-btn btn"
                   style={{
                     backgroundColor: "#2B5943",
@@ -141,7 +141,7 @@ export default function AirPurifying() {
                   }}
                 >
                   View Product
-                </a>
+                </Link>
               </div>
             </div>
           </div>

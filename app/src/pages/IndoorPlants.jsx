@@ -46,8 +46,8 @@ export default function IndoorPlants() {
                 />
                 <h3>Jade Plant With Self Watering Pot: Lucky Plant</h3>
                 <p>₹299.00</p>
-                <a
-                  href="#"
+                <Link
+                  to="/product/jade-plant"
                   className="view-product-btn btn"
                   style={{
                     backgroundColor: "#2B5943",
@@ -60,7 +60,7 @@ export default function IndoorPlants() {
                   }}
                 >
                   View Product
-                </a>
+                </Link>
               </div>
             </div>
           </div>
