@@ -13,11 +13,15 @@ import IndoorPlants from "./pages/IndoorPlants";
 import LowMaintenance from "./pages/LowMaintenance";
 import ProductDetail from "./pages/ProductDetail";
 import { CartProvider } from "./context/CartContext";
+import { WishlistProvider } from "./context/WishlistContext";
+import { CompareProvider } from "./context/CompareContext";
 
 export default function App() {
   return (
     <CartProvider>
-      <BrowserRouter>
+      <WishlistProvider>
+        <CompareProvider>
+          <BrowserRouter>
         <Header />
         <main>
         <Routes>
@@ -34,6 +38,8 @@ export default function App() {
       </main>
       <Footer />
     </BrowserRouter>
+        </CompareProvider>
+      </WishlistProvider>
     </CartProvider>
   );
 }

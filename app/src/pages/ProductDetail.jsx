@@ -2,11 +2,15 @@ import { useParams, Link } from "react-router-dom";
 import { useState } from "react";
 import { products } from "../data/products";
 import { useCart } from "../context/CartContext";
+import { useWishlist } from "../context/WishlistContext";
+import { useCompare } from "../context/CompareContext";
 
 export default function ProductDetail() {
   const { id } = useParams();
   const product = products.find((p) => p.id === id);
   const { addToCart } = useCart();
+  const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
+  const { addToCompare, removeFromCompare, isInCompare } = useCompare();
 
   if (!product)
     return (
@@ -40,6 +44,22 @@ export default function ProductDetail() {
   const handleBuyNow = () => {
     handleAddToCart();
     alert('Redirecting to checkout...');
+  };
+
+  const toggleWishlist = () => {
+    if (isInWishlist(product.id)) {
+      removeFromWishlist(product.id);
+    } else {
+      addToWishlist(product);
+    }
+  };
+
+  const toggleCompare = () => {
+    if (isInCompare(product.id)) {
+      removeFromCompare(product.id);
+    } else {
+      addToCompare(product);
+    }
   };
 
   // Extract plant name from product name (e.g., "Peace Lily Plant With..." -> "Peace Lily")
@@ -125,6 +145,22 @@ export default function ProductDetail() {
                 </button>
                 <button className="btn buy-now-btn" onClick={handleBuyNow}>
                   Buy It Now
+                </button>
+                <button 
+                  className={`btn ${isInWishlist(product.id) ? 'btn-danger' : 'btn-outline-danger'}`}
+                  onClick={toggleWishlist}
+                  title={isInWishlist(product.id) ? 'Remove from Wishlist' : 'Add to Wishlist'}
+                >
+                  <i className={`fas fa-heart ${isInWishlist(product.id) ? '' : 'far'}`}></i>
+                  {isInWishlist(product.id) ? ' Remove' : ' Wishlist'}
+                </button>
+                <button 
+                  className={`btn ${isInCompare(product.id) ? 'btn-warning' : 'btn-outline-warning'}`}
+                  onClick={toggleCompare}
+                  title={isInCompare(product.id) ? 'Remove from Compare' : 'Add to Compare'}
+                >
+                  <i className="fas fa-balance-scale"></i>
+                  {isInCompare(product.id) ? ' Remove' : ' Compare'}
                 </button>
               </div>
               {addedToCart && (
