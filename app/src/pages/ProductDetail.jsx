@@ -6,6 +6,7 @@ import { useWishlist } from "../context/WishlistContext";
 import { useCompare } from "../context/CompareContext";
 import { useNotes } from "../context/NotesContext";
 import { useStock } from "../context/StockContext";
+import ProductRecommendations from "../components/ProductRecommendations";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -425,6 +426,9 @@ export default function ProductDetail() {
             </div>
           </div>
         </div>
+
+        {/* Product Recommendations */}
+        <ProductRecommendations currentProduct={product} />
       </section>
     </main>
   );
