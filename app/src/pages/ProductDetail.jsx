@@ -4,6 +4,7 @@ import { products } from "../data/products";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { useCompare } from "../context/CompareContext";
+import { useNotes } from "../context/NotesContext";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -11,6 +12,7 @@ export default function ProductDetail() {
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const { addToCompare, removeFromCompare, isInCompare } = useCompare();
+  const { addNote, getNotesForProduct, removeNote } = useNotes();
 
   if (!product)
     return (
@@ -26,6 +28,8 @@ export default function ProductDetail() {
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false);
+  const [noteText, setNoteText] = useState("");
+  const [showNotes, setShowNotes] = useState(false);
 
   const colors = ["black", "red", "white", "#757471", "#EEFC09"];
   const colorNames = ["Black", "Red", "White", "Grey", "Yellow"];
@@ -61,6 +65,15 @@ export default function ProductDetail() {
       addToCompare(product);
     }
   };
+
+  const handleAddNote = () => {
+    if (noteText.trim()) {
+      addNote(noteText, product.id);
+      setNoteText("");
+    }
+  };
+
+  const productNotes = getNotesForProduct(product.id);
 
   // Extract plant name from product name (e.g., "Peace Lily Plant With..." -> "Peace Lily")
   const getPlantName = (productName) => {
@@ -316,6 +329,66 @@ export default function ProductDetail() {
                     Submit Review
                   </button>
                 </form>
+              )}
+            </div>
+
+            {/* Notes Section */}
+            <div className="product-notes mt-4">
+              <div className="d-flex justify-content-between align-items-center mb-3">
+                <h5>My Notes</h5>
+                <button 
+                  className="btn btn-outline-info btn-sm"
+                  onClick={() => setShowNotes(!showNotes)}
+                >
+                  {showNotes ? 'Hide Notes' : 'Show Notes'} ({productNotes.length})
+                </button>
+              </div>
+              
+              {showNotes && (
+                <div>
+                  <div className="mb-3">
+                    <div className="input-group">
+                      <input
+                        type="text"
+                        className="form-control"
+                        placeholder="Add a note about this plant..."
+                        value={noteText}
+                        onChange={(e) => setNoteText(e.target.value)}
+                        onKeyPress={(e) => e.key === 'Enter' && handleAddNote()}
+                      />
+                      <button 
+                        className="btn btn-outline-secondary"
+                        onClick={handleAddNote}
+                        disabled={!noteText.trim()}
+                      >
+                        Add Note
+                      </button>
+                    </div>
+                  </div>
+                  
+                  {productNotes.length > 0 && (
+                    <div className="notes-list">
+                      {productNotes.map(note => (
+                        <div key={note.id} className="note-item card mb-2">
+                          <div className="card-body p-2">
+                            <div className="d-flex justify-content-between">
+                              <small className="text-muted">
+                                {new Date(note.timestamp).toLocaleDateString()}
+                              </small>
+                              <button 
+                                className="btn btn-sm btn-outline-danger"
+                                onClick={() => removeNote(note.id)}
+                              >
+                                ×
+                              </button>
+                            </div>
+                            <p className="mb-0">{note.text}</p>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               )}
             </div>
           </div>

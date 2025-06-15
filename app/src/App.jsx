@@ -15,13 +15,15 @@ import ProductDetail from "./pages/ProductDetail";
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
 import { CompareProvider } from "./context/CompareContext";
+import { NotesProvider } from "./context/NotesContext";
 
 export default function App() {
   return (
     <CartProvider>
       <WishlistProvider>
         <CompareProvider>
-          <BrowserRouter>
+          <NotesProvider>
+            <BrowserRouter>
         <Header />
         <main>
         <Routes>
@@ -38,6 +40,7 @@ export default function App() {
       </main>
       <Footer />
     </BrowserRouter>
+          </NotesProvider>
         </CompareProvider>
       </WishlistProvider>
     </CartProvider>
