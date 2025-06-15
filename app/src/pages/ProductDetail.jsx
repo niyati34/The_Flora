@@ -5,6 +5,7 @@ import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { useCompare } from "../context/CompareContext";
 import { useNotes } from "../context/NotesContext";
+import { useStock } from "../context/StockContext";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -13,6 +14,7 @@ export default function ProductDetail() {
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const { addToCompare, removeFromCompare, isInCompare } = useCompare();
   const { addNote, getNotesForProduct, removeNote } = useNotes();
+  const { getAvailableStock, isInStock, getStockStatus, reserveStock } = useStock();
 
   if (!product)
     return (
@@ -40,9 +42,14 @@ export default function ProductDetail() {
   };
 
   const handleAddToCart = () => {
-    addToCart(product, quantity, selectedImage, colorNames[selectedColorIndex]);
-    setAddedToCart(true);
-    setTimeout(() => setAddedToCart(false), 2000);
+    if (isInStock(product.id, quantity)) {
+      addToCart(product, quantity, selectedImage, colorNames[selectedColorIndex]);
+      reserveStock(product.id, quantity);
+      setAddedToCart(true);
+      setTimeout(() => setAddedToCart(false), 2000);
+    } else {
+      alert('Sorry, not enough stock available!');
+    }
   };
 
   const handleBuyNow = () => {
@@ -122,6 +129,22 @@ export default function ProductDetail() {
                 ))}
               </ul>
               <p>Price: ₹{product.price.toFixed(2)}</p>
+              
+              {/* Stock Status */}
+              <div className="stock-info mb-3">
+                <span className={`badge ${
+                  getStockStatus(product.id) === 'In Stock' ? 'bg-success' :
+                  getStockStatus(product.id) === 'Low Stock' ? 'bg-warning' : 'bg-danger'
+                }`}>
+                  {getStockStatus(product.id)}
+                </span>
+                {getAvailableStock(product.id) > 0 && (
+                  <small className="text-muted ms-2">
+                    {getAvailableStock(product.id)} available
+                  </small>
+                )}
+              </div>
+
               <div className="form-group">
                 <label htmlFor="quantity">Quantity:</label>
                 <input
@@ -131,6 +154,7 @@ export default function ProductDetail() {
                   value={quantity}
                   onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
                   min={1}
+                  max={getAvailableStock(product.id)}
                   className="form-control"
                   style={{
                     width: "100px",
@@ -153,10 +177,18 @@ export default function ProductDetail() {
                 ))}
               </div>
               <div className="buttons">
-                <button className="btn add-to-cart-btn" onClick={handleAddToCart}>
-                  Add to Cart
+                <button 
+                  className="btn add-to-cart-btn" 
+                  onClick={handleAddToCart}
+                  disabled={!isInStock(product.id, quantity)}
+                >
+                  {getStockStatus(product.id) === 'Out of Stock' ? 'Out of Stock' : 'Add to Cart'}
                 </button>
-                <button className="btn buy-now-btn" onClick={handleBuyNow}>
+                <button 
+                  className="btn buy-now-btn" 
+                  onClick={handleBuyNow}
+                  disabled={!isInStock(product.id, quantity)}
+                >
                   Buy It Now
                 </button>
                 <button 
