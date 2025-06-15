@@ -7,6 +7,7 @@ import { useCompare } from "../context/CompareContext";
 import { useNotes } from "../context/NotesContext";
 import { useStock } from "../context/StockContext";
 import { useRecentlyViewed } from "../context/RecentlyViewedContext";
+import { usePriceAlert } from "../context/PriceAlertContext";
 import ProductRecommendations from "../components/ProductRecommendations";
 
 export default function ProductDetail() {
@@ -18,6 +19,7 @@ export default function ProductDetail() {
   const { addNote, getNotesForProduct, removeNote } = useNotes();
   const { getAvailableStock, isInStock, getStockStatus, reserveStock } = useStock();
   const { addToRecentlyViewed } = useRecentlyViewed();
+  const { addPriceAlert, getAlertsForProduct } = usePriceAlert();
 
   if (!product)
     return (
@@ -40,6 +42,8 @@ export default function ProductDetail() {
   const [addedToCart, setAddedToCart] = useState(false);
   const [noteText, setNoteText] = useState("");
   const [showNotes, setShowNotes] = useState(false);
+  const [targetPrice, setTargetPrice] = useState("");
+  const [showPriceAlert, setShowPriceAlert] = useState(false);
 
   const colors = ["black", "red", "white", "#757471", "#EEFC09"];
   const colorNames = ["Black", "Red", "White", "Grey", "Yellow"];
@@ -88,7 +92,20 @@ export default function ProductDetail() {
     }
   };
 
+  const handlePriceAlert = () => {
+    const price = parseFloat(targetPrice);
+    if (price && price < product.price) {
+      addPriceAlert(product.id, price);
+      setTargetPrice("");
+      setShowPriceAlert(false);
+      alert(`Price alert set for ₹${price}! You'll be notified when the price drops.`);
+    } else {
+      alert("Please enter a valid price lower than the current price.");
+    }
+  };
+
   const productNotes = getNotesForProduct(product.id);
+  const priceAlerts = getAlertsForProduct(product.id);
 
   // Extract plant name from product name (e.g., "Peace Lily Plant With..." -> "Peace Lily")
   const getPlantName = (productName) => {
@@ -137,6 +154,48 @@ export default function ProductDetail() {
                 ))}
               </ul>
               <p>Price: ₹{product.price.toFixed(2)}</p>
+              
+              {/* Price Alert */}
+              <div className="price-alert mb-3">
+                <button 
+                  className="btn btn-sm btn-outline-info"
+                  onClick={() => setShowPriceAlert(!showPriceAlert)}
+                >
+                  <i className="fas fa-bell"></i> Set Price Alert
+                </button>
+                {priceAlerts.filter(alert => alert.isActive).length > 0 && (
+                  <small className="text-success ms-2">
+                    ✓ Price alert active
+                  </small>
+                )}
+              </div>
+
+              {showPriceAlert && (
+                <div className="price-alert-form card p-3 mb-3">
+                  <div className="input-group">
+                    <span className="input-group-text">₹</span>
+                    <input
+                      type="number"
+                      className="form-control"
+                      placeholder="Target price"
+                      value={targetPrice}
+                      onChange={(e) => setTargetPrice(e.target.value)}
+                      max={product.price - 1}
+                      step="0.01"
+                    />
+                    <button 
+                      className="btn btn-outline-primary"
+                      onClick={handlePriceAlert}
+                      disabled={!targetPrice || parseFloat(targetPrice) >= product.price}
+                    >
+                      Set Alert
+                    </button>
+                  </div>
+                  <small className="text-muted mt-1">
+                    Enter a price below ₹{product.price} to get notified when it drops
+                  </small>
+                </div>
+              )}
               
               {/* Stock Status */}
               <div className="stock-info mb-3">

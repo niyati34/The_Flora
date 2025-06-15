@@ -18,6 +18,7 @@ import { CompareProvider } from "./context/CompareContext";
 import { NotesProvider } from "./context/NotesContext";
 import { StockProvider } from "./context/StockContext";
 import { RecentlyViewedProvider } from "./context/RecentlyViewedContext";
+import { PriceAlertProvider } from "./context/PriceAlertContext";
 
 export default function App() {
   return (
@@ -27,7 +28,8 @@ export default function App() {
           <NotesProvider>
             <StockProvider>
               <RecentlyViewedProvider>
-                <BrowserRouter>
+                <PriceAlertProvider>
+                  <BrowserRouter>
         <Header />
         <main>
         <Routes>
@@ -44,6 +46,7 @@ export default function App() {
       </main>
       <Footer />
     </BrowserRouter>
+                </PriceAlertProvider>
               </RecentlyViewedProvider>
             </StockProvider>
           </NotesProvider>
