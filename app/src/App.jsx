@@ -17,6 +17,7 @@ import { WishlistProvider } from "./context/WishlistContext";
 import { CompareProvider } from "./context/CompareContext";
 import { NotesProvider } from "./context/NotesContext";
 import { StockProvider } from "./context/StockContext";
+import { RecentlyViewedProvider } from "./context/RecentlyViewedContext";
 
 export default function App() {
   return (
@@ -25,7 +26,8 @@ export default function App() {
         <CompareProvider>
           <NotesProvider>
             <StockProvider>
-              <BrowserRouter>
+              <RecentlyViewedProvider>
+                <BrowserRouter>
         <Header />
         <main>
         <Routes>
@@ -42,6 +44,7 @@ export default function App() {
       </main>
       <Footer />
     </BrowserRouter>
+              </RecentlyViewedProvider>
             </StockProvider>
           </NotesProvider>
         </CompareProvider>

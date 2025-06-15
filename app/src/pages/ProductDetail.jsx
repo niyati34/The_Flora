@@ -1,11 +1,12 @@
 import { useParams, Link } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { products } from "../data/products";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import { useCompare } from "../context/CompareContext";
 import { useNotes } from "../context/NotesContext";
 import { useStock } from "../context/StockContext";
+import { useRecentlyViewed } from "../context/RecentlyViewedContext";
 import ProductRecommendations from "../components/ProductRecommendations";
 
 export default function ProductDetail() {
@@ -16,6 +17,7 @@ export default function ProductDetail() {
   const { addToCompare, removeFromCompare, isInCompare } = useCompare();
   const { addNote, getNotesForProduct, removeNote } = useNotes();
   const { getAvailableStock, isInStock, getStockStatus, reserveStock } = useStock();
+  const { addToRecentlyViewed } = useRecentlyViewed();
 
   if (!product)
     return (
@@ -23,6 +25,11 @@ export default function ProductDetail() {
         <h2>Product not found</h2>
       </div>
     );
+
+  // Add to recently viewed when component mounts
+  useEffect(() => {
+    addToRecentlyViewed(product);
+  }, [product.id, addToRecentlyViewed]);
 
   const [selectedImage, setSelectedImage] = useState(product.image);
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
