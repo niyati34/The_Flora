@@ -44,6 +44,8 @@ export default function ProductDetail() {
   const [showNotes, setShowNotes] = useState(false);
   const [targetPrice, setTargetPrice] = useState("");
   const [showPriceAlert, setShowPriceAlert] = useState(false);
+  const [isImageZoomed, setIsImageZoomed] = useState(false);
+  const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
 
   const colors = ["black", "red", "white", "#757471", "#EEFC09"];
   const colorNames = ["Black", "Red", "White", "Grey", "Yellow"];
@@ -104,6 +106,19 @@ export default function ProductDetail() {
     }
   };
 
+  const handleImageMouseMove = (e) => {
+    if (!isImageZoomed) return;
+    
+    const rect = e.target.getBoundingClientRect();
+    const x = ((e.clientX - rect.left) / rect.width) * 100;
+    const y = ((e.clientY - rect.top) / rect.height) * 100;
+    setZoomPosition({ x, y });
+  };
+
+  const toggleImageZoom = () => {
+    setIsImageZoomed(!isImageZoomed);
+  };
+
   const productNotes = getNotesForProduct(product.id);
   const priceAlerts = getAlertsForProduct(product.id);
 
@@ -139,12 +154,28 @@ export default function ProductDetail() {
         <div className="container">
           <div className="row">
             <div className="col-md-6">
-              <img
-                id="product-image"
-                src={selectedImage}
-                alt={product.name}
-                className="product-image"
-              />
+              <div className="image-container position-relative">
+                <img
+                  id="product-image"
+                  src={selectedImage}
+                  alt={product.name}
+                  className={`product-image ${isImageZoomed ? 'zoomed' : ''}`}
+                  onClick={toggleImageZoom}
+                  onMouseMove={handleImageMouseMove}
+                  onMouseLeave={() => setIsImageZoomed(false)}
+                  style={{
+                    transform: isImageZoomed ? `scale(2)` : 'scale(1)',
+                    transformOrigin: isImageZoomed ? `${zoomPosition.x}% ${zoomPosition.y}%` : 'center',
+                    transition: isImageZoomed ? 'none' : 'transform 0.3s ease',
+                    cursor: isImageZoomed ? 'zoom-out' : 'zoom-in'
+                  }}
+                />
+                <div className="zoom-hint position-absolute top-0 end-0 m-2">
+                  <small className="badge bg-dark">
+                    <i className="fas fa-search-plus"></i> Click to zoom
+                  </small>
+                </div>
+              </div>
             </div>
             <div className="col-md-6">
               <h2>{product.name}</h2>
