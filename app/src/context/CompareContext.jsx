@@ -10,13 +10,13 @@ export function CompareProvider({ children }) {
       alert("You can only compare up to 3 products");
       return;
     }
-    if (!compareList.find(p => p.id === product.id)) {
-      setCompareList(prev => [...prev, product]);
+    if (!compareList.find((p) => p.id === product.id)) {
+      setCompareList((prev) => [...prev, product]);
     }
   };
 
   const removeFromCompare = (productId) => {
-    setCompareList(prev => prev.filter(p => p.id !== productId));
+    setCompareList((prev) => prev.filter((p) => p.id !== productId));
   };
 
   const clearCompare = () => {
@@ -24,17 +24,19 @@ export function CompareProvider({ children }) {
   };
 
   const isInCompare = (productId) => {
-    return compareList.some(p => p.id === productId);
+    return compareList.some((p) => p.id === productId);
   };
 
   return (
-    <CompareContext.Provider value={{
-      compareList,
-      addToCompare,
-      removeFromCompare,
-      clearCompare,
-      isInCompare
-    }}>
+    <CompareContext.Provider
+      value={{
+        compareList,
+        addToCompare,
+        removeFromCompare,
+        clearCompare,
+        isInCompare,
+      }}
+    >
       {children}
     </CompareContext.Provider>
   );

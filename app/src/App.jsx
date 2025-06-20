@@ -20,7 +20,9 @@ import { StockProvider } from "./context/StockContext";
 import { RecentlyViewedProvider } from "./context/RecentlyViewedContext";
 import { PriceAlertProvider } from "./context/PriceAlertContext";
 import { CareReminderProvider } from "./context/CareReminderContext";
+import { WalletProvider } from "./context/WalletContext";
 import ErrorBoundary from "./components/ErrorBoundary";
+import Wallet from "./pages/Wallet";
 
 export default function App() {
   return (
@@ -32,25 +34,40 @@ export default function App() {
               <RecentlyViewedProvider>
                 <PriceAlertProvider>
                   <CareReminderProvider>
+                    <WalletProvider>
                     <BrowserRouter>
-        <Header />
-        <main>
-        <ErrorBoundary>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/plants/air-purifying" element={<AirPurifying />} />
-          <Route path="/plants/indoor" element={<IndoorPlants />} />
-          <Route path="/plants/low-maintenance" element={<LowMaintenance />} />
-          <Route path="/planters" element={<Planters />} />
-          <Route path="/cart" element={<Cart />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup" element={<Signup />} />
-          <Route path="/product/:id" element={<ProductDetail />} />
-  </Routes>
-  </ErrorBoundary>
-      </main>
-      <Footer />
-    </BrowserRouter>
+                      <Header />
+                      <main>
+                        <ErrorBoundary>
+                          <Routes>
+                            <Route path="/" element={<Home />} />
+                            <Route
+                              path="/plants/air-purifying"
+                              element={<AirPurifying />}
+                            />
+                            <Route
+                              path="/plants/indoor"
+                              element={<IndoorPlants />}
+                            />
+                            <Route
+                              path="/plants/low-maintenance"
+                              element={<LowMaintenance />}
+                            />
+                            <Route path="/planters" element={<Planters />} />
+                            <Route path="/cart" element={<Cart />} />
+                            <Route path="/login" element={<Login />} />
+                            <Route path="/signup" element={<Signup />} />
+                            <Route
+                              path="/product/:id"
+                              element={<ProductDetail />}
+                            />
+          <Route path="/wallet" element={<Wallet />} />
+                          </Routes>
+                        </ErrorBoundary>
+                      </main>
+                      <Footer />
+                    </BrowserRouter>
+        </WalletProvider>
                   </CareReminderProvider>
                 </PriceAlertProvider>
               </RecentlyViewedProvider>

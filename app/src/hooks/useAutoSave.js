@@ -37,6 +37,6 @@ export function useAutoSave(key, initialValue = "", delay = 1000) {
     setValue,
     isSaving,
     clearSaved,
-    hasSavedData: hasSavedData()
+    hasSavedData: hasSavedData(),
   };
 }

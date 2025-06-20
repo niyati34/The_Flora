@@ -10,7 +10,7 @@ export default function Header() {
   const navigate = useNavigate();
   const [showSearch, setShowSearch] = useState(false);
   const searchRef = useRef(null);
-  
+
   useEffect(() => {
     let prevScrollPos = window.pageYOffset;
     const header = document.querySelector("header.sticky");
@@ -45,14 +45,25 @@ export default function Header() {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <div className="d-none d-md-flex align-items-center gap-2 flex-grow-1" style={{ maxWidth: 420 }}>
+          <div
+            className="d-none d-md-flex align-items-center gap-2 flex-grow-1"
+            style={{ maxWidth: 420 }}
+          >
             {showSearch ? (
               <div className="w-100" ref={searchRef}>
-                <AdvancedSearch onProductSelect={(p) => { setShowSearch(false); navigate(`/product/${p.id}`); }} />
+                <AdvancedSearch
+                  onProductSelect={(p) => {
+                    setShowSearch(false);
+                    navigate(`/product/${p.id}`);
+                  }}
+                />
               </div>
             ) : (
-              <button className="btn btn-outline-success" onClick={() => setShowSearch(true)}>
-                <i className="fas fa-search me-1"/> Search
+              <button
+                className="btn btn-outline-success"
+                onClick={() => setShowSearch(true)}
+              >
+                <i className="fas fa-search me-1" /> Search
               </button>
             )}
           </div>
@@ -135,16 +146,16 @@ export default function Header() {
                 </span>
               )}
             </NavLink>
-            <a href="#">
+            <NavLink to="/wallet">
               <i className="fas fa-wallet" />
-            </a>
+            </NavLink>
           </div>
         </div>
       </nav>
-      <GlobalKeyboardShortcuts 
+      <GlobalKeyboardShortcuts
         onOpenSearch={() => setShowSearch(true)}
-        onToggleCart={() => navigate('/cart')}
-        onGoHome={() => navigate('/')}
+        onToggleCart={() => navigate("/cart")}
+        onGoHome={() => navigate("/")}
       />
     </header>
   );

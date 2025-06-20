@@ -19,7 +19,8 @@ export default function ProductDetail() {
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
   const { addToCompare, removeFromCompare, isInCompare } = useCompare();
   const { addNote, getNotesForProduct, removeNote } = useNotes();
-  const { getAvailableStock, isInStock, getStockStatus, reserveStock } = useStock();
+  const { getAvailableStock, isInStock, getStockStatus, reserveStock } =
+    useStock();
   const { addToRecentlyViewed } = useRecentlyViewed();
   const { addPriceAlert, getAlertsForProduct } = usePriceAlert();
   const { addReminder, getRemindersForProduct } = useCareReminder();
@@ -52,19 +53,19 @@ export default function ProductDetail() {
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
 
   // Auto-save functionality for review and notes
-  const { 
-    value: review, 
-    setValue: setReview, 
+  const {
+    value: review,
+    setValue: setReview,
     isSaving: isReviewSaving,
     clearSaved: clearReviewDraft,
-    hasSavedData: hasReviewDraft 
+    hasSavedData: hasReviewDraft,
   } = useAutoSave(`review_${product.id}`, "");
 
-  const { 
-    value: noteText, 
-    setValue: setNoteText, 
+  const {
+    value: noteText,
+    setValue: setNoteText,
     isSaving: isNoteSaving,
-    clearSaved: clearNoteDraft 
+    clearSaved: clearNoteDraft,
   } = useAutoSave(`note_${product.id}`, "");
 
   const colors = ["black", "red", "white", "#757471", "#EEFC09"];
@@ -77,18 +78,23 @@ export default function ProductDetail() {
 
   const handleAddToCart = () => {
     if (isInStock(product.id, quantity)) {
-      addToCart(product, quantity, selectedImage, colorNames[selectedColorIndex]);
+      addToCart(
+        product,
+        quantity,
+        selectedImage,
+        colorNames[selectedColorIndex]
+      );
       reserveStock(product.id, quantity);
       setAddedToCart(true);
       setTimeout(() => setAddedToCart(false), 2000);
     } else {
-      alert('Sorry, not enough stock available!');
+      alert("Sorry, not enough stock available!");
     }
   };
 
   const handleBuyNow = () => {
     handleAddToCart();
-    alert('Redirecting to checkout...');
+    alert("Redirecting to checkout...");
   };
 
   const toggleWishlist = () => {
@@ -121,7 +127,9 @@ export default function ProductDetail() {
       addPriceAlert(product.id, price);
       setTargetPrice("");
       setShowPriceAlert(false);
-      alert(`Price alert set for ₹${price}! You'll be notified when the price drops.`);
+      alert(
+        `Price alert set for ₹${price}! You'll be notified when the price drops.`
+      );
     } else {
       alert("Please enter a valid price lower than the current price.");
     }
@@ -130,15 +138,23 @@ export default function ProductDetail() {
   const handleCareReminder = () => {
     if (careType && careFrequency > 0) {
       const plantName = getPlantName(product.name);
-      addReminder(product.id, plantName, careType, careFrequency, new Date().toISOString());
+      addReminder(
+        product.id,
+        plantName,
+        careType,
+        careFrequency,
+        new Date().toISOString()
+      );
       setShowCareReminder(false);
-      alert(`Care reminder set! You'll be reminded to ${careType} your ${plantName} every ${careFrequency} days.`);
+      alert(
+        `Care reminder set! You'll be reminded to ${careType} your ${plantName} every ${careFrequency} days.`
+      );
     }
   };
 
   const handleImageMouseMove = (e) => {
     if (!isImageZoomed) return;
-    
+
     const rect = e.target.getBoundingClientRect();
     const x = ((e.clientX - rect.left) / rect.width) * 100;
     const y = ((e.clientY - rect.top) / rect.height) * 100;
@@ -190,15 +206,17 @@ export default function ProductDetail() {
                   id="product-image"
                   src={selectedImage}
                   alt={product.name}
-                  className={`product-image ${isImageZoomed ? 'zoomed' : ''}`}
+                  className={`product-image ${isImageZoomed ? "zoomed" : ""}`}
                   onClick={toggleImageZoom}
                   onMouseMove={handleImageMouseMove}
                   onMouseLeave={() => setIsImageZoomed(false)}
                   style={{
-                    transform: isImageZoomed ? `scale(2)` : 'scale(1)',
-                    transformOrigin: isImageZoomed ? `${zoomPosition.x}% ${zoomPosition.y}%` : 'center',
-                    transition: isImageZoomed ? 'none' : 'transform 0.3s ease',
-                    cursor: isImageZoomed ? 'zoom-out' : 'zoom-in'
+                    transform: isImageZoomed ? `scale(2)` : "scale(1)",
+                    transformOrigin: isImageZoomed
+                      ? `${zoomPosition.x}% ${zoomPosition.y}%`
+                      : "center",
+                    transition: isImageZoomed ? "none" : "transform 0.3s ease",
+                    cursor: isImageZoomed ? "zoom-out" : "zoom-in",
                   }}
                 />
                 <div className="zoom-hint position-absolute top-0 end-0 m-2">
@@ -216,16 +234,16 @@ export default function ProductDetail() {
                 ))}
               </ul>
               <p>Price: ₹{product.price.toFixed(2)}</p>
-              
+
               {/* Price Alert */}
               <div className="price-alert mb-3">
-                <button 
+                <button
                   className="btn btn-sm btn-outline-info"
                   onClick={() => setShowPriceAlert(!showPriceAlert)}
                 >
                   <i className="fas fa-bell"></i> Set Price Alert
                 </button>
-                {priceAlerts.filter(alert => alert.isActive).length > 0 && (
+                {priceAlerts.filter((alert) => alert.isActive).length > 0 && (
                   <small className="text-success ms-2">
                     ✓ Price alert active
                   </small>
@@ -245,31 +263,40 @@ export default function ProductDetail() {
                       max={product.price - 1}
                       step="0.01"
                     />
-                    <button 
+                    <button
                       className="btn btn-outline-primary"
                       onClick={handlePriceAlert}
-                      disabled={!targetPrice || parseFloat(targetPrice) >= product.price}
+                      disabled={
+                        !targetPrice || parseFloat(targetPrice) >= product.price
+                      }
                     >
                       Set Alert
                     </button>
                   </div>
                   <small className="text-muted mt-1">
-                    Enter a price below ₹{product.price} to get notified when it drops
+                    Enter a price below ₹{product.price} to get notified when it
+                    drops
                   </small>
                 </div>
               )}
 
               {/* Care Reminders */}
               <div className="care-reminder mb-3">
-                <button 
+                <button
                   className="btn btn-sm btn-outline-success"
                   onClick={() => setShowCareReminder(!showCareReminder)}
                 >
                   <i className="fas fa-calendar-alt"></i> Set Care Reminder
                 </button>
-                {careReminders.filter(reminder => reminder.isActive).length > 0 && (
+                {careReminders.filter((reminder) => reminder.isActive).length >
+                  0 && (
                   <small className="text-success ms-2">
-                    ✓ {careReminders.filter(reminder => reminder.isActive).length} reminder(s) active
+                    ✓{" "}
+                    {
+                      careReminders.filter((reminder) => reminder.isActive)
+                        .length
+                    }{" "}
+                    reminder(s) active
                   </small>
                 )}
               </div>
@@ -279,7 +306,7 @@ export default function ProductDetail() {
                   <div className="row">
                     <div className="col-md-6 mb-2">
                       <label className="form-label">Care Type:</label>
-                      <select 
+                      <select
                         className="form-select"
                         value={careType}
                         onChange={(e) => setCareType(e.target.value)}
@@ -296,13 +323,15 @@ export default function ProductDetail() {
                         type="number"
                         className="form-control"
                         value={careFrequency}
-                        onChange={(e) => setCareFrequency(parseInt(e.target.value))}
+                        onChange={(e) =>
+                          setCareFrequency(parseInt(e.target.value))
+                        }
                         min="1"
                         max="365"
                       />
                     </div>
                   </div>
-                  <button 
+                  <button
                     className="btn btn-success"
                     onClick={handleCareReminder}
                   >
@@ -310,13 +339,18 @@ export default function ProductDetail() {
                   </button>
                 </div>
               )}
-              
+
               {/* Stock Status */}
               <div className="stock-info mb-3">
-                <span className={`badge ${
-                  getStockStatus(product.id) === 'In Stock' ? 'bg-success' :
-                  getStockStatus(product.id) === 'Low Stock' ? 'bg-warning' : 'bg-danger'
-                }`}>
+                <span
+                  className={`badge ${
+                    getStockStatus(product.id) === "In Stock"
+                      ? "bg-success"
+                      : getStockStatus(product.id) === "Low Stock"
+                      ? "bg-warning"
+                      : "bg-danger"
+                  }`}
+                >
                   {getStockStatus(product.id)}
                 </span>
                 {getAvailableStock(product.id) > 0 && (
@@ -333,7 +367,9 @@ export default function ProductDetail() {
                   id="quantity"
                   name="quantity"
                   value={quantity}
-                  onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                  onChange={(e) =>
+                    setQuantity(Math.max(1, parseInt(e.target.value) || 1))
+                  }
                   min={1}
                   max={getAvailableStock(product.id)}
                   className="form-control"
@@ -358,40 +394,63 @@ export default function ProductDetail() {
                 ))}
               </div>
               <div className="buttons">
-                <button 
-                  className="btn add-to-cart-btn" 
+                <button
+                  className="btn add-to-cart-btn"
                   onClick={handleAddToCart}
                   disabled={!isInStock(product.id, quantity)}
                 >
-                  {getStockStatus(product.id) === 'Out of Stock' ? 'Out of Stock' : 'Add to Cart'}
+                  {getStockStatus(product.id) === "Out of Stock"
+                    ? "Out of Stock"
+                    : "Add to Cart"}
                 </button>
-                <button 
-                  className="btn buy-now-btn" 
+                <button
+                  className="btn buy-now-btn"
                   onClick={handleBuyNow}
                   disabled={!isInStock(product.id, quantity)}
                 >
                   Buy It Now
                 </button>
-                <button 
-                  className={`btn ${isInWishlist(product.id) ? 'btn-danger' : 'btn-outline-danger'}`}
+                <button
+                  className={`btn ${
+                    isInWishlist(product.id)
+                      ? "btn-danger"
+                      : "btn-outline-danger"
+                  }`}
                   onClick={toggleWishlist}
-                  title={isInWishlist(product.id) ? 'Remove from Wishlist' : 'Add to Wishlist'}
+                  title={
+                    isInWishlist(product.id)
+                      ? "Remove from Wishlist"
+                      : "Add to Wishlist"
+                  }
                 >
-                  <i className={`fas fa-heart ${isInWishlist(product.id) ? '' : 'far'}`}></i>
-                  {isInWishlist(product.id) ? ' Remove' : ' Wishlist'}
+                  <i
+                    className={`fas fa-heart ${
+                      isInWishlist(product.id) ? "" : "far"
+                    }`}
+                  ></i>
+                  {isInWishlist(product.id) ? " Remove" : " Wishlist"}
                 </button>
-                <button 
-                  className={`btn ${isInCompare(product.id) ? 'btn-warning' : 'btn-outline-warning'}`}
+                <button
+                  className={`btn ${
+                    isInCompare(product.id)
+                      ? "btn-warning"
+                      : "btn-outline-warning"
+                  }`}
                   onClick={toggleCompare}
-                  title={isInCompare(product.id) ? 'Remove from Compare' : 'Add to Compare'}
+                  title={
+                    isInCompare(product.id)
+                      ? "Remove from Compare"
+                      : "Add to Compare"
+                  }
                 >
                   <i className="fas fa-balance-scale"></i>
-                  {isInCompare(product.id) ? ' Remove' : ' Compare'}
+                  {isInCompare(product.id) ? " Remove" : " Compare"}
                 </button>
               </div>
               {addedToCart && (
                 <div className="alert alert-success mt-2">
-                  Added {quantity} {colorNames[selectedColorIndex]} {product.name} to cart!
+                  Added {quantity} {colorNames[selectedColorIndex]}{" "}
+                  {product.name} to cart!
                 </div>
               )}
               <ul className="list-styled">
@@ -517,11 +576,13 @@ export default function ProductDetail() {
                 </div>
               </div>
               {reviewSubmitted ? (
-                <div className="alert alert-success mt-3">Thank you for your review!</div>
+                <div className="alert alert-success mt-3">
+                  Thank you for your review!
+                </div>
               ) : (
                 <form
                   id="review-form"
-                  onSubmit={e => {
+                  onSubmit={(e) => {
                     e.preventDefault();
                     setReviewSubmitted(true);
                     clearReviewDraft();
@@ -547,7 +608,7 @@ export default function ProductDetail() {
                       rows={4}
                       required
                       value={review}
-                      onChange={e => setReview(e.target.value)}
+                      onChange={(e) => setReview(e.target.value)}
                     ></textarea>
                   </div>
                   <button type="submit" className="btn btn-primary">
@@ -561,14 +622,15 @@ export default function ProductDetail() {
             <div className="product-notes mt-4">
               <div className="d-flex justify-content-between align-items-center mb-3">
                 <h5>My Notes</h5>
-                <button 
+                <button
                   className="btn btn-outline-info btn-sm"
                   onClick={() => setShowNotes(!showNotes)}
                 >
-                  {showNotes ? 'Hide Notes' : 'Show Notes'} ({productNotes.length})
+                  {showNotes ? "Hide Notes" : "Show Notes"} (
+                  {productNotes.length})
                 </button>
               </div>
-              
+
               {showNotes && (
                 <div>
                   <div className="mb-3">
@@ -579,9 +641,9 @@ export default function ProductDetail() {
                         placeholder="Add a note about this plant..."
                         value={noteText}
                         onChange={(e) => setNoteText(e.target.value)}
-                        onKeyPress={(e) => e.key === 'Enter' && handleAddNote()}
+                        onKeyPress={(e) => e.key === "Enter" && handleAddNote()}
                       />
-                      <button 
+                      <button
                         className="btn btn-outline-secondary"
                         onClick={handleAddNote}
                         disabled={!noteText.trim()}
@@ -591,21 +653,22 @@ export default function ProductDetail() {
                     </div>
                     {isNoteSaving && (
                       <small className="text-muted">
-                        <i className="fas fa-spinner fa-spin"></i> Auto-saving draft...
+                        <i className="fas fa-spinner fa-spin"></i> Auto-saving
+                        draft...
                       </small>
                     )}
                   </div>
-                  
+
                   {productNotes.length > 0 && (
                     <div className="notes-list">
-                      {productNotes.map(note => (
+                      {productNotes.map((note) => (
                         <div key={note.id} className="note-item card mb-2">
                           <div className="card-body p-2">
                             <div className="d-flex justify-content-between">
                               <small className="text-muted">
                                 {new Date(note.timestamp).toLocaleDateString()}
                               </small>
-                              <button 
+                              <button
                                 className="btn btn-sm btn-outline-danger"
                                 onClick={() => removeNote(note.id)}
                               >

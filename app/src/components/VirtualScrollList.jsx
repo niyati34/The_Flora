@@ -1,17 +1,20 @@
 import { useState, useEffect, useRef, useMemo } from "react";
 
-export default function VirtualScrollList({ 
-  items, 
-  itemHeight = 200, 
-  containerHeight = 600, 
+export default function VirtualScrollList({
+  items,
+  itemHeight = 200,
+  containerHeight = 600,
   renderItem,
-  overscan = 5 
+  overscan = 5,
 }) {
   const [scrollTop, setScrollTop] = useState(0);
   const scrollRef = useRef(null);
 
   const visibleRange = useMemo(() => {
-    const startIndex = Math.max(0, Math.floor(scrollTop / itemHeight) - overscan);
+    const startIndex = Math.max(
+      0,
+      Math.floor(scrollTop / itemHeight) - overscan
+    );
     const endIndex = Math.min(
       items.length - 1,
       Math.ceil((scrollTop + containerHeight) / itemHeight) + overscan
@@ -46,8 +49,11 @@ export default function VirtualScrollList({
       }
     };
 
-    scrollElement.addEventListener('scroll', handleScrollThrottled, { passive: true });
-    return () => scrollElement.removeEventListener('scroll', handleScrollThrottled);
+    scrollElement.addEventListener("scroll", handleScrollThrottled, {
+      passive: true,
+    });
+    return () =>
+      scrollElement.removeEventListener("scroll", handleScrollThrottled);
   }, []);
 
   return (
@@ -56,19 +62,19 @@ export default function VirtualScrollList({
       className="virtual-scroll-container"
       style={{
         height: containerHeight,
-        overflowY: 'auto',
-        border: '1px solid #ddd',
-        borderRadius: '4px'
+        overflowY: "auto",
+        border: "1px solid #ddd",
+        borderRadius: "4px",
       }}
     >
-      <div style={{ height: totalHeight, position: 'relative' }}>
+      <div style={{ height: totalHeight, position: "relative" }}>
         <div
           style={{
             transform: `translateY(${offsetY}px)`,
-            position: 'absolute',
+            position: "absolute",
             top: 0,
             left: 0,
-            right: 0
+            right: 0,
           }}
         >
           {visibleItems.map((item, index) => {
@@ -78,8 +84,8 @@ export default function VirtualScrollList({
                 key={item.id || actualIndex}
                 style={{
                   height: itemHeight,
-                  display: 'flex',
-                  alignItems: 'center'
+                  display: "flex",
+                  alignItems: "center",
                 }}
               >
                 {renderItem(item, actualIndex)}

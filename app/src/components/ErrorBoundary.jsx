@@ -3,11 +3,11 @@ import React from "react";
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { 
-      hasError: false, 
+    this.state = {
+      hasError: false,
       error: null,
       errorInfo: null,
-      errorId: null
+      errorId: null,
     };
   }
 
@@ -17,11 +17,11 @@ class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     const errorId = Date.now().toString();
-    
+
     this.setState({
       error,
       errorInfo,
-      errorId
+      errorId,
     });
 
     // Log error details
@@ -36,53 +36,56 @@ class ErrorBoundary extends React.Component {
       componentStack: errorInfo.componentStack,
       timestamp: new Date().toISOString(),
       userAgent: navigator.userAgent,
-      url: window.location.href
+      url: window.location.href,
     };
 
     // Store in localStorage for debugging
     try {
-      const existingErrors = JSON.parse(localStorage.getItem('flora_errors') || '[]');
+      const existingErrors = JSON.parse(
+        localStorage.getItem("flora_errors") || "[]"
+      );
       existingErrors.push(errorData);
-      
+
       // Keep only last 10 errors
       const recentErrors = existingErrors.slice(-10);
-      localStorage.setItem('flora_errors', JSON.stringify(recentErrors));
+      localStorage.setItem("flora_errors", JSON.stringify(recentErrors));
     } catch (storageError) {
-      console.error('Failed to store error:', storageError);
+      console.error("Failed to store error:", storageError);
     }
 
     // Log to console in development
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Error Boundary caught an error:', error);
-      console.error('Error Info:', errorInfo);
+    if (process.env.NODE_ENV === "development") {
+      console.error("Error Boundary caught an error:", error);
+      console.error("Error Info:", errorInfo);
     }
   };
 
   handleRetry = () => {
-    this.setState({ 
-      hasError: false, 
-      error: null, 
+    this.setState({
+      hasError: false,
+      error: null,
       errorInfo: null,
-      errorId: null 
+      errorId: null,
     });
   };
 
   handleReportError = () => {
     const { error, errorInfo, errorId } = this.state;
-    
+
     // Create error report
     const report = {
       errorId,
       message: error.message,
       stack: error.stack,
       componentStack: errorInfo.componentStack,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     };
 
     // Copy to clipboard for easy reporting
-    navigator.clipboard.writeText(JSON.stringify(report, null, 2))
+    navigator.clipboard
+      .writeText(JSON.stringify(report, null, 2))
       .then(() => {
-        alert('Error details copied to clipboard. Please share with support.');
+        alert("Error details copied to clipboard. Please share with support.");
       })
       .catch(() => {
         // Fallback: show error details in alert
@@ -100,28 +103,28 @@ class ErrorBoundary extends React.Component {
               Oops! Something went wrong
             </h4>
             <p>
-              We're sorry, but something unexpected happened. Don't worry, 
-              your data is safe and this error has been logged.
+              We're sorry, but something unexpected happened. Don't worry, your
+              data is safe and this error has been logged.
             </p>
-            
+
             <div className="mt-3">
-              <button 
+              <button
                 className="btn btn-primary me-2"
                 onClick={this.handleRetry}
               >
                 <i className="fas fa-redo me-1"></i>
                 Try Again
               </button>
-              
-              <button 
+
+              <button
                 className="btn btn-outline-secondary me-2"
-                onClick={() => window.location.href = '/'}
+                onClick={() => (window.location.href = "/")}
               >
                 <i className="fas fa-home me-1"></i>
                 Go Home
               </button>
-              
-              <button 
+
+              <button
                 className="btn btn-outline-info"
                 onClick={this.handleReportError}
               >
@@ -130,17 +133,20 @@ class ErrorBoundary extends React.Component {
               </button>
             </div>
 
-            {process.env.NODE_ENV === 'development' && (
+            {process.env.NODE_ENV === "development" && (
               <details className="mt-3">
                 <summary className="btn btn-sm btn-outline-warning">
                   Show Error Details (Development)
                 </summary>
                 <pre className="mt-2 p-2 bg-light border rounded small">
-                  <strong>Error:</strong> {this.state.error && this.state.error.toString()}
-                  {'\n\n'}
-                  <strong>Stack:</strong> {this.state.error && this.state.error.stack}
-                  {'\n\n'}
-                  <strong>Component Stack:</strong> {this.state.errorInfo && this.state.errorInfo.componentStack}
+                  <strong>Error:</strong>{" "}
+                  {this.state.error && this.state.error.toString()}
+                  {"\n\n"}
+                  <strong>Stack:</strong>{" "}
+                  {this.state.error && this.state.error.stack}
+                  {"\n\n"}
+                  <strong>Component Stack:</strong>{" "}
+                  {this.state.errorInfo && this.state.errorInfo.componentStack}
                 </pre>
               </details>
             )}
@@ -155,27 +161,32 @@ class ErrorBoundary extends React.Component {
 
 // Hook for manual error reporting
 export function useErrorReporting() {
-  const reportError = (error, context = '') => {
+  const reportError = (error, context = "") => {
     const errorData = {
       id: Date.now().toString(),
-      message: error.message || 'Unknown error',
-      stack: error.stack || 'No stack trace',
+      message: error.message || "Unknown error",
+      stack: error.stack || "No stack trace",
       context,
       timestamp: new Date().toISOString(),
       userAgent: navigator.userAgent,
-      url: window.location.href
+      url: window.location.href,
     };
 
     try {
-      const existingErrors = JSON.parse(localStorage.getItem('flora_errors') || '[]');
+      const existingErrors = JSON.parse(
+        localStorage.getItem("flora_errors") || "[]"
+      );
       existingErrors.push(errorData);
-      localStorage.setItem('flora_errors', JSON.stringify(existingErrors.slice(-10)));
+      localStorage.setItem(
+        "flora_errors",
+        JSON.stringify(existingErrors.slice(-10))
+      );
     } catch (storageError) {
-      console.error('Failed to store error:', storageError);
+      console.error("Failed to store error:", storageError);
     }
 
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Manual error report:', error, context);
+    if (process.env.NODE_ENV === "development") {
+      console.error("Manual error report:", error, context);
     }
   };
 

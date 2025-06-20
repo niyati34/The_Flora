@@ -19,9 +19,9 @@ export function RecentlyViewedProvider({ children }) {
   }, [recentlyViewed]);
 
   const addToRecentlyViewed = (product) => {
-    setRecentlyViewed(prev => {
+    setRecentlyViewed((prev) => {
       // Remove if already exists
-      const filtered = prev.filter(p => p.id !== product.id);
+      const filtered = prev.filter((p) => p.id !== product.id);
       // Add to beginning and limit to 10 items
       return [product, ...filtered].slice(0, 10);
     });
@@ -32,11 +32,13 @@ export function RecentlyViewedProvider({ children }) {
   };
 
   return (
-    <RecentlyViewedContext.Provider value={{
-      recentlyViewed,
-      addToRecentlyViewed,
-      clearRecentlyViewed
-    }}>
+    <RecentlyViewedContext.Provider
+      value={{
+        recentlyViewed,
+        addToRecentlyViewed,
+        clearRecentlyViewed,
+      }}
+    >
       {children}
     </RecentlyViewedContext.Provider>
   );
@@ -45,7 +47,9 @@ export function RecentlyViewedProvider({ children }) {
 export const useRecentlyViewed = () => {
   const context = useContext(RecentlyViewedContext);
   if (!context) {
-    throw new Error("useRecentlyViewed must be used within a RecentlyViewedProvider");
+    throw new Error(
+      "useRecentlyViewed must be used within a RecentlyViewedProvider"
+    );
   }
   return context;
 };

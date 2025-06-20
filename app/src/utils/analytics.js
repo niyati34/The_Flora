@@ -20,13 +20,13 @@ class Analytics {
       properties,
       timestamp: new Date().toISOString(),
       url: window.location.href,
-      userAgent: navigator.userAgent
+      userAgent: navigator.userAgent,
     };
 
     // Store in localStorage for now
-    const events = JSON.parse(localStorage.getItem('flora_analytics') || '[]');
+    const events = JSON.parse(localStorage.getItem("flora_analytics") || "[]");
     events.push(event);
-    localStorage.setItem('flora_analytics', JSON.stringify(events.slice(-100)));
+    localStorage.setItem("flora_analytics", JSON.stringify(events.slice(-100)));
 
     // Add to queue
     this.queue.push(event);
@@ -40,7 +40,7 @@ class Analytics {
     const toSend = [...this.queue];
     this.queue = [];
 
-    console.log('Sending analytics events:', toSend.length);
+    console.log("Sending analytics events:", toSend.length);
   }
 }
 

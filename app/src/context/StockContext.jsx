@@ -8,14 +8,14 @@ export function StockProvider({ children }) {
   // Initialize default stock levels
   useEffect(() => {
     const defaultStock = {
-      'peace-lily': { available: 15, reserved: 0 },
-      'snake-plant': { available: 12, reserved: 0 },
-      'pothos': { available: 20, reserved: 0 },
-      'fiddle-leaf': { available: 8, reserved: 0 },
-      'monstera': { available: 10, reserved: 0 },
-      'spider-plant': { available: 18, reserved: 0 }
+      "peace-lily": { available: 15, reserved: 0 },
+      "snake-plant": { available: 12, reserved: 0 },
+      pothos: { available: 20, reserved: 0 },
+      "fiddle-leaf": { available: 8, reserved: 0 },
+      monstera: { available: 10, reserved: 0 },
+      "spider-plant": { available: 18, reserved: 0 },
     };
-    
+
     const savedStock = localStorage.getItem("plantStock");
     if (savedStock) {
       setStockData(JSON.parse(savedStock));
@@ -37,24 +37,24 @@ export function StockProvider({ children }) {
   };
 
   const reserveStock = (productId, quantity) => {
-    setStockData(prev => ({
+    setStockData((prev) => ({
       ...prev,
       [productId]: {
         ...prev[productId],
         available: prev[productId]?.available - quantity || 0,
-        reserved: (prev[productId]?.reserved || 0) + quantity
-      }
+        reserved: (prev[productId]?.reserved || 0) + quantity,
+      },
     }));
   };
 
   const releaseReservedStock = (productId, quantity) => {
-    setStockData(prev => ({
+    setStockData((prev) => ({
       ...prev,
       [productId]: {
         ...prev[productId],
         available: (prev[productId]?.available || 0) + quantity,
-        reserved: prev[productId]?.reserved - quantity || 0
-      }
+        reserved: prev[productId]?.reserved - quantity || 0,
+      },
     }));
   };
 
@@ -65,31 +65,33 @@ export function StockProvider({ children }) {
 
   const getStockStatus = (productId) => {
     const available = getAvailableStock(productId);
-    if (available === 0) return 'Out of Stock';
-    if (available <= 3) return 'Low Stock';
-    return 'In Stock';
+    if (available === 0) return "Out of Stock";
+    if (available <= 3) return "Low Stock";
+    return "In Stock";
   };
 
   const restockItem = (productId, quantity) => {
-    setStockData(prev => ({
+    setStockData((prev) => ({
       ...prev,
       [productId]: {
         ...prev[productId],
-        available: (prev[productId]?.available || 0) + quantity
-      }
+        available: (prev[productId]?.available || 0) + quantity,
+      },
     }));
   };
 
   return (
-    <StockContext.Provider value={{
-      stockData,
-      getAvailableStock,
-      reserveStock,
-      releaseReservedStock,
-      isInStock,
-      getStockStatus,
-      restockItem
-    }}>
+    <StockContext.Provider
+      value={{
+        stockData,
+        getAvailableStock,
+        reserveStock,
+        releaseReservedStock,
+        isInStock,
+        getStockStatus,
+        restockItem,
+      }}
+    >
       {children}
     </StockContext.Provider>
   );

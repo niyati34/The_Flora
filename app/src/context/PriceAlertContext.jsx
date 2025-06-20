@@ -25,36 +25,43 @@ export function PriceAlertProvider({ children }) {
       targetPrice,
       userEmail,
       createdAt: new Date().toISOString(),
-      isActive: true
+      isActive: true,
     };
-    
-    setPriceAlerts(prev => [...prev, newAlert]);
+
+    setPriceAlerts((prev) => [...prev, newAlert]);
     return newAlert.id;
   };
 
   const removePriceAlert = (alertId) => {
-    setPriceAlerts(prev => prev.filter(alert => alert.id !== alertId));
+    setPriceAlerts((prev) => prev.filter((alert) => alert.id !== alertId));
   };
 
   const checkPriceAlerts = (productId, currentPrice) => {
     const activeAlerts = priceAlerts.filter(
-      alert => alert.productId === productId && 
-               alert.isActive && 
-               currentPrice <= alert.targetPrice
+      (alert) =>
+        alert.productId === productId &&
+        alert.isActive &&
+        currentPrice <= alert.targetPrice
     );
 
     if (activeAlerts.length > 0) {
       // Simulate notification
-      activeAlerts.forEach(alert => {
-        console.log(`Price Alert: Product ${productId} is now ₹${currentPrice}, target was ₹${alert.targetPrice}`);
+      activeAlerts.forEach((alert) => {
+        console.log(
+          `Price Alert: Product ${productId} is now ₹${currentPrice}, target was ₹${alert.targetPrice}`
+        );
         // In real app, would send email or push notification
       });
-      
+
       // Mark alerts as triggered
-      setPriceAlerts(prev => 
-        prev.map(alert => 
-          activeAlerts.includes(alert) 
-            ? { ...alert, isActive: false, triggeredAt: new Date().toISOString() }
+      setPriceAlerts((prev) =>
+        prev.map((alert) =>
+          activeAlerts.includes(alert)
+            ? {
+                ...alert,
+                isActive: false,
+                triggeredAt: new Date().toISOString(),
+              }
             : alert
         )
       );
@@ -64,22 +71,24 @@ export function PriceAlertProvider({ children }) {
   };
 
   const getAlertsForProduct = (productId) => {
-    return priceAlerts.filter(alert => alert.productId === productId);
+    return priceAlerts.filter((alert) => alert.productId === productId);
   };
 
   const getAllActiveAlerts = () => {
-    return priceAlerts.filter(alert => alert.isActive);
+    return priceAlerts.filter((alert) => alert.isActive);
   };
 
   return (
-    <PriceAlertContext.Provider value={{
-      priceAlerts,
-      addPriceAlert,
-      removePriceAlert,
-      checkPriceAlerts,
-      getAlertsForProduct,
-      getAllActiveAlerts
-    }}>
+    <PriceAlertContext.Provider
+      value={{
+        priceAlerts,
+        addPriceAlert,
+        removePriceAlert,
+        checkPriceAlerts,
+        getAlertsForProduct,
+        getAllActiveAlerts,
+      }}
+    >
       {children}
     </PriceAlertContext.Provider>
   );

@@ -7,26 +7,27 @@ const notesReducer = (state, action) => {
     case "ADD_NOTE":
       return {
         ...state,
-        notes: [...state.notes, { 
-          id: Date.now(), 
-          text: action.text, 
-          productId: action.productId,
-          timestamp: new Date().toISOString() 
-        }]
+        notes: [
+          ...state.notes,
+          {
+            id: Date.now(),
+            text: action.text,
+            productId: action.productId,
+            timestamp: new Date().toISOString(),
+          },
+        ],
       };
     case "REMOVE_NOTE":
       return {
         ...state,
-        notes: state.notes.filter(note => note.id !== action.noteId)
+        notes: state.notes.filter((note) => note.id !== action.noteId),
       };
     case "EDIT_NOTE":
       return {
         ...state,
-        notes: state.notes.map(note => 
-          note.id === action.noteId 
-            ? { ...note, text: action.text }
-            : note
-        )
+        notes: state.notes.map((note) =>
+          note.id === action.noteId ? { ...note, text: action.text } : note
+        ),
       };
     case "LOAD_NOTES":
       return { notes: action.notes };
@@ -65,7 +66,7 @@ export function NotesProvider({ children }) {
   };
 
   const getNotesForProduct = (productId) => {
-    return notesState.notes.filter(note => note.productId === productId);
+    return notesState.notes.filter((note) => note.productId === productId);
   };
 
   const getAllNotes = () => {
@@ -73,14 +74,16 @@ export function NotesProvider({ children }) {
   };
 
   return (
-    <NotesContext.Provider value={{
-      notes: notesState.notes,
-      addNote,
-      removeNote,
-      editNote,
-      getNotesForProduct,
-      getAllNotes
-    }}>
+    <NotesContext.Provider
+      value={{
+        notes: notesState.notes,
+        addNote,
+        removeNote,
+        editNote,
+        getNotesForProduct,
+        getAllNotes,
+      }}
+    >
       {children}
     </NotesContext.Provider>
   );
