@@ -2,10 +2,13 @@ import { Link } from "react-router-dom";
 import { products } from "../data/products";
 
 export default function ProductRecommendations({ currentProduct, onQuickView }) {
-  // Get products from same category, excluding current product
-  const recommendations = products
-    .filter(p => p.category === currentProduct.category && p.id !== currentProduct.id)
-    .slice(0, 3);
+  // Choose recommendations: prefer same category if present, otherwise just other products
+  let pool = products.filter(p => p.id !== currentProduct.id);
+  if (currentProduct.category) {
+    const sameCat = pool.filter(p => p.category === currentProduct.category);
+    if (sameCat.length >= 3) pool = sameCat;
+  }
+  const recommendations = pool.slice(0, 3);
 
   if (recommendations.length === 0) {
     return null;
@@ -26,7 +29,9 @@ export default function ProductRecommendations({ currentProduct, onQuickView }) 
               />
               <div className="card-body d-flex flex-column">
                 <h6 className="card-title">{product.name}</h6>
-                <p className="card-text text-muted small">{product.category}</p>
+                {product.category && (
+                  <p className="card-text text-muted small">{product.category}</p>
+                )}
                 <p className="card-text fw-bold text-success">₹{product.price}</p>
                 <div className="mt-auto">
                   <div className="d-flex gap-2">

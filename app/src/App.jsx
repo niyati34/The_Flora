@@ -20,6 +20,7 @@ import { StockProvider } from "./context/StockContext";
 import { RecentlyViewedProvider } from "./context/RecentlyViewedContext";
 import { PriceAlertProvider } from "./context/PriceAlertContext";
 import { CareReminderProvider } from "./context/CareReminderContext";
+import ErrorBoundary from "./components/ErrorBoundary";
 
 export default function App() {
   return (
@@ -34,6 +35,7 @@ export default function App() {
                     <BrowserRouter>
         <Header />
         <main>
+        <ErrorBoundary>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/plants/air-purifying" element={<AirPurifying />} />
@@ -44,7 +46,8 @@ export default function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/signup" element={<Signup />} />
           <Route path="/product/:id" element={<ProductDetail />} />
-        </Routes>
+  </Routes>
+  </ErrorBoundary>
       </main>
       <Footer />
     </BrowserRouter>

@@ -77,15 +77,17 @@ export const CartProvider = ({ children }) => {
     localStorage.setItem('flora-cart', JSON.stringify(state));
   }, [state]);
   
-  const addToCart = (product, quantity = 1, color = 'black') => {
+  // imageOverride is optional third param; color is the optional fourth param.
+  // This keeps compatibility with calls like addToCart(product, qty, selectedImage, colorName)
+  const addToCart = (product, quantity = 1, imageOverride = null, color = 'black') => {
     dispatch({
       type: 'ADD_TO_CART',
       payload: {
         id: product.id,
         name: product.name,
         price: product.price,
-        image: product.image,
-        color,
+        image: imageOverride || product.image,
+        color: color,
         quantity
       }
     });

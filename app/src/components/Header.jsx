@@ -1,10 +1,15 @@
-import { Link, NavLink } from "react-router-dom";
-import { useEffect } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useEffect, useRef, useState } from "react";
 import { useCart } from "../context/CartContext";
+import AdvancedSearch from "./AdvancedSearch";
+import { GlobalKeyboardShortcuts } from "../hooks/useKeyboardShortcuts";
 
 export default function Header() {
   const { getCartCount } = useCart();
   const cartCount = getCartCount();
+  const navigate = useNavigate();
+  const [showSearch, setShowSearch] = useState(false);
+  const searchRef = useRef(null);
   
   useEffect(() => {
     let prevScrollPos = window.pageYOffset;
@@ -40,16 +45,17 @@ export default function Header() {
           >
             <span className="navbar-toggler-icon"></span>
           </button>
-          <form className="search-bar d-none d-md-flex align-items-center gap-2">
-            <input
-              className="form-control mr-sm-2"
-              type="text"
-              placeholder="Search..."
-            />
-            <button className="btn btn-success" type="submit">
-              <i className="fas fa-search" />
-            </button>
-          </form>
+          <div className="d-none d-md-flex align-items-center gap-2 flex-grow-1" style={{ maxWidth: 420 }}>
+            {showSearch ? (
+              <div className="w-100" ref={searchRef}>
+                <AdvancedSearch onProductSelect={(p) => { setShowSearch(false); navigate(`/product/${p.id}`); }} />
+              </div>
+            ) : (
+              <button className="btn btn-outline-success" onClick={() => setShowSearch(true)}>
+                <i className="fas fa-search me-1"/> Search
+              </button>
+            )}
+          </div>
 
           <div className="logo-container text-center">
             <Link className="navbar-brand" to="/">
@@ -135,6 +141,11 @@ export default function Header() {
           </div>
         </div>
       </nav>
+      <GlobalKeyboardShortcuts 
+        onOpenSearch={() => setShowSearch(true)}
+        onToggleCart={() => navigate('/cart')}
+        onGoHome={() => navigate('/')}
+      />
     </header>
   );
 }
