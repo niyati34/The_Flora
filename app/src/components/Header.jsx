@@ -2,7 +2,7 @@ import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { useCart } from "../context/CartContext";
 import AdvancedSearch from "./AdvancedSearch";
-import { GlobalKeyboardShortcuts } from "../hooks/useKeyboardShortcuts";
+import GlobalKeyboardShortcuts from "./GlobalKeyboardShortcuts";
 
 export default function Header() {
   const { getCartCount } = useCart();
