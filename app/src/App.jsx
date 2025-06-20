@@ -19,6 +19,7 @@ import { NotesProvider } from "./context/NotesContext";
 import { StockProvider } from "./context/StockContext";
 import { RecentlyViewedProvider } from "./context/RecentlyViewedContext";
 import { PriceAlertProvider } from "./context/PriceAlertContext";
+import { CareReminderProvider } from "./context/CareReminderContext";
 
 export default function App() {
   return (
@@ -29,7 +30,8 @@ export default function App() {
             <StockProvider>
               <RecentlyViewedProvider>
                 <PriceAlertProvider>
-                  <BrowserRouter>
+                  <CareReminderProvider>
+                    <BrowserRouter>
         <Header />
         <main>
         <Routes>
@@ -46,6 +48,7 @@ export default function App() {
       </main>
       <Footer />
     </BrowserRouter>
+                  </CareReminderProvider>
                 </PriceAlertProvider>
               </RecentlyViewedProvider>
             </StockProvider>

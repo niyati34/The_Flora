@@ -8,7 +8,9 @@ import { useNotes } from "../context/NotesContext";
 import { useStock } from "../context/StockContext";
 import { useRecentlyViewed } from "../context/RecentlyViewedContext";
 import { usePriceAlert } from "../context/PriceAlertContext";
+import { useCareReminder } from "../context/CareReminderContext";
 import ProductRecommendations from "../components/ProductRecommendations";
+import { useAutoSave } from "../hooks/useAutoSave";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -20,6 +22,7 @@ export default function ProductDetail() {
   const { getAvailableStock, isInStock, getStockStatus, reserveStock } = useStock();
   const { addToRecentlyViewed } = useRecentlyViewed();
   const { addPriceAlert, getAlertsForProduct } = usePriceAlert();
+  const { addReminder, getRemindersForProduct } = useCareReminder();
 
   if (!product)
     return (
@@ -36,16 +39,33 @@ export default function ProductDetail() {
   const [selectedImage, setSelectedImage] = useState(product.image);
   const [selectedColorIndex, setSelectedColorIndex] = useState(0);
   const [rating, setRating] = useState(0);
-  const [review, setReview] = useState("");
   const [reviewSubmitted, setReviewSubmitted] = useState(false);
   const [quantity, setQuantity] = useState(1);
   const [addedToCart, setAddedToCart] = useState(false);
-  const [noteText, setNoteText] = useState("");
   const [showNotes, setShowNotes] = useState(false);
   const [targetPrice, setTargetPrice] = useState("");
   const [showPriceAlert, setShowPriceAlert] = useState(false);
+  const [showCareReminder, setShowCareReminder] = useState(false);
+  const [careType, setCareType] = useState("water");
+  const [careFrequency, setCareFrequency] = useState(7);
   const [isImageZoomed, setIsImageZoomed] = useState(false);
   const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
+
+  // Auto-save functionality for review and notes
+  const { 
+    value: review, 
+    setValue: setReview, 
+    isSaving: isReviewSaving,
+    clearSaved: clearReviewDraft,
+    hasSavedData: hasReviewDraft 
+  } = useAutoSave(`review_${product.id}`, "");
+
+  const { 
+    value: noteText, 
+    setValue: setNoteText, 
+    isSaving: isNoteSaving,
+    clearSaved: clearNoteDraft 
+  } = useAutoSave(`note_${product.id}`, "");
 
   const colors = ["black", "red", "white", "#757471", "#EEFC09"];
   const colorNames = ["Black", "Red", "White", "Grey", "Yellow"];
@@ -91,6 +111,7 @@ export default function ProductDetail() {
     if (noteText.trim()) {
       addNote(noteText, product.id);
       setNoteText("");
+      clearNoteDraft();
     }
   };
 
@@ -103,6 +124,15 @@ export default function ProductDetail() {
       alert(`Price alert set for ₹${price}! You'll be notified when the price drops.`);
     } else {
       alert("Please enter a valid price lower than the current price.");
+    }
+  };
+
+  const handleCareReminder = () => {
+    if (careType && careFrequency > 0) {
+      const plantName = getPlantName(product.name);
+      addReminder(product.id, plantName, careType, careFrequency, new Date().toISOString());
+      setShowCareReminder(false);
+      alert(`Care reminder set! You'll be reminded to ${careType} your ${plantName} every ${careFrequency} days.`);
     }
   };
 
@@ -121,6 +151,7 @@ export default function ProductDetail() {
 
   const productNotes = getNotesForProduct(product.id);
   const priceAlerts = getAlertsForProduct(product.id);
+  const careReminders = getRemindersForProduct(product.id);
 
   // Extract plant name from product name (e.g., "Peace Lily Plant With..." -> "Peace Lily")
   const getPlantName = (productName) => {
@@ -225,6 +256,58 @@ export default function ProductDetail() {
                   <small className="text-muted mt-1">
                     Enter a price below ₹{product.price} to get notified when it drops
                   </small>
+                </div>
+              )}
+
+              {/* Care Reminders */}
+              <div className="care-reminder mb-3">
+                <button 
+                  className="btn btn-sm btn-outline-success"
+                  onClick={() => setShowCareReminder(!showCareReminder)}
+                >
+                  <i className="fas fa-calendar-alt"></i> Set Care Reminder
+                </button>
+                {careReminders.filter(reminder => reminder.isActive).length > 0 && (
+                  <small className="text-success ms-2">
+                    ✓ {careReminders.filter(reminder => reminder.isActive).length} reminder(s) active
+                  </small>
+                )}
+              </div>
+
+              {showCareReminder && (
+                <div className="care-reminder-form card p-3 mb-3">
+                  <div className="row">
+                    <div className="col-md-6 mb-2">
+                      <label className="form-label">Care Type:</label>
+                      <select 
+                        className="form-select"
+                        value={careType}
+                        onChange={(e) => setCareType(e.target.value)}
+                      >
+                        <option value="water">Watering</option>
+                        <option value="fertilize">Fertilizing</option>
+                        <option value="prune">Pruning</option>
+                        <option value="repot">Repotting</option>
+                      </select>
+                    </div>
+                    <div className="col-md-6 mb-2">
+                      <label className="form-label">Frequency (days):</label>
+                      <input
+                        type="number"
+                        className="form-control"
+                        value={careFrequency}
+                        onChange={(e) => setCareFrequency(parseInt(e.target.value))}
+                        min="1"
+                        max="365"
+                      />
+                    </div>
+                  </div>
+                  <button 
+                    className="btn btn-success"
+                    onClick={handleCareReminder}
+                  >
+                    Set Reminder
+                  </button>
                 </div>
               )}
               
@@ -441,11 +524,23 @@ export default function ProductDetail() {
                   onSubmit={e => {
                     e.preventDefault();
                     setReviewSubmitted(true);
-                    setReview("");
+                    clearReviewDraft();
                   }}
                 >
                   <div className="form-group">
-                    <label htmlFor="review">Write a Review:</label>
+                    <label htmlFor="review">
+                      Write a Review:
+                      {hasReviewDraft && (
+                        <small className="text-info ms-2">
+                          <i className="fas fa-save"></i> Draft saved
+                        </small>
+                      )}
+                      {isReviewSaving && (
+                        <small className="text-muted ms-2">
+                          <i className="fas fa-spinner fa-spin"></i> Saving...
+                        </small>
+                      )}
+                    </label>
                     <textarea
                       className="form-control"
                       id="review"
@@ -494,6 +589,11 @@ export default function ProductDetail() {
                         Add Note
                       </button>
                     </div>
+                    {isNoteSaving && (
+                      <small className="text-muted">
+                        <i className="fas fa-spinner fa-spin"></i> Auto-saving draft...
+                      </small>
+                    )}
                   </div>
                   
                   {productNotes.length > 0 && (
