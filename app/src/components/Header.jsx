@@ -126,16 +126,6 @@ export default function Header() {
                     Plant Scanner
                   </NavLink>
                 </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#">
-                    Plant-Scanner
-                  </a>
-                </li>
-                <li className="nav-item">
-                  <a className="nav-link" href="#">
-                    Customer Support
-                  </a>
-                </li>
               </ul>
             </div>
           </div>
