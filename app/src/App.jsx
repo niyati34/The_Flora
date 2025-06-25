@@ -59,10 +59,19 @@ export default function App() {
                                   path="/plants/low-maintenance"
                                   element={<LowMaintenance />}
                                 />
-                                <Route path="/planters" element={<Planters />} />
-                                <Route path="/category" element={<Category />} />
+                                <Route
+                                  path="/planters"
+                                  element={<Planters />}
+                                />
+                                <Route
+                                  path="/category"
+                                  element={<Category />}
+                                />
                                 <Route path="/compare" element={<Compare />} />
-                                <Route path="/plant-scanner" element={<PlantScanner />} />
+                                <Route
+                                  path="/plant-scanner"
+                                  element={<PlantScanner />}
+                                />
                                 <Route path="/cart" element={<Cart />} />
                                 <Route path="/login" element={<Login />} />
                                 <Route path="/signup" element={<Signup />} />
