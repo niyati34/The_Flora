@@ -12,6 +12,8 @@ import AirPurifying from "./pages/AirPurifying";
 import IndoorPlants from "./pages/IndoorPlants";
 import LowMaintenance from "./pages/LowMaintenance";
 import ProductDetail from "./pages/ProductDetail";
+import Category from "./pages/Category";
+import Compare from "./pages/Compare";
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
 import { CompareProvider } from "./context/CompareContext";
@@ -54,6 +56,8 @@ export default function App() {
                               element={<LowMaintenance />}
                             />
                             <Route path="/planters" element={<Planters />} />
+                            <Route path="/category" element={<Category />} />
+                            <Route path="/compare" element={<Compare />} />
                             <Route path="/cart" element={<Cart />} />
                             <Route path="/login" element={<Login />} />
                             <Route path="/signup" element={<Signup />} />

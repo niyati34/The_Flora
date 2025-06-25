@@ -1,3 +1,6 @@
+import LazyImage from "../components/LazyImage";
+import analytics from "../utils/analytics";
+
 export default function Home() {
   return (
     <div className="container-fluid py-4">
@@ -94,7 +97,7 @@ export default function Home() {
         </div>
         <div className="carousel-inner" style={{ height: 500 }}>
           <div className="carousel-item active">
-            <img
+            <LazyImage
               src="/i1.jpg"
               className="d-block w-100"
               style={{ height: "100%", objectFit: "cover" }}
@@ -102,7 +105,7 @@ export default function Home() {
             />
           </div>
           <div className="carousel-item">
-            <img
+            <LazyImage
               src="/i4.webp"
               className="d-block w-100"
               style={{ height: "100%", objectFit: "cover" }}
@@ -110,7 +113,7 @@ export default function Home() {
             />
           </div>
           <div className="carousel-item">
-            <img
+            <LazyImage
               src="/i3.webp"
               className="d-block w-100"
               style={{ height: "100%", objectFit: "cover" }}
@@ -225,7 +228,7 @@ export default function Home() {
             ].map((c, i) => (
               <div className="col-md-3 text-center" key={i}>
                 <div className="column-content">
-                  <img
+                  <LazyImage
                     src={c.img}
                     alt=""
                     className="img-fluid mx-auto"

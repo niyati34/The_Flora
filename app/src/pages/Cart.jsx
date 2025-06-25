@@ -1,5 +1,6 @@
 import { useCart } from "../context/CartContext";
 import { useWallet } from "../context/WalletContext";
+import analytics from "../utils/analytics";
 
 export default function Cart() {
   const { cart, updateQuantity, removeFromCart, clearCart, getCartTotal } =
@@ -12,6 +13,11 @@ export default function Cart() {
     if (!canPayWithWallet) return;
     const ok = charge(total, { note: "Order payment" });
     if (ok) {
+      analytics.track("purchase_completed", { 
+        total, 
+        itemCount: items.length, 
+        paymentMethod: "wallet" 
+      });
       clearCart();
       alert("Payment successful with Wallet! Order placed.");
     }

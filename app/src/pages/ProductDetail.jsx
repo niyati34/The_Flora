@@ -87,6 +87,15 @@ export default function ProductDetail() {
       reserveStock(product.id, quantity);
       setAddedToCart(true);
       setTimeout(() => setAddedToCart(false), 2000);
+      
+      analytics.track("product_added_to_cart", { 
+        productId: product.id, 
+        productName: product.name,
+        price: product.price,
+        quantity,
+        color: colorNames[selectedColorIndex],
+        source: "product_detail"
+      });
     } else {
       alert("Sorry, not enough stock available!");
     }
@@ -100,16 +109,36 @@ export default function ProductDetail() {
   const toggleWishlist = () => {
     if (isInWishlist(product.id)) {
       removeFromWishlist(product.id);
+      analytics.track("product_removed_from_wishlist", { 
+        productId: product.id, 
+        productName: product.name,
+        source: "product_detail"
+      });
     } else {
       addToWishlist(product);
+      analytics.track("product_added_to_wishlist", { 
+        productId: product.id, 
+        productName: product.name,
+        source: "product_detail"
+      });
     }
   };
 
   const toggleCompare = () => {
     if (isInCompare(product.id)) {
       removeFromCompare(product.id);
+      analytics.track("product_removed_from_compare", { 
+        productId: product.id, 
+        productName: product.name,
+        source: "product_detail"
+      });
     } else {
       addToCompare(product);
+      analytics.track("product_added_to_compare", { 
+        productId: product.id, 
+        productName: product.name,
+        source: "product_detail"
+      });
     }
   };
 
