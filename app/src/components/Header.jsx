@@ -133,7 +133,10 @@ export default function Header() {
                     style={{ cursor: "pointer" }}
                     onClick={() => {
                       // Open customer support chat
-                      if (typeof window !== "undefined" && window.openCustomerSupport) {
+                      if (
+                        typeof window !== "undefined" &&
+                        window.openCustomerSupport
+                      ) {
                         window.openCustomerSupport();
                       }
                     }}
