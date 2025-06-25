@@ -10,8 +10,8 @@ const CustomerSupport = () => {
       id: 1,
       sender: "bot",
       text: "Hello! I'm here to help you with your plant questions. How can I assist you today?",
-      timestamp: new Date()
-    }
+      timestamp: new Date(),
+    },
   ]);
   const [inputMessage, setInputMessage] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -30,53 +30,90 @@ const CustomerSupport = () => {
     greetings: [
       "Hello! How can I help you with your plants today?",
       "Hi there! What plant question can I answer for you?",
-      "Welcome! I'm here to help with all your plant care needs."
+      "Welcome! I'm here to help with all your plant care needs.",
     ],
     watering: [
       "Most houseplants prefer to dry out slightly between waterings. Check the top inch of soil - if it's dry, it's time to water!",
       "Overwatering is more common than underwatering. Look for yellowing leaves as a sign of too much water.",
-      "The finger test works great - stick your finger 1-2 inches into the soil. If it's dry, water your plant."
+      "The finger test works great - stick your finger 1-2 inches into the soil. If it's dry, water your plant.",
     ],
     light: [
       "Most houseplants prefer bright, indirect light. Direct sunlight can scorch the leaves.",
       "If your plant is stretching toward the window, it needs more light. Consider moving it closer or adding a grow light.",
-      "South-facing windows get the most light, while north-facing get the least. East and west are usually perfect for most plants."
+      "South-facing windows get the most light, while north-facing get the least. East and west are usually perfect for most plants.",
     ],
     fertilizer: [
       "During growing season (spring/summer), fertilize monthly with a balanced liquid fertilizer diluted to half strength.",
       "In winter, most plants rest and don't need fertilizer. Resume feeding in spring when new growth appears.",
-      "Yellow leaves can indicate over-fertilizing. Flush the soil with water if you think you've overdone it."
+      "Yellow leaves can indicate over-fertilizing. Flush the soil with water if you think you've overdone it.",
     ],
     pests: [
       "Common signs of pests include sticky leaves, tiny webs, or small moving dots. Neem oil is a safe, effective treatment.",
       "Isolate any plant with pests immediately to prevent spread. Wipe leaves with soapy water as a first step.",
-      "Prevention is key - keep plants healthy and inspect them regularly during watering."
+      "Prevention is key - keep plants healthy and inspect them regularly during watering.",
     ],
     repotting: [
       "Repot when roots are circling the bottom or growing out of drainage holes. Usually every 1-2 years.",
       "Spring is the best time to repot when plants are actively growing and can recover quickly.",
-      "Go up just one pot size when repotting. Too large a pot can lead to overwatering issues."
+      "Go up just one pot size when repotting. Too large a pot can lead to overwatering issues.",
     ],
     default: [
       "That's a great question! For specific plant care advice, I recommend consulting our plant care guides or speaking with one of our experts.",
       "I'd be happy to help you find the right information. Can you tell me more about your specific plant or concern?",
-      "For detailed plant identification or complex issues, you might want to try our Plant Scanner feature or contact our plant specialists."
-    ]
+      "For detailed plant identification or complex issues, you might want to try our Plant Scanner feature or contact our plant specialists.",
+    ],
   };
 
   const getKeywords = (text) => {
     const keywords = {
-      greetings: ["hello", "hi", "hey", "good morning", "good afternoon", "help"],
-      watering: ["water", "watering", "dry", "wet", "moisture", "overwater", "underwater"],
+      greetings: [
+        "hello",
+        "hi",
+        "hey",
+        "good morning",
+        "good afternoon",
+        "help",
+      ],
+      watering: [
+        "water",
+        "watering",
+        "dry",
+        "wet",
+        "moisture",
+        "overwater",
+        "underwater",
+      ],
       light: ["light", "sun", "shade", "bright", "dark", "window", "sunlight"],
-      fertilizer: ["fertilizer", "fertilize", "feed", "nutrients", "yellow", "growth"],
-      pests: ["bugs", "pests", "insects", "aphids", "spider mites", "sticky", "webs"],
-      repotting: ["repot", "pot", "roots", "container", "transplant", "rootbound"]
+      fertilizer: [
+        "fertilizer",
+        "fertilize",
+        "feed",
+        "nutrients",
+        "yellow",
+        "growth",
+      ],
+      pests: [
+        "bugs",
+        "pests",
+        "insects",
+        "aphids",
+        "spider mites",
+        "sticky",
+        "webs",
+      ],
+      repotting: [
+        "repot",
+        "pot",
+        "roots",
+        "container",
+        "transplant",
+        "rootbound",
+      ],
     };
 
     const lowerText = text.toLowerCase();
     for (const [category, words] of Object.entries(keywords)) {
-      if (words.some(word => lowerText.includes(word))) {
+      if (words.some((word) => lowerText.includes(word))) {
         return category;
       }
     }
@@ -96,13 +133,13 @@ const CustomerSupport = () => {
       id: Date.now(),
       sender: "user",
       text: inputMessage,
-      timestamp: new Date()
+      timestamp: new Date(),
     };
 
-    setMessages(prev => [...prev, userMessage]);
+    setMessages((prev) => [...prev, userMessage]);
     analytics.track("customer_support_message_sent", {
       messageLength: inputMessage.length,
-      category: getKeywords(inputMessage)
+      category: getKeywords(inputMessage),
     });
 
     setInputMessage("");
@@ -114,14 +151,14 @@ const CustomerSupport = () => {
         id: Date.now() + 1,
         sender: "bot",
         text: getBotResponse(inputMessage),
-        timestamp: new Date()
+        timestamp: new Date(),
       };
 
-      setMessages(prev => [...prev, botResponse]);
+      setMessages((prev) => [...prev, botResponse]);
       setIsTyping(false);
 
       analytics.track("customer_support_bot_response", {
-        responseCategory: getKeywords(inputMessage)
+        responseCategory: getKeywords(inputMessage),
       });
     }, 1000 + Math.random() * 2000);
   };
@@ -138,7 +175,7 @@ const CustomerSupport = () => {
     "Why are my plant's leaves turning yellow?",
     "What's the best light for houseplants?",
     "How do I know if my plant needs repotting?",
-    "How can I get rid of plant pests?"
+    "How can I get rid of plant pests?",
   ];
 
   const handleQuickQuestion = (question) => {
@@ -160,7 +197,7 @@ const CustomerSupport = () => {
             width: "60px",
             height: "60px",
             zIndex: 1000,
-            boxShadow: "0 4px 12px rgba(0,0,0,0.3)"
+            boxShadow: "0 4px 12px rgba(0,0,0,0.3)",
           }}
           onClick={() => {
             openSupport();
@@ -184,7 +221,7 @@ const CustomerSupport = () => {
           height: "500px",
           zIndex: 1000,
           display: "flex",
-          flexDirection: "column"
+          flexDirection: "column",
         }}
       >
         {/* Chat Header */}
@@ -208,11 +245,16 @@ const CustomerSupport = () => {
         </div>
 
         {/* Messages */}
-        <div className="chat-messages flex-grow-1 p-3 overflow-auto" style={{ maxHeight: "300px" }}>
+        <div
+          className="chat-messages flex-grow-1 p-3 overflow-auto"
+          style={{ maxHeight: "300px" }}
+        >
           {messages.map((message) => (
             <div
               key={message.id}
-              className={`message mb-3 ${message.sender === "user" ? "text-end" : ""}`}
+              className={`message mb-3 ${
+                message.sender === "user" ? "text-end" : ""
+              }`}
             >
               <div
                 className={`d-inline-block p-2 rounded ${
@@ -227,7 +269,7 @@ const CustomerSupport = () => {
               <div className="small text-muted mt-1">
                 {message.timestamp.toLocaleTimeString([], {
                   hour: "2-digit",
-                  minute: "2-digit"
+                  minute: "2-digit",
                 })}
               </div>
             </div>
@@ -311,7 +353,9 @@ const CustomerSupport = () => {
           animation-delay: -0.16s;
         }
         @keyframes typing {
-          0%, 80%, 100% {
+          0%,
+          80%,
+          100% {
             transform: scale(0.8);
             opacity: 0.5;
           }
