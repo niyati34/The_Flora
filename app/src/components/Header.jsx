@@ -1,6 +1,7 @@
 import { Link, NavLink, useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { useCart } from "../context/CartContext";
+import { useCustomerSupport } from "../context/CustomerSupportContext";
 import AdvancedSearch from "./AdvancedSearch";
 import GlobalKeyboardShortcuts from "./GlobalKeyboardShortcuts";
 
@@ -125,6 +126,21 @@ export default function Header() {
                     <i className="fas fa-camera me-1"></i>
                     Plant Scanner
                   </NavLink>
+                </li>
+                <li className="nav-item">
+                  <button
+                    className="nav-link btn btn-link"
+                    style={{ cursor: "pointer" }}
+                    onClick={() => {
+                      // Open customer support chat
+                      if (typeof window !== "undefined" && window.openCustomerSupport) {
+                        window.openCustomerSupport();
+                      }
+                    }}
+                  >
+                    <i className="fas fa-comments me-1"></i>
+                    Customer Support
+                  </button>
                 </li>
               </ul>
             </div>

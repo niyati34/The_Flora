@@ -1,8 +1,10 @@
 import { useState, useRef, useEffect } from "react";
 import analytics from "../utils/analytics";
 
+import { useCustomerSupport } from "../context/CustomerSupportContext";
 const CustomerSupport = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const { open, openSupport, closeSupport } = useCustomerSupport();
+  const [isOpen, setIsOpen] = useState(open);
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -143,7 +145,11 @@ const CustomerSupport = () => {
     setInputMessage(question);
   };
 
-  if (!isOpen) {
+  // Expose openSupport globally for navbar button
+  if (typeof window !== "undefined") {
+    window.openCustomerSupport = openSupport;
+  }
+  if (!open) {
     return (
       <div className="customer-support-widget">
         <button
@@ -157,7 +163,7 @@ const CustomerSupport = () => {
             boxShadow: "0 4px 12px rgba(0,0,0,0.3)"
           }}
           onClick={() => {
-            setIsOpen(true);
+            openSupport();
             analytics.track("customer_support_opened");
           }}
         >
@@ -193,7 +199,7 @@ const CustomerSupport = () => {
           <button
             className="btn btn-sm text-white"
             onClick={() => {
-              setIsOpen(false);
+              closeSupport();
               analytics.track("customer_support_closed");
             }}
           >
