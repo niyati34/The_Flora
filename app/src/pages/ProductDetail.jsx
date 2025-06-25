@@ -11,6 +11,8 @@ import { usePriceAlert } from "../context/PriceAlertContext";
 import { useCareReminder } from "../context/CareReminderContext";
 import ProductRecommendations from "../components/ProductRecommendations";
 import { useAutoSave } from "../hooks/useAutoSave";
+import LazyImage from "../components/LazyImage";
+import analytics from "../utils/analytics";
 
 export default function ProductDetail() {
   const { id } = useParams();
@@ -231,7 +233,7 @@ export default function ProductDetail() {
           <div className="row">
             <div className="col-md-6">
               <div className="image-container position-relative">
-                <img
+                <LazyImage
                   id="product-image"
                   src={selectedImage}
                   alt={product.name}
