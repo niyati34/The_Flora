@@ -121,6 +121,12 @@ export default function Header() {
                   </NavLink>
                 </li>
                 <li className="nav-item">
+                  <NavLink className="nav-link" to="/plant-scanner">
+                    <i className="fas fa-camera me-1"></i>
+                    Plant Scanner
+                  </NavLink>
+                </li>
+                <li className="nav-item">
                   <a className="nav-link" href="#">
                     Plant-Scanner
                   </a>
