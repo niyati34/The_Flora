@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import analytics from "../utils/analytics";
 
-import { useCustomerSupport } from "../context/CustomerSupportContext";
+import { useCustomerSupport } from "../context/CustomerSupportContext.jsx";
 const CustomerSupport = () => {
   const { open, openSupport, closeSupport } = useCustomerSupport();
   const [isOpen, setIsOpen] = useState(open);

@@ -24,7 +24,7 @@ import { RecentlyViewedProvider } from "./context/RecentlyViewedContext";
 import { PriceAlertProvider } from "./context/PriceAlertContext";
 import { CareReminderProvider } from "./context/CareReminderContext";
 import { WalletProvider } from "./context/WalletContext";
-import { CustomerSupportProvider } from "./context/CustomerSupportContext";
+import { CustomerSupportProvider } from "./context/CustomerSupportContext.jsx";
 import ErrorBoundary from "./components/ErrorBoundary";
 import CustomerSupport from "./components/CustomerSupport";
 import Wallet from "./pages/Wallet";
