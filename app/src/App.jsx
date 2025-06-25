@@ -14,6 +14,7 @@ import LowMaintenance from "./pages/LowMaintenance";
 import ProductDetail from "./pages/ProductDetail";
 import Category from "./pages/Category";
 import Compare from "./pages/Compare";
+import PlantScanner from "./pages/PlantScanner";
 import { CartProvider } from "./context/CartContext";
 import { WishlistProvider } from "./context/WishlistContext";
 import { CompareProvider } from "./context/CompareContext";
@@ -24,6 +25,7 @@ import { PriceAlertProvider } from "./context/PriceAlertContext";
 import { CareReminderProvider } from "./context/CareReminderContext";
 import { WalletProvider } from "./context/WalletContext";
 import ErrorBoundary from "./components/ErrorBoundary";
+import CustomerSupport from "./components/CustomerSupport";
 import Wallet from "./pages/Wallet";
 
 export default function App() {
@@ -58,6 +60,7 @@ export default function App() {
                             <Route path="/planters" element={<Planters />} />
                             <Route path="/category" element={<Category />} />
                             <Route path="/compare" element={<Compare />} />
+                            <Route path="/plant-scanner" element={<PlantScanner />} />
                             <Route path="/cart" element={<Cart />} />
                             <Route path="/login" element={<Login />} />
                             <Route path="/signup" element={<Signup />} />
@@ -69,6 +72,7 @@ export default function App() {
                           </Routes>
                         </ErrorBoundary>
                       </main>
+                      <CustomerSupport />
                       <Footer />
                     </BrowserRouter>
         </WalletProvider>
