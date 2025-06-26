@@ -8,7 +8,9 @@ export function CustomerSupportProvider({ children }) {
   const closeSupport = useCallback(() => setOpen(false), []);
 
   return (
-    <CustomerSupportContext.Provider value={{ open, openSupport, closeSupport }}>
+    <CustomerSupportContext.Provider
+      value={{ open, openSupport, closeSupport }}
+    >
       {children}
     </CustomerSupportContext.Provider>
   );
