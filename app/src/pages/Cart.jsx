@@ -13,10 +13,10 @@ export default function Cart() {
     if (!canPayWithWallet) return;
     const ok = charge(total, { note: "Order payment" });
     if (ok) {
-      analytics.track("purchase_completed", { 
-        total, 
-        itemCount: items.length, 
-        paymentMethod: "wallet" 
+      analytics.track("purchase_completed", {
+        total,
+        itemCount: items.length,
+        paymentMethod: "wallet",
       });
       clearCart();
       alert("Payment successful with Wallet! Order placed.");
@@ -83,10 +83,16 @@ export default function Cart() {
                 Clear Cart
               </button>
               <div className="ms-auto d-flex gap-2">
-                <button className="btn btn-outline-primary" disabled={!canPayWithWallet} onClick={onWalletCheckout}>
+                <button
+                  className="btn btn-outline-primary"
+                  disabled={!canPayWithWallet}
+                  onClick={onWalletCheckout}
+                >
                   Pay with Wallet (₹{balance.toFixed(0)})
                 </button>
-                <a className="btn btn-success" href="/wallet">Add Funds</a>
+                <a className="btn btn-success" href="/wallet">
+                  Add Funds
+                </a>
               </div>
             </div>
           </>
