@@ -13,7 +13,9 @@ export function WalletProvider({ children }) {
       const saved = JSON.parse(localStorage.getItem("flora_wallet") || "null");
       if (saved && typeof saved.balance === "number") {
         setBalance(saved.balance);
-        setTransactions(Array.isArray(saved.transactions) ? saved.transactions : []);
+        setTransactions(
+          Array.isArray(saved.transactions) ? saved.transactions : []
+        );
       }
     } catch {}
   }, []);
@@ -28,7 +30,13 @@ export function WalletProvider({ children }) {
     const amt = Number(amount) || 0;
     if (amt <= 0) return false;
     setBalance((b) => b + amt);
-    const tx = { id: Date.now(), type: "credit", amount: amt, note, ts: new Date().toISOString() };
+    const tx = {
+      id: Date.now(),
+      type: "credit",
+      amount: amt,
+      note,
+      ts: new Date().toISOString(),
+    };
     setTransactions((t) => [tx, ...t].slice(0, 100));
     analytics.track("wallet_credit", { amount: amt, note });
     return true;
@@ -39,7 +47,13 @@ export function WalletProvider({ children }) {
     if (amt <= 0) return false;
     if (balance < amt) return false;
     setBalance((b) => b - amt);
-    const tx = { id: Date.now(), type: "debit", amount: amt, note: meta.note || "Checkout", ts: new Date().toISOString() };
+    const tx = {
+      id: Date.now(),
+      type: "debit",
+      amount: amt,
+      note: meta.note || "Checkout",
+      ts: new Date().toISOString(),
+    };
     setTransactions((t) => [tx, ...t].slice(0, 100));
     analytics.track("wallet_debit", { amount: amt, ...meta });
     return true;
@@ -52,7 +66,9 @@ export function WalletProvider({ children }) {
     [balance, transactions]
   );
 
-  return <WalletContext.Provider value={value}>{children}</WalletContext.Provider>;
+  return (
+    <WalletContext.Provider value={value}>{children}</WalletContext.Provider>
+  );
 }
 
 export const useWallet = () => {
