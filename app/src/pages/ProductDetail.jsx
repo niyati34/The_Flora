@@ -1,726 +1,754 @@
-import { useParams, Link } from "react-router-dom";
 import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import { products } from "../data/products";
 import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
-import { useCompare } from "../context/CompareContext";
-import { useNotes } from "../context/NotesContext";
-import { useStock } from "../context/StockContext";
 import { useRecentlyViewed } from "../context/RecentlyViewedContext";
-import { usePriceAlert } from "../context/PriceAlertContext";
-import { useCareReminder } from "../context/CareReminderContext";
-import ProductRecommendations from "../components/ProductRecommendations";
-import { useAutoSave } from "../hooks/useAutoSave";
 import LazyImage from "../components/LazyImage";
-import analytics from "../utils/analytics";
+import ProductRecommendations from "../components/ProductRecommendations";
 
 export default function ProductDetail() {
   const { id } = useParams();
-  const product = products.find((p) => p.id === id);
-  const { addToCart } = useCart();
+  const navigate = useNavigate();
+  const { addToCart, getCartItem } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
-  const { addToCompare, removeFromCompare, isInCompare } = useCompare();
-  const { addNote, getNotesForProduct, removeNote } = useNotes();
-  const { getAvailableStock, isInStock, getStockStatus, reserveStock } =
-    useStock();
   const { addToRecentlyViewed } = useRecentlyViewed();
-  const { addPriceAlert, getAlertsForProduct } = usePriceAlert();
-  const { addReminder, getRemindersForProduct } = useCareReminder();
 
-  if (!product)
+  const [product, setProduct] = useState(null);
+  const [selectedImage, setSelectedImage] = useState(0);
+  const [quantity, setQuantity] = useState(1);
+  const [selectedColor, setSelectedColor] = useState("default");
+  const [isLoading, setIsLoading] = useState(true);
+  const [activeTab, setActiveTab] = useState("description");
+  const [showImageModal, setShowImageModal] = useState(false);
+
+  useEffect(() => {
+    const foundProduct = products.find(p => p.id === id);
+    if (foundProduct) {
+      setProduct(foundProduct);
+      addToRecentlyViewed(foundProduct);
+    }
+    setIsLoading(false);
+  }, [id, addToRecentlyViewed]);
+
+  useEffect(() => {
+    if (product) {
+      document.title = `${product.name} - The Flora`;
+    }
+  }, [product]);
+
+  if (isLoading) {
     return (
-      <div className="container mt-5">
-        <h2>Product not found</h2>
+      <div className="container py-5 text-center">
+        <div className="spinner-border text-success" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
       </div>
     );
+  }
 
-  // Add to recently viewed when component mounts
-  useEffect(() => {
-    addToRecentlyViewed(product);
-  }, [product.id, addToRecentlyViewed]);
-
-  const [selectedImage, setSelectedImage] = useState(product.image);
-  const [selectedColorIndex, setSelectedColorIndex] = useState(0);
-  const [rating, setRating] = useState(0);
-  const [reviewSubmitted, setReviewSubmitted] = useState(false);
-  const [quantity, setQuantity] = useState(1);
-  const [addedToCart, setAddedToCart] = useState(false);
-  const [showNotes, setShowNotes] = useState(false);
-  const [targetPrice, setTargetPrice] = useState("");
-  const [showPriceAlert, setShowPriceAlert] = useState(false);
-  const [showCareReminder, setShowCareReminder] = useState(false);
-  const [careType, setCareType] = useState("water");
-  const [careFrequency, setCareFrequency] = useState(7);
-  const [isImageZoomed, setIsImageZoomed] = useState(false);
-  const [zoomPosition, setZoomPosition] = useState({ x: 0, y: 0 });
-
-  // Auto-save functionality for review and notes
-  const {
-    value: review,
-    setValue: setReview,
-    isSaving: isReviewSaving,
-    clearSaved: clearReviewDraft,
-    hasSavedData: hasReviewDraft,
-  } = useAutoSave(`review_${product.id}`, "");
-
-  const {
-    value: noteText,
-    setValue: setNoteText,
-    isSaving: isNoteSaving,
-    clearSaved: clearNoteDraft,
-  } = useAutoSave(`note_${product.id}`, "");
-
-  const colors = ["black", "red", "white", "#757471", "#EEFC09"];
-  const colorNames = ["Black", "Red", "White", "Grey", "Yellow"];
-
-  const handleColorChange = (imageUrl, index) => {
-    setSelectedImage(imageUrl);
-    setSelectedColorIndex(index);
-  };
+  if (!product) {
+    return (
+      <div className="container py-5 text-center">
+        <h2>Product Not Found</h2>
+        <p>The product you're looking for doesn't exist.</p>
+        <button className="btn btn-primary" onClick={() => navigate("/")}>
+          Go Back Home
+        </button>
+      </div>
+    );
+  }
 
   const handleAddToCart = () => {
-    if (isInStock(product.id, quantity)) {
-      addToCart(
-        product,
-        quantity,
-        selectedImage,
-        colorNames[selectedColorIndex]
-      );
-      reserveStock(product.id, quantity);
-      setAddedToCart(true);
-      setTimeout(() => setAddedToCart(false), 2000);
-
-      analytics.track("product_added_to_cart", {
-        productId: product.id,
-        productName: product.name,
-        price: product.price,
-        quantity,
-        color: colorNames[selectedColorIndex],
-        source: "product_detail",
-      });
-    } else {
-      alert("Sorry, not enough stock available!");
-    }
+    addToCart(product, quantity, null, selectedColor);
   };
 
-  const handleBuyNow = () => {
-    handleAddToCart();
-    alert("Redirecting to checkout...");
-  };
-
-  const toggleWishlist = () => {
+  const handleWishlistToggle = () => {
     if (isInWishlist(product.id)) {
       removeFromWishlist(product.id);
-      analytics.track("product_removed_from_wishlist", {
-        productId: product.id,
-        productName: product.name,
-        source: "product_detail",
-      });
     } else {
       addToWishlist(product);
-      analytics.track("product_added_to_wishlist", {
-        productId: product.id,
-        productName: product.name,
-        source: "product_detail",
-      });
     }
   };
 
-  const toggleCompare = () => {
-    if (isInCompare(product.id)) {
-      removeFromCompare(product.id);
-      analytics.track("product_removed_from_compare", {
-        productId: product.id,
-        productName: product.name,
-        source: "product_detail",
-      });
-    } else {
-      addToCompare(product);
-      analytics.track("product_added_to_compare", {
-        productId: product.id,
-        productName: product.name,
-        source: "product_detail",
-      });
-    }
-  };
-
-  const handleAddNote = () => {
-    if (noteText.trim()) {
-      addNote(noteText, product.id);
-      setNoteText("");
-      clearNoteDraft();
-    }
-  };
-
-  const handlePriceAlert = () => {
-    const price = parseFloat(targetPrice);
-    if (price && price < product.price) {
-      addPriceAlert(product.id, price);
-      setTargetPrice("");
-      setShowPriceAlert(false);
-      alert(
-        `Price alert set for ₹${price}! You'll be notified when the price drops.`
-      );
-    } else {
-      alert("Please enter a valid price lower than the current price.");
-    }
-  };
-
-  const handleCareReminder = () => {
-    if (careType && careFrequency > 0) {
-      const plantName = getPlantName(product.name);
-      addReminder(
-        product.id,
-        plantName,
-        careType,
-        careFrequency,
-        new Date().toISOString()
-      );
-      setShowCareReminder(false);
-      alert(
-        `Care reminder set! You'll be reminded to ${careType} your ${plantName} every ${careFrequency} days.`
-      );
-    }
-  };
-
-  const handleImageMouseMove = (e) => {
-    if (!isImageZoomed) return;
-
-    const rect = e.target.getBoundingClientRect();
-    const x = ((e.clientX - rect.left) / rect.width) * 100;
-    const y = ((e.clientY - rect.top) / rect.height) * 100;
-    setZoomPosition({ x, y });
-  };
-
-  const toggleImageZoom = () => {
-    setIsImageZoomed(!isImageZoomed);
-  };
-
-  const productNotes = getNotesForProduct(product.id);
-  const priceAlerts = getAlertsForProduct(product.id);
-  const careReminders = getRemindersForProduct(product.id);
-
-  // Extract plant name from product name (e.g., "Peace Lily Plant With..." -> "Peace Lily")
-  const getPlantName = (productName) => {
-    const words = productName.split(" ");
-    // Find index of "Plant" and take words before it
-    const plantIndex = words.findIndex(
-      (word) => word.toLowerCase() === "plant"
-    );
-    if (plantIndex > 0) {
-      return words.slice(0, plantIndex).join(" ");
-    }
-    // Fallback: take first two words
-    return words.slice(0, 2).join(" ");
-  };
+  const cartItem = getCartItem(product.id, selectedColor);
+  const isInCart = !!cartItem;
 
   return (
-    <main style={{ marginTop: 180 }}>
-      <div className="breadcrumb-container">
-        <nav aria-label="breadcrumb">
+    <div className="product-detail-page">
+      <style>
+        {`
+          .product-detail-page {
+            background: #f8f9fa;
+            min-height: 100vh;
+          }
+          
+          .product-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+            margin: 20px 0;
+          }
+          
+          .product-gallery {
+            position: relative;
+            background: #f8f9fa;
+          }
+          
+          .main-image-container {
+            position: relative;
+            aspect-ratio: 1;
+            background: white;
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 12px;
+          }
+          
+          .main-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+          }
+          
+          .main-image:hover {
+            transform: scale(1.05);
+          }
+          
+          .image-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            cursor: pointer;
+          }
+          
+          .main-image-container:hover .image-overlay {
+            opacity: 1;
+          }
+          
+          .image-overlay i {
+            color: white;
+            font-size: 24px;
+          }
+          
+          .thumbnail-gallery {
+            display: flex;
+            gap: 12px;
+            margin-top: 16px;
+            overflow-x: auto;
+            padding: 8px 0;
+          }
+          
+          .thumbnail {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s ease;
+            flex-shrink: 0;
+          }
+          
+          .thumbnail.active {
+            border-color: #6A9304;
+            transform: scale(1.05);
+          }
+          
+          .thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 6px;
+          }
+          
+          .product-info {
+            padding: 32px;
+          }
+          
+          .product-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
+            margin-bottom: 16px;
+            line-height: 1.3;
+          }
+          
+          .product-rating {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+          }
+          
+          .rating-stars {
+            display: flex;
+            gap: 4px;
+          }
+          
+          .rating-stars i {
+            color: #ffd700;
+            font-size: 18px;
+          }
+          
+          .rating-text {
+            color: #666;
+            font-size: 14px;
+          }
+          
+          .product-price {
+            margin-bottom: 24px;
+          }
+          
+          .current-price {
+            font-size: 32px;
+            font-weight: 700;
+            color: #6A9304;
+            margin-right: 16px;
+          }
+          
+          .original-price {
+            font-size: 20px;
+            color: #999;
+            text-decoration: line-through;
+          }
+          
+          .discount-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-left: 12px;
+          }
+          
+          .product-description {
+            color: #666;
+            line-height: 1.6;
+            margin-bottom: 24px;
+          }
+          
+          .product-features {
+            margin-bottom: 24px;
+          }
+          
+          .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 12px;
+            color: #555;
+          }
+          
+          .feature-item i {
+            color: #6A9304;
+            width: 20px;
+          }
+          
+          .product-options {
+            margin-bottom: 32px;
+          }
+          
+          .option-group {
+            margin-bottom: 20px;
+          }
+          
+          .option-label {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            display: block;
+          }
+          
+          .color-options {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+          }
+          
+          .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            border: 3px solid transparent;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            position: relative;
+          }
+          
+          .color-option.active {
+            border-color: #6A9304;
+            transform: scale(1.1);
+          }
+          
+          .color-option:hover {
+            transform: scale(1.05);
+          }
+          
+          .quantity-selector {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 20px;
+          }
+          
+          .quantity-btn {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #ddd;
+            background: white;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          
+          .quantity-btn:hover {
+            border-color: #6A9304;
+            color: #6A9304;
+          }
+          
+          .quantity-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+          }
+          
+          .quantity-input {
+            width: 60px;
+            height: 40px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 16px;
+          }
+          
+          .action-buttons {
+            display: flex;
+            gap: 16px;
+            margin-bottom: 24px;
+          }
+          
+          .btn-add-to-cart {
+            flex: 2;
+            height: 50px;
+            background: #6A9304;
+            border: none;
+            border-radius: 12px;
+            color: white;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+          }
+          
+          .btn-add-to-cart:hover {
+            background: #5a7d03;
+            transform: translateY(-2px);
+          }
+          
+          .btn-add-to-cart:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+          }
+          
+          .btn-wishlist {
+            width: 50px;
+            height: 50px;
+            border: 2px solid #6A9304;
+            background: white;
+            border-radius: 12px;
+            color: #6A9304;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+          
+          .btn-wishlist:hover {
+            background: #6A9304;
+            color: white;
+          }
+          
+          .btn-wishlist.active {
+            background: #ff6b6b;
+            border-color: #ff6b6b;
+            color: white;
+          }
+          
+          .product-tabs {
+            margin-top: 40px;
+          }
+          
+          .tab-navigation {
+            display: flex;
+            border-bottom: 2px solid #f1f3f4;
+            margin-bottom: 24px;
+          }
+          
+          .tab-button {
+            padding: 16px 24px;
+            border: none;
+            background: none;
+            color: #666;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+          }
+          
+          .tab-button.active {
+            color: #6A9304;
+            border-bottom-color: #6A9304;
+          }
+          
+          .tab-button:hover {
+            color: #6A9304;
+          }
+          
+          .tab-content {
+            color: #666;
+            line-height: 1.6;
+          }
+          
+          .faq-item {
+            margin-bottom: 20px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 8px;
+          }
+          
+          .faq-question {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+          }
+          
+          .faq-answer {
+            color: #666;
+          }
+          
+          .stock-status {
+            display: inline-block;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 20px;
+          }
+          
+          .stock-status.in-stock {
+            background: #d4edda;
+            color: #155724;
+          }
+          
+          .stock-status.low-stock {
+            background: #fff3cd;
+            color: #856404;
+          }
+          
+          .stock-status.out-of-stock {
+            background: #f8d7da;
+            color: #721c24;
+          }
+          
+          .image-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            cursor: pointer;
+          }
+          
+          .modal-image {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+            border-radius: 8px;
+          }
+          
+          .modal-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            color: white;
+            font-size: 32px;
+            cursor: pointer;
+            background: rgba(0,0,0,0.5);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        `}
+      </style>
+
+      <div className="container py-4">
+        <nav aria-label="breadcrumb" className="mb-4">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <Link to="/">Home</Link>
+              <a href="/" className="text-decoration-none">Home</a>
+            </li>
+            <li className="breadcrumb-item">
+              <a href="/category" className="text-decoration-none">Products</a>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               {product.name}
             </li>
           </ol>
         </nav>
-      </div>
-      <section className="product-details">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-6">
-              <div className="image-container position-relative">
-                <LazyImage
-                  id="product-image"
-                  src={selectedImage}
-                  alt={product.name}
-                  className={`product-image ${isImageZoomed ? "zoomed" : ""}`}
-                  onClick={toggleImageZoom}
-                  onMouseMove={handleImageMouseMove}
-                  onMouseLeave={() => setIsImageZoomed(false)}
-                  style={{
-                    transform: isImageZoomed ? `scale(2)` : "scale(1)",
-                    transformOrigin: isImageZoomed
-                      ? `${zoomPosition.x}% ${zoomPosition.y}%`
-                      : "center",
-                    transition: isImageZoomed ? "none" : "transform 0.3s ease",
-                    cursor: isImageZoomed ? "zoom-out" : "zoom-in",
-                  }}
-                />
-                <div className="zoom-hint position-absolute top-0 end-0 m-2">
-                  <small className="badge bg-dark">
-                    <i className="fas fa-search-plus"></i> Click to zoom
-                  </small>
-                </div>
-              </div>
-            </div>
-            <div className="col-md-6">
-              <h2>{product.name}</h2>
-              <ul>
-                {product.features.map((f, i) => (
-                  <li key={i}>{f}</li>
-                ))}
-              </ul>
-              <p>Price: ₹{product.price.toFixed(2)}</p>
 
-              {/* Price Alert */}
-              <div className="price-alert mb-3">
-                <button
-                  className="btn btn-sm btn-outline-info"
-                  onClick={() => setShowPriceAlert(!showPriceAlert)}
+        <div className="product-container">
+          <div className="row g-0">
+            <div className="col-lg-6">
+              <div className="product-gallery p-4">
+                <div 
+                  className="main-image-container"
+                  onClick={() => setShowImageModal(true)}
                 >
-                  <i className="fas fa-bell"></i> Set Price Alert
-                </button>
-                {priceAlerts.filter((alert) => alert.isActive).length > 0 && (
-                  <small className="text-success ms-2">
-                    ✓ Price alert active
-                  </small>
-                )}
-              </div>
+                  <LazyImage
+                    src={product.images[selectedImage]}
+                    alt={product.name}
+                    className="main-image"
+                  />
+                  <div className="image-overlay">
+                    <i className="fas fa-expand"></i>
+                  </div>
+                </div>
 
-              {showPriceAlert && (
-                <div className="price-alert-form card p-3 mb-3">
-                  <div className="input-group">
-                    <span className="input-group-text">₹</span>
-                    <input
-                      type="number"
-                      className="form-control"
-                      placeholder="Target price"
-                      value={targetPrice}
-                      onChange={(e) => setTargetPrice(e.target.value)}
-                      max={product.price - 1}
-                      step="0.01"
-                    />
-                    <button
-                      className="btn btn-outline-primary"
-                      onClick={handlePriceAlert}
-                      disabled={
-                        !targetPrice || parseFloat(targetPrice) >= product.price
-                      }
+                <div className="thumbnail-gallery">
+                  {product.images.map((image, index) => (
+                    <div
+                      key={index}
+                      className={`thumbnail ${index === selectedImage ? 'active' : ''}`}
+                      onClick={() => setSelectedImage(index)}
                     >
-                      Set Alert
-                    </button>
-                  </div>
-                  <small className="text-muted mt-1">
-                    Enter a price below ₹{product.price} to get notified when it
-                    drops
-                  </small>
-                </div>
-              )}
-
-              {/* Care Reminders */}
-              <div className="care-reminder mb-3">
-                <button
-                  className="btn btn-sm btn-outline-success"
-                  onClick={() => setShowCareReminder(!showCareReminder)}
-                >
-                  <i className="fas fa-calendar-alt"></i> Set Care Reminder
-                </button>
-                {careReminders.filter((reminder) => reminder.isActive).length >
-                  0 && (
-                  <small className="text-success ms-2">
-                    ✓{" "}
-                    {
-                      careReminders.filter((reminder) => reminder.isActive)
-                        .length
-                    }{" "}
-                    reminder(s) active
-                  </small>
-                )}
-              </div>
-
-              {showCareReminder && (
-                <div className="care-reminder-form card p-3 mb-3">
-                  <div className="row">
-                    <div className="col-md-6 mb-2">
-                      <label className="form-label">Care Type:</label>
-                      <select
-                        className="form-select"
-                        value={careType}
-                        onChange={(e) => setCareType(e.target.value)}
-                      >
-                        <option value="water">Watering</option>
-                        <option value="fertilize">Fertilizing</option>
-                        <option value="prune">Pruning</option>
-                        <option value="repot">Repotting</option>
-                      </select>
-                    </div>
-                    <div className="col-md-6 mb-2">
-                      <label className="form-label">Frequency (days):</label>
-                      <input
-                        type="number"
-                        className="form-control"
-                        value={careFrequency}
-                        onChange={(e) =>
-                          setCareFrequency(parseInt(e.target.value))
-                        }
-                        min="1"
-                        max="365"
+                      <LazyImage
+                        src={image}
+                        alt={`${product.name} - Image ${index + 1}`}
                       />
                     </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="col-lg-6">
+              <div className="product-info">
+                <h1 className="product-title">{product.name}</h1>
+                
+                <div className="product-rating">
+                  <div className="rating-stars">
+                    {[1, 2, 3, 4, 5].map(star => (
+                      <i 
+                        key={star} 
+                        className={`fas fa-star ${star <= (product.rating || 0) ? 'filled' : ''}`}
+                      ></i>
+                    ))}
                   </div>
-                  <button
-                    className="btn btn-success"
-                    onClick={handleCareReminder}
-                  >
-                    Set Reminder
-                  </button>
+                  <span className="rating-text">
+                    {product.rating || 4.5} ({product.reviews || 128} reviews)
+                  </span>
                 </div>
-              )}
 
-              {/* Stock Status */}
-              <div className="stock-info mb-3">
-                <span
-                  className={`badge ${
-                    getStockStatus(product.id) === "In Stock"
-                      ? "bg-success"
-                      : getStockStatus(product.id) === "Low Stock"
-                      ? "bg-warning"
-                      : "bg-danger"
-                  }`}
-                >
-                  {getStockStatus(product.id)}
-                </span>
-                {getAvailableStock(product.id) > 0 && (
-                  <small className="text-muted ms-2">
-                    {getAvailableStock(product.id)} available
-                  </small>
-                )}
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="quantity">Quantity:</label>
-                <input
-                  type="number"
-                  id="quantity"
-                  name="quantity"
-                  value={quantity}
-                  onChange={(e) =>
-                    setQuantity(Math.max(1, parseInt(e.target.value) || 1))
-                  }
-                  min={1}
-                  max={getAvailableStock(product.id)}
-                  className="form-control"
-                  style={{
-                    width: "100px",
-                    display: "inline-block",
-                    marginLeft: "10px",
-                  }}
-                />
-              </div>
-              <div className="color-options">
-                {product.images.map((img, i) => (
-                  <div
-                    key={i}
-                    className={`color-circle ${
-                      selectedColorIndex === i ? "selected" : ""
-                    }`}
-                    style={{ backgroundColor: colors[i] }}
-                    onClick={() => handleColorChange(img, i)}
-                    title={`${colorNames[i]} variant`}
-                  ></div>
-                ))}
-              </div>
-              <div className="buttons">
-                <button
-                  className="btn add-to-cart-btn"
-                  onClick={handleAddToCart}
-                  disabled={!isInStock(product.id, quantity)}
-                >
-                  {getStockStatus(product.id) === "Out of Stock"
-                    ? "Out of Stock"
-                    : "Add to Cart"}
-                </button>
-                <button
-                  className="btn buy-now-btn"
-                  onClick={handleBuyNow}
-                  disabled={!isInStock(product.id, quantity)}
-                >
-                  Buy It Now
-                </button>
-                <button
-                  className={`btn ${
-                    isInWishlist(product.id)
-                      ? "btn-danger"
-                      : "btn-outline-danger"
-                  }`}
-                  onClick={toggleWishlist}
-                  title={
-                    isInWishlist(product.id)
-                      ? "Remove from Wishlist"
-                      : "Add to Wishlist"
-                  }
-                >
-                  <i
-                    className={`fas fa-heart ${
-                      isInWishlist(product.id) ? "" : "far"
-                    }`}
-                  ></i>
-                  {isInWishlist(product.id) ? " Remove" : " Wishlist"}
-                </button>
-                <button
-                  className={`btn ${
-                    isInCompare(product.id)
-                      ? "btn-warning"
-                      : "btn-outline-warning"
-                  }`}
-                  onClick={toggleCompare}
-                  title={
-                    isInCompare(product.id)
-                      ? "Remove from Compare"
-                      : "Add to Compare"
-                  }
-                >
-                  <i className="fas fa-balance-scale"></i>
-                  {isInCompare(product.id) ? " Remove" : " Compare"}
-                </button>
-              </div>
-              {addedToCart && (
-                <div className="alert alert-success mt-2">
-                  Added {quantity} {colorNames[selectedColorIndex]}{" "}
-                  {product.name} to cart!
-                </div>
-              )}
-              <ul className="list-styled">
-                <li>Free Shipping</li>
-                <li>Cash on delivery available</li>
-                <li>10 Days Refund Policy Terms & Conditions Apply</li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </section>
-      <div className="product-about-section">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-12">
-              <h3>About The {getPlantName(product.name)} Plant</h3>
-              <div className="about-text">
-                <p>{product.description}</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <section className="product-info">
-        <div className="container">
-          <div className="row product-info-row">
-            <div className="col-md-6">
-              <p>{product.info}</p>
-            </div>
-            <div className="col-md-6">
-              <img
-                src={selectedImage}
-                alt="Product Info"
-                className="img-fluid"
-              />
-            </div>
-          </div>
-        </div>
-      </section>
-      <div className="faq">
-        <h2 className="section-title">Frequently Asked Questions</h2>
-        {product.faqs.map((faq, i) => (
-          <div className="faq-item" key={i}>
-            <div className="card">
-              <div className="card-header" id={`faqHeading${i}`}>
-                <h3 className="mb-0">
-                  <button
-                    className="btn btn-link"
-                    type="button"
-                    data-bs-toggle="collapse"
-                    data-bs-target={`#faqCollapse${i}`}
-                    aria-expanded={i === 0}
-                    aria-controls={`faqCollapse${i}`}
-                  >
-                    {i + 1}. {faq.q}
-                  </button>
-                </h3>
-              </div>
-              <div
-                id={`faqCollapse${i}`}
-                className={`collapse${i === 0 ? " show" : ""}`}
-                aria-labelledby={`faqHeading${i}`}
-                data-bs-parent=".faq"
-              >
-                <div className="card-body">{faq.a}</div>
-              </div>
-            </div>
-          </div>
-        ))}
-      </div>
-      <section className="product-rating">
-        <div className="container">
-          <div className="row">
-            <div className="col-md-12">
-              <h3>Product Rating</h3>
-              <div className="form-group">
-                <div className="rating">
-                  <input
-                    type="radio"
-                    id="star5"
-                    name="rating"
-                    value="5"
-                    checked={rating === 5}
-                    onChange={() => setRating(5)}
-                  />
-                  <label htmlFor="star5"></label>
-                  <input
-                    type="radio"
-                    id="star4"
-                    name="rating"
-                    value="4"
-                    checked={rating === 4}
-                    onChange={() => setRating(4)}
-                  />
-                  <label htmlFor="star4"></label>
-                  <input
-                    type="radio"
-                    id="star3"
-                    name="rating"
-                    value="3"
-                    checked={rating === 3}
-                    onChange={() => setRating(3)}
-                  />
-                  <label htmlFor="star3"></label>
-                  <input
-                    type="radio"
-                    id="star2"
-                    name="rating"
-                    value="2"
-                    checked={rating === 2}
-                    onChange={() => setRating(2)}
-                  />
-                  <label htmlFor="star2"></label>
-                  <input
-                    type="radio"
-                    id="star1"
-                    name="rating"
-                    value="1"
-                    checked={rating === 1}
-                    onChange={() => setRating(1)}
-                  />
-                  <label htmlFor="star1"></label>
-                </div>
-              </div>
-              {reviewSubmitted ? (
-                <div className="alert alert-success mt-3">
-                  Thank you for your review!
-                </div>
-              ) : (
-                <form
-                  id="review-form"
-                  onSubmit={(e) => {
-                    e.preventDefault();
-                    setReviewSubmitted(true);
-                    clearReviewDraft();
-                  }}
-                >
-                  <div className="form-group">
-                    <label htmlFor="review">
-                      Write a Review:
-                      {hasReviewDraft && (
-                        <small className="text-info ms-2">
-                          <i className="fas fa-save"></i> Draft saved
-                        </small>
-                      )}
-                      {isReviewSaving && (
-                        <small className="text-muted ms-2">
-                          <i className="fas fa-spinner fa-spin"></i> Saving...
-                        </small>
-                      )}
-                    </label>
-                    <textarea
-                      className="form-control"
-                      id="review"
-                      rows={4}
-                      required
-                      value={review}
-                      onChange={(e) => setReview(e.target.value)}
-                    ></textarea>
-                  </div>
-                  <button type="submit" className="btn btn-primary">
-                    Submit Review
-                  </button>
-                </form>
-              )}
-            </div>
-
-            {/* Notes Section */}
-            <div className="product-notes mt-4">
-              <div className="d-flex justify-content-between align-items-center mb-3">
-                <h5>My Notes</h5>
-                <button
-                  className="btn btn-outline-info btn-sm"
-                  onClick={() => setShowNotes(!showNotes)}
-                >
-                  {showNotes ? "Hide Notes" : "Show Notes"} (
-                  {productNotes.length})
-                </button>
-              </div>
-
-              {showNotes && (
-                <div>
-                  <div className="mb-3">
-                    <div className="input-group">
-                      <input
-                        type="text"
-                        className="form-control"
-                        placeholder="Add a note about this plant..."
-                        value={noteText}
-                        onChange={(e) => setNoteText(e.target.value)}
-                        onKeyPress={(e) => e.key === "Enter" && handleAddNote()}
-                      />
-                      <button
-                        className="btn btn-outline-secondary"
-                        onClick={handleAddNote}
-                        disabled={!noteText.trim()}
-                      >
-                        Add Note
-                      </button>
-                    </div>
-                    {isNoteSaving && (
-                      <small className="text-muted">
-                        <i className="fas fa-spinner fa-spin"></i> Auto-saving
-                        draft...
-                      </small>
-                    )}
-                  </div>
-
-                  {productNotes.length > 0 && (
-                    <div className="notes-list">
-                      {productNotes.map((note) => (
-                        <div key={note.id} className="note-item card mb-2">
-                          <div className="card-body p-2">
-                            <div className="d-flex justify-content-between">
-                              <small className="text-muted">
-                                {new Date(note.timestamp).toLocaleDateString()}
-                              </small>
-                              <button
-                                className="btn btn-sm btn-outline-danger"
-                                onClick={() => removeNote(note.id)}
-                              >
-                                ×
-                              </button>
-                            </div>
-                            <p className="mb-0">{note.text}</p>
-                          </div>
-                        </div>
-                      ))}
-                    </div>
+                <div className="product-price">
+                  <span className="current-price">₹{product.price}</span>
+                  {product.originalPrice && product.originalPrice > product.price && (
+                    <>
+                      <span className="original-price">₹{product.originalPrice}</span>
+                      <span className="discount-badge">
+                        {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
+                      </span>
+                    </>
                   )}
                 </div>
-              )}
+
+                <p className="product-description">{product.description}</p>
+
+                <div className="product-features">
+                  {product.features?.map((feature, index) => (
+                    <div key={index} className="feature-item">
+                      <i className="fas fa-check-circle"></i>
+                      <span>{feature}</span>
+                    </div>
+                  ))}
+                </div>
+
+                <div className="stock-status in-stock">
+                  <i className="fas fa-check-circle me-2"></i>
+                  In Stock - Free Delivery
+                </div>
+
+                <div className="product-options">
+                  <div className="option-group">
+                    <label className="option-label">Color:</label>
+                    <div className="color-options">
+                      {["default", "black", "white", "brown"].map(color => (
+                        <div
+                          key={color}
+                          className={`color-option ${selectedColor === color ? 'active' : ''}`}
+                          style={{ backgroundColor: color === 'default' ? '#6A9304' : color }}
+                          onClick={() => setSelectedColor(color)}
+                          title={color}
+                        />
+                      ))}
+                    </div>
+                  </div>
+
+                  <div className="option-group">
+                    <label className="option-label">Quantity:</label>
+                    <div className="quantity-selector">
+                      <button
+                        className="quantity-btn"
+                        onClick={() => setQuantity(Math.max(1, quantity - 1))}
+                        disabled={quantity <= 1}
+                      >
+                        <i className="fas fa-minus"></i>
+                      </button>
+                      <input
+                        type="number"
+                        className="quantity-input"
+                        value={quantity}
+                        onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                        min="1"
+                        max="99"
+                      />
+                      <button
+                        className="quantity-btn"
+                        onClick={() => setQuantity(Math.min(99, quantity + 1))}
+                        disabled={quantity >= 99}
+                      >
+                        <i className="fas fa-plus"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="action-buttons">
+                  <button
+                    className={`btn-add-to-cart ${isInCart ? 'btn-secondary' : ''}`}
+                    onClick={handleAddToCart}
+                    disabled={isInCart}
+                  >
+                    {isInCart ? (
+                      <>
+                        <i className="fas fa-check me-2"></i>
+                        Added to Cart
+                      </>
+                    ) : (
+                      <>
+                        <i className="fas fa-shopping-cart me-2"></i>
+                        Add to Cart - ₹{product.price}
+                      </>
+                    )}
+                  </button>
+                  
+                  <button
+                    className={`btn-wishlist ${isInWishlist(product.id) ? 'active' : ''}`}
+                    onClick={handleWishlistToggle}
+                    title={isInWishlist(product.id) ? 'Remove from wishlist' : 'Add to wishlist'}
+                  >
+                    <i className={`fas ${isInWishlist(product.id) ? 'fa-heart' : 'fa-heart'}`}></i>
+                  </button>
+                </div>
+
+                <div className="product-tabs">
+                  <div className="tab-navigation">
+                    <button
+                      className={`tab-button ${activeTab === 'description' ? 'active' : ''}`}
+                      onClick={() => setActiveTab('description')}
+                    >
+                      Description
+                    </button>
+                    <button
+                      className={`tab-button ${activeTab === 'features' ? 'active' : ''}`}
+                      onClick={() => setActiveTab('features')}
+                    >
+                      Features
+                    </button>
+                    <button
+                      className={`tab-button ${activeTab === 'faq' ? 'active' : ''}`}
+                      onClick={() => setActiveTab('faq')}
+                    >
+                      FAQ
+                    </button>
+                  </div>
+
+                  <div className="tab-content">
+                    {activeTab === 'description' && (
+                      <div>
+                        <p>{product.info || product.description}</p>
+                      </div>
+                    )}
+                    
+                    {activeTab === 'features' && (
+                      <div>
+                        <ul>
+                          {product.features?.map((feature, index) => (
+                            <li key={index} className="mb-2">{feature}</li>
+                          ))}
+                        </ul>
+                      </div>
+                    )}
+                    
+                    {activeTab === 'faq' && (
+                      <div>
+                        {product.faqs?.map((faq, index) => (
+                          <div key={index} className="faq-item">
+                            <div className="faq-question">{faq.q}</div>
+                            <div className="faq-answer">{faq.a}</div>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
-        {/* Product Recommendations */}
-        <ProductRecommendations currentProduct={product} />
-      </section>
-    </main>
+        <ProductRecommendations 
+          currentProductId={product.id}
+          category={product.category}
+        />
+      </div>
+
+      {showImageModal && (
+        <div className="image-modal" onClick={() => setShowImageModal(false)}>
+          <img
+            src={product.images[selectedImage]}
+            alt={product.name}
+            className="modal-image"
+            onClick={(e) => e.stopPropagation()}
+          />
+          <div className="modal-close" onClick={() => setShowImageModal(false)}>
+            <i className="fas fa-times"></i>
+          </div>
+        </div>
+      )}
+    </div>
   );
 }
