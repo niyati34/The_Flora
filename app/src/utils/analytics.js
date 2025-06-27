@@ -33,6 +33,10 @@ class Analytics {
     this.flush();
   }
 
+  trackPageView(pageName) {
+    this.track("page_view", { page: pageName });
+  }
+
   flush() {
     if (!this.isInitialized || this.queue.length === 0) return;
 

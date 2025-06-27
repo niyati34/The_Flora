@@ -8,7 +8,7 @@ export default function Home() {
 
   useEffect(() => {
     setIsVisible(true);
-    analytics.trackPageView('Home');
+    analytics.trackPageView("Home");
   }, []);
 
   const carouselItems = [
@@ -16,20 +16,20 @@ export default function Home() {
       src: "/i1.jpg",
       alt: "Beautiful Garden Collection",
       title: "Discover Our Garden Collection",
-      subtitle: "Transform your space with nature's beauty"
+      subtitle: "Transform your space with nature's beauty",
     },
     {
       src: "/i4.webp",
       alt: "Indoor Plant Selection",
       title: "Indoor Plant Paradise",
-      subtitle: "Bring the outdoors inside with our curated selection"
+      subtitle: "Bring the outdoors inside with our curated selection",
     },
     {
       src: "/i3.webp",
       alt: "Plant Care Essentials",
       title: "Expert Plant Care",
-      subtitle: "Everything you need for thriving plants"
-    }
+      subtitle: "Everything you need for thriving plants",
+    },
   ];
 
   const newLaunches = [
@@ -40,7 +40,7 @@ export default function Home() {
       originalPrice: "₹499",
       discount: "20% OFF",
       rating: 4.8,
-      reviews: 127
+      reviews: 127,
     },
     {
       src: "/v2.mp4",
@@ -49,7 +49,7 @@ export default function Home() {
       originalPrice: "₹399",
       discount: "25% OFF",
       rating: 4.6,
-      reviews: 89
+      reviews: 89,
     },
     {
       src: "/v3.mp4",
@@ -58,7 +58,7 @@ export default function Home() {
       originalPrice: "₹501",
       discount: "20% OFF",
       rating: 4.7,
-      reviews: 156
+      reviews: 156,
     },
     {
       src: "/v4.mp4",
@@ -67,72 +67,72 @@ export default function Home() {
       originalPrice: "₹499",
       discount: "20% OFF",
       rating: 4.9,
-      reviews: 203
-    }
+      reviews: 203,
+    },
   ];
 
   const features = [
-    { 
-      img: "/n3.png", 
+    {
+      img: "/n3.png",
       text: "Just like you, we're plant lovers too",
       icon: "fas fa-heart",
-      color: "#e74c3c"
+      color: "#e74c3c",
     },
     {
       img: "/n2.png",
       text: "Our homegrown plants get the utmost care and attention",
       icon: "fas fa-seedling",
-      color: "#27ae60"
+      color: "#27ae60",
     },
     {
       img: "/n1.png",
       text: "We bring you plant care guides by gardening experts",
       icon: "fas fa-book-open",
-      color: "#f39c12"
+      color: "#f39c12",
     },
     {
       img: "/n.png",
       text: "We ensure quick delivery and hassle-free replacements",
       icon: "fas fa-shipping-fast",
-      color: "#3498db"
-    }
+      color: "#3498db",
+    },
   ];
 
   const faqs = [
     {
       q: "1. How do I choose the right plants for my garden?",
       a: "Consider your local climate, sunlight exposure, soil type, and preferences. Research each plant's specific needs and growth patterns. Our plant finder tool can help you discover the perfect plants for your space.",
-      category: "Plant Selection"
+      category: "Plant Selection",
     },
     {
       q: "2. How often should I water my plants?",
       a: "Water when the top inch of soil is dry; avoid overwatering to prevent root rot. Different plants have different water needs - succulents need less water while tropical plants prefer consistently moist soil.",
-      category: "Care & Maintenance"
+      category: "Care & Maintenance",
     },
     {
       q: "3. What should I do if my plant has pests?",
       a: "Isolate the affected plant, identify the pest type, and treat with appropriate methods like insecticidal soap, neem oil, or manual removal. Early detection is key to preventing spread.",
-      category: "Pest Control"
+      category: "Pest Control",
     },
     {
       q: "4. When is the best time to fertilize plants?",
       a: "During the active growing season (spring/summer) with a balanced, slow-release fertilizer. Avoid fertilizing during dormancy periods and always follow package instructions.",
-      category: "Care & Maintenance"
+      category: "Care & Maintenance",
     },
     {
       q: "5. How can I protect my plants from extreme weather conditions?",
       a: "Use mulch for temperature regulation, shade cloth for sun protection, row covers for frost protection, and ensure proper watering during heat waves. Consider moving potted plants indoors during extreme conditions.",
-      category: "Weather Protection"
+      category: "Weather Protection",
     },
     {
       q: "6. What should I do if my plant's leaves turn yellow?",
       a: "Yellow leaves can indicate water issues, nutrient deficiency, pests, or natural aging. Check soil moisture, examine for pests, and consider if it's just older leaves naturally dying off.",
-      category: "Troubleshooting"
-    }
+      category: "Troubleshooting",
+    },
   ];
 
   return (
-    <div className={`container-fluid py-4 ${isVisible ? 'fade-in' : ''}`}>
+    <div className={`container-fluid py-4 ${isVisible ? "fade-in" : ""}`}>
       <style>
         {`
           .fade-in {
@@ -290,7 +290,7 @@ export default function Home() {
         </div>
         <div className="carousel-inner" style={{ height: 500 }}>
           {carouselItems.map((item, index) => (
-            <div 
+            <div
               key={index}
               className={`carousel-item ${index === 0 ? "active" : ""}`}
             >
@@ -352,23 +352,36 @@ export default function Home() {
                     >
                       <source src={product.src} type="video/mp4" />
                     </video>
-                    <div className="discount-badge">
-                      {product.discount}
-                    </div>
+                    <div className="discount-badge">{product.discount}</div>
                     <div className="rating-badge">
-                      <i className="fas fa-star me-1" style={{ color: "#ffd700" }}></i>
+                      <i
+                        className="fas fa-star me-1"
+                        style={{ color: "#ffd700" }}
+                      ></i>
                       {product.rating} ({product.reviews})
                     </div>
                   </div>
                   <div className="product-details text-center p-3">
-                    <h6 className="product-description mb-2">
-                      {product.desc}
-                    </h6>
+                    <h6 className="product-description mb-2">{product.desc}</h6>
                     <div className="price-section mb-3">
-                      <span className="current-price me-2" style={{ fontSize: "18px", fontWeight: "bold", color: "#6A9304" }}>
+                      <span
+                        className="current-price me-2"
+                        style={{
+                          fontSize: "18px",
+                          fontWeight: "bold",
+                          color: "#6A9304",
+                        }}
+                      >
                         {product.price}
                       </span>
-                      <span className="original-price" style={{ textDecoration: "line-through", color: "#999", fontSize: "14px" }}>
+                      <span
+                        className="original-price"
+                        style={{
+                          textDecoration: "line-through",
+                          color: "#999",
+                          fontSize: "14px",
+                        }}
+                      >
                         {product.originalPrice}
                       </span>
                     </div>
@@ -410,9 +423,17 @@ export default function Home() {
                     style={{ maxWidth: "50%" }}
                   />
                   <div className="feature-icon mb-3">
-                    <i className={feature.icon} style={{ fontSize: "32px", color: feature.color }}></i>
+                    <i
+                      className={feature.icon}
+                      style={{ fontSize: "32px", color: feature.color }}
+                    ></i>
                   </div>
-                  <p style={{ fontFamily: "Josefin Slab, sans-serif", margin: 0 }}>
+                  <p
+                    style={{
+                      fontFamily: "Josefin Slab, sans-serif",
+                      margin: 0,
+                    }}
+                  >
                     {feature.text}
                   </p>
                 </div>
@@ -425,7 +446,10 @@ export default function Home() {
       <section className="faq my-5">
         <div className="container">
           <h2 className="section-title text-center mb-4">
-            <i className="fas fa-question-circle me-2" style={{ color: "#6A9304" }}></i>
+            <i
+              className="fas fa-question-circle me-2"
+              style={{ color: "#6A9304" }}
+            ></i>
             Frequently Asked Questions
           </h2>
           <div className="accordion" id="faqAccordion">
@@ -444,7 +468,10 @@ export default function Home() {
                     >
                       <i className="fas fa-chevron-right me-2"></i>
                       {item.q}
-                      <span className="badge bg-secondary ms-2" style={{ fontSize: "10px" }}>
+                      <span
+                        className="badge bg-secondary ms-2"
+                        style={{ fontSize: "10px" }}
+                      >
                         {item.category}
                       </span>
                     </button>
@@ -456,7 +483,10 @@ export default function Home() {
                   aria-labelledby={`faqHeading${idx}`}
                   data-bs-parent="#faqAccordion"
                 >
-                  <div className="card-body" style={{ backgroundColor: "#f8f9fa" }}>
+                  <div
+                    className="card-body"
+                    style={{ backgroundColor: "#f8f9fa" }}
+                  >
                     {item.a}
                   </div>
                 </div>
