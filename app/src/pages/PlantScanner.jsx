@@ -19,7 +19,7 @@ const PlantScanner = () => {
         setResult(null);
         analytics.track("plant_scanner_image_uploaded", {
           fileSize: file.size,
-          fileType: file.type
+          fileType: file.type,
         });
       };
       reader.readAsDataURL(file);
@@ -38,7 +38,7 @@ const PlantScanner = () => {
       // Use the plant recognition utility
       const plantResult = await plantRecognition.analyzeImage(selectedImage);
       const healthResult = plantRecognition.assessPlantHealth(selectedImage);
-      
+
       setResult(plantResult);
       setHealthAssessment(healthResult);
       setIsAnalyzing(false);
@@ -46,12 +46,14 @@ const PlantScanner = () => {
       analytics.track("plant_scanner_analysis_completed", {
         plantName: plantResult.name,
         confidence: Math.round(plantResult.confidence * 100),
-        healthScore: healthResult.overallScore
+        healthScore: healthResult.overallScore,
       });
     } catch (error) {
       console.error("Analysis failed:", error);
       setIsAnalyzing(false);
-      analytics.track("plant_scanner_analysis_failed", { error: error.message });
+      analytics.track("plant_scanner_analysis_failed", {
+        error: error.message,
+      });
     }
   };
 
@@ -61,7 +63,7 @@ const PlantScanner = () => {
     setHealthAssessment(null);
     setShowHealthTab(false);
     if (fileInputRef.current) {
-      fileInputRef.current.value = '';
+      fileInputRef.current.value = "";
     }
   };
 
@@ -85,7 +87,8 @@ const PlantScanner = () => {
                       <i className="fas fa-camera fa-3x text-muted mb-3"></i>
                       <h5>Upload Plant Photo</h5>
                       <p className="text-muted">
-                        Take a clear photo of your plant's leaves and overall structure
+                        Take a clear photo of your plant's leaves and overall
+                        structure
                       </p>
                     </div>
                     <input
@@ -161,16 +164,20 @@ const PlantScanner = () => {
                         {/* Tabs for Plant Info and Health Assessment */}
                         <ul className="nav nav-tabs mb-3">
                           <li className="nav-item">
-                            <button 
-                              className={`nav-link ${!showHealthTab ? 'active' : ''}`}
+                            <button
+                              className={`nav-link ${
+                                !showHealthTab ? "active" : ""
+                              }`}
                               onClick={() => setShowHealthTab(false)}
                             >
                               Plant Information
                             </button>
                           </li>
                           <li className="nav-item">
-                            <button 
-                              className={`nav-link ${showHealthTab ? 'active' : ''}`}
+                            <button
+                              className={`nav-link ${
+                                showHealthTab ? "active" : ""
+                              }`}
                               onClick={() => setShowHealthTab(true)}
                             >
                               Health Assessment
@@ -186,7 +193,7 @@ const PlantScanner = () => {
                                 {result.scientificName}
                               </p>
                               <p>{result.description}</p>
-                              
+
                               <h6>Care Instructions:</h6>
                               <ul className="list-unstyled">
                                 {result.care.map((instruction, index) => (
@@ -200,19 +207,26 @@ const PlantScanner = () => {
                               <h6>Plant Characteristics:</h6>
                               <div className="characteristics mb-3">
                                 {result.characteristics.map((char, index) => (
-                                  <span key={index} className="badge bg-light text-dark me-1 mb-1">
+                                  <span
+                                    key={index}
+                                    className="badge bg-light text-dark me-1 mb-1"
+                                  >
                                     {char}
                                   </span>
                                 ))}
                               </div>
                             </div>
-                            
+
                             <div className="col-md-6">
                               <div className="card bg-light">
                                 <div className="card-body text-center">
-                                  <h6 className="card-title">Available in Store</h6>
+                                  <h6 className="card-title">
+                                    Available in Store
+                                  </h6>
                                   <div className="price mb-2">
-                                    <span className="h4 text-success">₹{result.price}</span>
+                                    <span className="h4 text-success">
+                                      ₹{result.price}
+                                    </span>
                                   </div>
                                   <span className="badge bg-success mb-3">
                                     {result.availability}
@@ -237,18 +251,23 @@ const PlantScanner = () => {
                               <div className="row">
                                 <div className="col-md-6">
                                   <div className="health-score text-center mb-4">
-                                    <div className="score-circle mx-auto mb-2" style={{
-                                      width: "120px",
-                                      height: "120px",
-                                      borderRadius: "50%",
-                                      background: `conic-gradient(#28a745 ${healthAssessment.overallScore * 3.6}deg, #e9ecef 0deg)`,
-                                      display: "flex",
-                                      alignItems: "center",
-                                      justifyContent: "center",
-                                      fontSize: "24px",
-                                      fontWeight: "bold",
-                                      color: "#28a745"
-                                    }}>
+                                    <div
+                                      className="score-circle mx-auto mb-2"
+                                      style={{
+                                        width: "120px",
+                                        height: "120px",
+                                        borderRadius: "50%",
+                                        background: `conic-gradient(#28a745 ${
+                                          healthAssessment.overallScore * 3.6
+                                        }deg, #e9ecef 0deg)`,
+                                        display: "flex",
+                                        alignItems: "center",
+                                        justifyContent: "center",
+                                        fontSize: "24px",
+                                        fontWeight: "bold",
+                                        color: "#28a745",
+                                      }}
+                                    >
                                       {healthAssessment.overallScore}%
                                     </div>
                                     <h6>Overall Health Score</h6>
@@ -256,29 +275,46 @@ const PlantScanner = () => {
                                 </div>
                                 <div className="col-md-6">
                                   <h6>Health Factors:</h6>
-                                  {healthAssessment.factors.map((factor, index) => (
-                                    <div key={index} className="d-flex justify-content-between align-items-center mb-2">
-                                      <span>{factor.factor}:</span>
-                                      <div>
-                                        <span className={`badge ${factor.score >= 85 ? 'bg-success' : factor.score >= 70 ? 'bg-warning' : 'bg-danger'}`}>
-                                          {factor.status}
-                                        </span>
-                                        <small className="text-muted ms-2">({factor.score}%)</small>
+                                  {healthAssessment.factors.map(
+                                    (factor, index) => (
+                                      <div
+                                        key={index}
+                                        className="d-flex justify-content-between align-items-center mb-2"
+                                      >
+                                        <span>{factor.factor}:</span>
+                                        <div>
+                                          <span
+                                            className={`badge ${
+                                              factor.score >= 85
+                                                ? "bg-success"
+                                                : factor.score >= 70
+                                                ? "bg-warning"
+                                                : "bg-danger"
+                                            }`}
+                                          >
+                                            {factor.status}
+                                          </span>
+                                          <small className="text-muted ms-2">
+                                            ({factor.score}%)
+                                          </small>
+                                        </div>
                                       </div>
-                                    </div>
-                                  ))}
+                                    )
+                                  )}
                                 </div>
                               </div>
-                              
+
                               <div className="recommendations mt-3">
                                 <h6>Recommendations:</h6>
                                 <ul className="list-unstyled">
-                                  {healthAssessment.recommendations.map((rec, index) => (
-                                    <li key={index} className="mb-1">
-                                      <i className="fas fa-lightbulb text-warning me-2"></i>
-                                      {rec}
-                                    </li>
-                                  ))}
+                                  {healthAssessment.recommendations.map(
+                                    (rec, index) => (
+                                      <li key={index} className="mb-1">
+                                        <i className="fas fa-lightbulb text-warning me-2"></i>
+                                        {rec}
+                                      </li>
+                                    )
+                                  )}
                                 </ul>
                               </div>
                             </div>
