@@ -12,7 +12,9 @@ export default function Compare() {
         <div className="alert alert-info">
           No products to compare. Add some products from their detail pages.
         </div>
-        <Link to="/" className="btn btn-primary">Browse Products</Link>
+        <Link to="/" className="btn btn-primary">
+          Browse Products
+        </Link>
       </main>
     );
   }
@@ -40,17 +42,21 @@ export default function Compare() {
         <table className="table table-bordered">
           <thead>
             <tr>
-              <th style={{ width: '150px' }}>Product</th>
-              {compareList.map(product => (
-                <th key={product.id} className="text-center" style={{ minWidth: '200px' }}>
+              <th style={{ width: "150px" }}>Product</th>
+              {compareList.map((product) => (
+                <th
+                  key={product.id}
+                  className="text-center"
+                  style={{ minWidth: "200px" }}
+                >
                   <div className="position-relative">
-                    <img 
-                      src={product.image} 
+                    <img
+                      src={product.image}
                       alt={product.name}
                       className="img-fluid mb-2"
-                      style={{ maxHeight: '120px', objectFit: 'cover' }}
+                      style={{ maxHeight: "120px", objectFit: "cover" }}
                     />
-                    <button 
+                    <button
                       className="btn btn-sm btn-outline-danger position-absolute top-0 end-0"
                       onClick={() => handleRemove(product.id)}
                       title="Remove from comparison"
@@ -65,16 +71,22 @@ export default function Compare() {
           </thead>
           <tbody>
             <tr>
-              <td><strong>Price</strong></td>
-              {compareList.map(product => (
+              <td>
+                <strong>Price</strong>
+              </td>
+              {compareList.map((product) => (
                 <td key={product.id} className="text-center">
-                  <span className="fs-5 fw-bold text-success">₹{product.price}</span>
+                  <span className="fs-5 fw-bold text-success">
+                    ₹{product.price}
+                  </span>
                 </td>
               ))}
             </tr>
             <tr>
-              <td><strong>Features</strong></td>
-              {compareList.map(product => (
+              <td>
+                <strong>Features</strong>
+              </td>
+              {compareList.map((product) => (
                 <td key={product.id}>
                   <ul className="list-unstyled small">
                     {product.features?.map((feature, i) => (
@@ -85,24 +97,28 @@ export default function Compare() {
               ))}
             </tr>
             <tr>
-              <td><strong>Description</strong></td>
-              {compareList.map(product => (
+              <td>
+                <strong>Description</strong>
+              </td>
+              {compareList.map((product) => (
                 <td key={product.id} className="small">
                   {product.description?.slice(0, 120)}...
                 </td>
               ))}
             </tr>
             <tr>
-              <td><strong>Actions</strong></td>
-              {compareList.map(product => (
+              <td>
+                <strong>Actions</strong>
+              </td>
+              {compareList.map((product) => (
                 <td key={product.id} className="text-center">
-                  <Link 
+                  <Link
                     to={`/product/${product.id}`}
                     className="btn btn-sm btn-primary d-block mb-1"
                   >
                     View Details
                   </Link>
-                  <button 
+                  <button
                     className="btn btn-sm btn-outline-secondary d-block w-100"
                     onClick={() => handleRemove(product.id)}
                   >
