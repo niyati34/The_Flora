@@ -26,7 +26,7 @@ import { CareReminderProvider } from "./context/CareReminderContext";
 import { WalletProvider } from "./context/WalletContext";
 import { CustomerSupportProvider } from "./context/CustomerSupportContext.jsx";
 import ErrorBoundary from "./components/ErrorBoundary";
-import CustomerSupport from "./components/CustomerSupport";
+import CustomerSupportPage from "./pages/CustomerSupportPage";
 import Wallet from "./pages/Wallet";
 
 export default function App() {
@@ -80,10 +80,10 @@ export default function App() {
                                   element={<ProductDetail />}
                                 />
                                 <Route path="/wallet" element={<Wallet />} />
+                                <Route path="/customer-support" element={<CustomerSupportPage />} />
                               </Routes>
                             </ErrorBoundary>
                           </main>
-                          <CustomerSupport />
                           <Footer />
                         </BrowserRouter>
                       </WalletProvider>

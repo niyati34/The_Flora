@@ -128,22 +128,10 @@ export default function Header() {
                   </NavLink>
                 </li>
                 <li className="nav-item">
-                  <button
-                    className="nav-link btn btn-link"
-                    style={{ cursor: "pointer" }}
-                    onClick={() => {
-                      // Open customer support chat
-                      if (
-                        typeof window !== "undefined" &&
-                        window.openCustomerSupport
-                      ) {
-                        window.openCustomerSupport();
-                      }
-                    }}
-                  >
+                  <NavLink className="nav-link" to="/customer-support">
                     <i className="fas fa-comments me-1"></i>
                     Customer Support
-                  </button>
+                  </NavLink>
                 </li>
               </ul>
             </div>
