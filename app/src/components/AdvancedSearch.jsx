@@ -9,7 +9,7 @@ export default function AdvancedSearch() {
   const location = useLocation();
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
-  
+
   const [searchTerm, setSearchTerm] = useState("");
   const [showAdvancedFilters, setShowAdvancedFilters] = useState(false);
   const [filters, setFilters] = useState({
@@ -20,7 +20,7 @@ export default function AdvancedSearch() {
     onSale: false,
     plantType: "all",
     careLevel: "all",
-    sunlight: "all"
+    sunlight: "all",
   });
   const [searchResults, setSearchResults] = useState([]);
   const [isSearching, setIsSearching] = useState(false);
@@ -28,7 +28,7 @@ export default function AdvancedSearch() {
   const [popularSearches, setPopularSearches] = useState([]);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [selectedSuggestion, setSelectedSuggestion] = useState(-1);
-  
+
   const searchInputRef = useRef(null);
   const suggestionsRef = useRef(null);
 
@@ -47,7 +47,7 @@ export default function AdvancedSearch() {
       careLevel: "easy",
       sunlight: "indirect",
       image: "/plant1.gif",
-      description: "Large tropical plant with distinctive split leaves"
+      description: "Large tropical plant with distinctive split leaves",
     },
     {
       id: 2,
@@ -62,13 +62,19 @@ export default function AdvancedSearch() {
       careLevel: "very-easy",
       sunlight: "low",
       image: "/plant1.gif",
-      description: "Low-maintenance plant perfect for beginners"
-    }
+      description: "Low-maintenance plant perfect for beginners",
+    },
   ];
 
   const popularSearchesData = [
-    "indoor plants", "succulents", "air purifying", "low maintenance",
-    "flowering plants", "tropical plants", "bonsai", "herbs"
+    "indoor plants",
+    "succulents",
+    "air purifying",
+    "low maintenance",
+    "flowering plants",
+    "tropical plants",
+    "bonsai",
+    "herbs",
   ];
 
   useEffect(() => {
@@ -86,7 +92,9 @@ export default function AdvancedSearch() {
   }, [searchTerm, filters]);
 
   const loadRecentSearches = () => {
-    const recent = JSON.parse(localStorage.getItem("flora_recent_searches") || "[]");
+    const recent = JSON.parse(
+      localStorage.getItem("flora_recent_searches") || "[]"
+    );
     setRecentSearches(recent.slice(0, 5));
   };
 
@@ -95,43 +103,56 @@ export default function AdvancedSearch() {
   };
 
   const saveSearch = (term) => {
-    const recent = JSON.parse(localStorage.getItem("flora_recent_searches") || "[]");
-    const updated = [term, ...recent.filter(s => s !== term)].slice(0, 10);
+    const recent = JSON.parse(
+      localStorage.getItem("flora_recent_searches") || "[]"
+    );
+    const updated = [term, ...recent.filter((s) => s !== term)].slice(0, 10);
     localStorage.setItem("flora_recent_searches", JSON.stringify(updated));
     loadRecentSearches();
   };
 
   const performSearch = useCallback(() => {
     setIsSearching(true);
-    
+
     setTimeout(() => {
-      let filtered = allProducts.filter(product => {
-        const matchesSearch = product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                            product.description.toLowerCase().includes(searchTerm.toLowerCase());
-        
+      let filtered = allProducts.filter((product) => {
+        const matchesSearch =
+          product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          product.description.toLowerCase().includes(searchTerm.toLowerCase());
+
         if (!matchesSearch) return false;
-        
-        if (filters.category !== "all" && product.category !== filters.category) return false;
-        if (filters.plantType !== "all" && product.plantType !== filters.plantType) return false;
-        if (filters.careLevel !== "all" && product.careLevel !== filters.careLevel) return false;
-        if (filters.sunlight !== "all" && product.sunlight !== filters.sunlight) return false;
+
+        if (filters.category !== "all" && product.category !== filters.category)
+          return false;
+        if (
+          filters.plantType !== "all" &&
+          product.plantType !== filters.plantType
+        )
+          return false;
+        if (
+          filters.careLevel !== "all" &&
+          product.careLevel !== filters.careLevel
+        )
+          return false;
+        if (filters.sunlight !== "all" && product.sunlight !== filters.sunlight)
+          return false;
         if (filters.inStock && !product.inStock) return false;
         if (filters.onSale && !product.onSale) return false;
-        
+
         if (filters.priceRange !== "all") {
           const [min, max] = filters.priceRange.split("-").map(Number);
           if (max && product.price > max) return false;
           if (min && product.price < min) return false;
         }
-        
+
         if (filters.rating !== "all") {
           const minRating = Number(filters.rating);
           if (product.rating < minRating) return false;
         }
-        
+
         return true;
       });
-      
+
       setSearchResults(filtered);
       setIsSearching(false);
     }, 500);
@@ -145,9 +166,9 @@ export default function AdvancedSearch() {
   };
 
   const handleFilterChange = (filterType, value) => {
-    setFilters(prev => ({
+    setFilters((prev) => ({
       ...prev,
-      [filterType]: value
+      [filterType]: value,
     }));
   };
 
@@ -172,12 +193,13 @@ export default function AdvancedSearch() {
       onSale: false,
       plantType: "all",
       careLevel: "all",
-      sunlight: "all"
+      sunlight: "all",
     });
   };
 
   const getFilterCount = () => {
-    return Object.values(filters).filter(v => v !== "all" && v !== false).length;
+    return Object.values(filters).filter((v) => v !== "all" && v !== false)
+      .length;
   };
 
   return (
@@ -730,7 +752,8 @@ export default function AdvancedSearch() {
           Advanced Plant Search
         </h1>
         <p className="search-subtitle">
-          Find the perfect plants for your space with our advanced search and filtering options
+          Find the perfect plants for your space with our advanced search and
+          filtering options
         </p>
       </div>
 
@@ -744,7 +767,7 @@ export default function AdvancedSearch() {
           onChange={(e) => setSearchTerm(e.target.value)}
           onFocus={() => setShowSuggestions(true)}
         />
-        <button 
+        <button
           className="search-button"
           onClick={() => handleSearch(searchTerm.trim())}
         >
@@ -754,28 +777,49 @@ export default function AdvancedSearch() {
       </div>
 
       <div className="search-options">
-        <div 
-          className={`search-option ${filters.category !== "all" ? "active" : ""}`}
-          onClick={() => handleFilterChange("category", filters.category === "all" ? "indoor" : "all")}
+        <div
+          className={`search-option ${
+            filters.category !== "all" ? "active" : ""
+          }`}
+          onClick={() =>
+            handleFilterChange(
+              "category",
+              filters.category === "all" ? "indoor" : "all"
+            )
+          }
         >
           <i className="fas fa-home me-2"></i>
           Indoor Plants
         </div>
-        <div 
-          className={`search-option ${filters.plantType !== "all" ? "active" : ""}`}
-          onClick={() => handleFilterChange("plantType", filters.plantType === "all" ? "succulent" : "all")}
+        <div
+          className={`search-option ${
+            filters.plantType !== "all" ? "active" : ""
+          }`}
+          onClick={() =>
+            handleFilterChange(
+              "plantType",
+              filters.plantType === "all" ? "succulent" : "all"
+            )
+          }
         >
           <i className="fas fa-seedling me-2"></i>
           Succulents
         </div>
-        <div 
-          className={`search-option ${filters.careLevel !== "all" ? "active" : ""}`}
-          onClick={() => handleFilterChange("careLevel", filters.careLevel === "all" ? "easy" : "all")}
+        <div
+          className={`search-option ${
+            filters.careLevel !== "all" ? "active" : ""
+          }`}
+          onClick={() =>
+            handleFilterChange(
+              "careLevel",
+              filters.careLevel === "all" ? "easy" : "all"
+            )
+          }
         >
           <i className="fas fa-thumbs-up me-2"></i>
           Easy Care
         </div>
-        <div 
+        <div
           className={`search-option ${filters.onSale ? "active" : ""}`}
           onClick={() => handleFilterChange("onSale", !filters.onSale)}
         >
@@ -788,7 +832,11 @@ export default function AdvancedSearch() {
         className="advanced-filters-toggle"
         onClick={() => setShowAdvancedFilters(!showAdvancedFilters)}
       >
-        <i className={`fas fa-${showAdvancedFilters ? 'chevron-up' : 'chevron-down'}`}></i>
+        <i
+          className={`fas fa-${
+            showAdvancedFilters ? "chevron-up" : "chevron-down"
+          }`}
+        ></i>
         Advanced Filters {getFilterCount() > 0 && `(${getFilterCount()})`}
       </button>
 
@@ -816,7 +864,9 @@ export default function AdvancedSearch() {
               <select
                 className="filter-select"
                 value={filters.priceRange}
-                onChange={(e) => handleFilterChange("priceRange", e.target.value)}
+                onChange={(e) =>
+                  handleFilterChange("priceRange", e.target.value)
+                }
               >
                 <option value="all">All Prices</option>
                 <option value="0-500">Under ₹500</option>
@@ -845,7 +895,9 @@ export default function AdvancedSearch() {
               <select
                 className="filter-select"
                 value={filters.plantType}
-                onChange={(e) => handleFilterChange("plantType", e.target.value)}
+                onChange={(e) =>
+                  handleFilterChange("plantType", e.target.value)
+                }
               >
                 <option value="all">All Types</option>
                 <option value="tropical">Tropical</option>
@@ -861,7 +913,9 @@ export default function AdvancedSearch() {
               <select
                 className="filter-select"
                 value={filters.careLevel}
-                onChange={(e) => handleFilterChange("careLevel", e.target.value)}
+                onChange={(e) =>
+                  handleFilterChange("careLevel", e.target.value)
+                }
               >
                 <option value="all">All Levels</option>
                 <option value="very-easy">Very Easy</option>
@@ -893,7 +947,9 @@ export default function AdvancedSearch() {
                   type="checkbox"
                   id="inStock"
                   checked={filters.inStock}
-                  onChange={(e) => handleFilterChange("inStock", e.target.checked)}
+                  onChange={(e) =>
+                    handleFilterChange("inStock", e.target.checked)
+                  }
                 />
                 <label htmlFor="inStock">In Stock Only</label>
               </div>
@@ -902,7 +958,9 @@ export default function AdvancedSearch() {
                   type="checkbox"
                   id="onSale"
                   checked={filters.onSale}
-                  onChange={(e) => handleFilterChange("onSale", e.target.checked)}
+                  onChange={(e) =>
+                    handleFilterChange("onSale", e.target.checked)
+                  }
                 />
                 <label htmlFor="onSale">On Sale Only</label>
               </div>
@@ -974,7 +1032,8 @@ export default function AdvancedSearch() {
           <>
             <div className="results-header">
               <div className="results-count">
-                Found {searchResults.length} plant{searchResults.length !== 1 ? 's' : ''}
+                Found {searchResults.length} plant
+                {searchResults.length !== 1 ? "s" : ""}
               </div>
               <div className="results-sort">
                 <label>Sort by:</label>
@@ -1000,16 +1059,21 @@ export default function AdvancedSearch() {
                   <div className="result-content">
                     <h3 className="result-name">{product.name}</h3>
                     <p className="result-description">{product.description}</p>
-                    
+
                     <div className="result-meta">
                       <div>
                         <span className="result-price">₹{product.price}</span>
                         {product.originalPrice > product.price && (
-                          <span className="result-original-price">₹{product.originalPrice}</span>
+                          <span className="result-original-price">
+                            ₹{product.originalPrice}
+                          </span>
                         )}
                       </div>
                       <div className="result-rating">
-                        <i className="fas fa-star" style={{ color: "#ffd700" }}></i>
+                        <i
+                          className="fas fa-star"
+                          style={{ color: "#ffd700" }}
+                        ></i>
                         {product.rating}
                       </div>
                     </div>
@@ -1023,11 +1087,17 @@ export default function AdvancedSearch() {
                         Add to Cart
                       </button>
                       <button
-                        className={`action-btn ${isInWishlist(product.id) ? 'wishlist' : 'secondary'}`}
+                        className={`action-btn ${
+                          isInWishlist(product.id) ? "wishlist" : "secondary"
+                        }`}
                         onClick={() => handleWishlistToggle(product)}
                       >
-                        <i className={`fas ${isInWishlist(product.id) ? 'fa-heart' : 'fa-heart'}`}></i>
-                        {isInWishlist(product.id) ? 'Saved' : 'Wishlist'}
+                        <i
+                          className={`fas ${
+                            isInWishlist(product.id) ? "fa-heart" : "fa-heart"
+                          }`}
+                        ></i>
+                        {isInWishlist(product.id) ? "Saved" : "Wishlist"}
                       </button>
                     </div>
                   </div>

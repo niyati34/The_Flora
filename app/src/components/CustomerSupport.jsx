@@ -2,17 +2,17 @@ import { useState, useEffect, useRef } from "react";
 import { useCustomerSupport } from "../context/CustomerSupportContext";
 
 export default function CustomerSupport() {
-  const { 
-    isOpen, 
-    toggleSupport, 
-    sendMessage, 
-    messages, 
+  const {
+    isOpen,
+    toggleSupport,
+    sendMessage,
+    messages,
     isTyping,
     createTicket,
     tickets,
-    updateTicketStatus
+    updateTicketStatus,
   } = useCustomerSupport();
-  
+
   const [activeTab, setActiveTab] = useState("chat");
   const [messageInput, setMessageInput] = useState("");
   const [ticketSubject, setTicketSubject] = useState("");
@@ -21,7 +21,7 @@ export default function CustomerSupport() {
   const [ticketCategory, setTicketCategory] = useState("general");
   const [showTicketForm, setShowTicketForm] = useState(false);
   const [selectedTicket, setSelectedTicket] = useState(null);
-  
+
   const messagesEndRef = useRef(null);
   const chatContainerRef = useRef(null);
 
@@ -54,7 +54,7 @@ export default function CustomerSupport() {
         subject: ticketSubject.trim(),
         description: ticketDescription.trim(),
         priority: ticketPriority,
-        category: ticketCategory
+        category: ticketCategory,
       });
       setTicketSubject("");
       setTicketDescription("");
@@ -69,50 +69,64 @@ export default function CustomerSupport() {
 
   const getPriorityColor = (priority) => {
     switch (priority) {
-      case "high": return "#dc3545";
-      case "medium": return "#ffc107";
-      case "low": return "#28a745";
-      default: return "#6c757d";
+      case "high":
+        return "#dc3545";
+      case "medium":
+        return "#ffc107";
+      case "low":
+        return "#28a745";
+      default:
+        return "#6c757d";
     }
   };
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "open": return "#007bff";
-      case "in-progress": return "#ffc107";
-      case "resolved": return "#28a745";
-      case "closed": return "#6c757d";
-      default: return "#6c757d";
+      case "open":
+        return "#007bff";
+      case "in-progress":
+        return "#ffc107";
+      case "resolved":
+        return "#28a745";
+      case "closed":
+        return "#6c757d";
+      default:
+        return "#6c757d";
     }
   };
 
   const faqs = [
     {
       question: "How do I care for my new plant?",
-      answer: "Start by placing your plant in appropriate lighting conditions and water according to the care instructions. Most plants prefer well-draining soil and moderate watering."
+      answer:
+        "Start by placing your plant in appropriate lighting conditions and water according to the care instructions. Most plants prefer well-draining soil and moderate watering.",
     },
     {
       question: "What should I do if my plant's leaves turn yellow?",
-      answer: "Yellow leaves can indicate overwatering, underwatering, or nutrient deficiency. Check soil moisture and adjust watering accordingly."
+      answer:
+        "Yellow leaves can indicate overwatering, underwatering, or nutrient deficiency. Check soil moisture and adjust watering accordingly.",
     },
     {
       question: "How often should I repot my plants?",
-      answer: "Most plants benefit from repotting every 1-2 years, or when roots become pot-bound. Spring is usually the best time for repotting."
+      answer:
+        "Most plants benefit from repotting every 1-2 years, or when roots become pot-bound. Spring is usually the best time for repotting.",
     },
     {
       question: "What's the best way to propagate my plants?",
-      answer: "Propagation methods vary by plant type. Common methods include stem cuttings, leaf cuttings, division, and air layering."
+      answer:
+        "Propagation methods vary by plant type. Common methods include stem cuttings, leaf cuttings, division, and air layering.",
     },
     {
       question: "How can I prevent pests on my plants?",
-      answer: "Regular inspection, proper watering, and good air circulation help prevent pests. Isolate affected plants and treat with appropriate methods."
-    }
+      answer:
+        "Regular inspection, proper watering, and good air circulation help prevent pests. Isolate affected plants and treat with appropriate methods.",
+    },
   ];
 
   if (!isOpen) {
     return (
       <div className="customer-support-widget">
-        <button 
+        <button
           className="support-toggle-btn"
           onClick={toggleSupport}
           title="Get Customer Support"
@@ -625,21 +639,21 @@ export default function CustomerSupport() {
       </div>
 
       <div className="support-tabs">
-        <button 
+        <button
           className={`support-tab ${activeTab === "chat" ? "active" : ""}`}
           onClick={() => setActiveTab("chat")}
         >
           <i className="fas fa-comments me-2"></i>
           Chat
         </button>
-        <button 
+        <button
           className={`support-tab ${activeTab === "tickets" ? "active" : ""}`}
           onClick={() => setActiveTab("tickets")}
         >
           <i className="fas fa-ticket-alt me-2"></i>
           Tickets
         </button>
-        <button 
+        <button
           className={`support-tab ${activeTab === "faq" ? "active" : ""}`}
           onClick={() => setActiveTab("faq")}
         >
@@ -655,15 +669,13 @@ export default function CustomerSupport() {
             <div className="chat-messages" ref={chatContainerRef}>
               {messages.map((message, index) => (
                 <div key={index} className={`message ${message.sender}`}>
-                  <div className="message-bubble">
-                    {message.text}
-                  </div>
+                  <div className="message-bubble">{message.text}</div>
                   <div className="message-time">
                     {new Date(message.timestamp).toLocaleTimeString()}
                   </div>
                 </div>
               ))}
-              
+
               {isTyping && (
                 <div className="typing-indicator">
                   <div className="typing-dots">
@@ -673,10 +685,10 @@ export default function CustomerSupport() {
                   </div>
                 </div>
               )}
-              
+
               <div ref={messagesEndRef} />
             </div>
-            
+
             <div className="chat-input">
               <form onSubmit={handleSendMessage} className="chat-input-form">
                 <input
@@ -695,11 +707,13 @@ export default function CustomerSupport() {
         </div>
 
         {/* Tickets Tab */}
-        <div className={`tab-content ${activeTab === "tickets" ? "active" : ""}`}>
+        <div
+          className={`tab-content ${activeTab === "tickets" ? "active" : ""}`}
+        >
           <div className="tickets-container">
             <div className="tickets-header">
               <div className="tickets-actions">
-                <button 
+                <button
                   className="btn btn-primary"
                   onClick={() => setShowTicketForm(!showTicketForm)}
                 >
@@ -713,7 +727,7 @@ export default function CustomerSupport() {
                   </button>
                 )}
               </div>
-              
+
               {showTicketForm && (
                 <form onSubmit={handleCreateTicket} className="ticket-form">
                   <div className="form-group">
@@ -727,7 +741,7 @@ export default function CustomerSupport() {
                       required
                     />
                   </div>
-                  
+
                   <div className="form-row">
                     <div className="form-group">
                       <label className="form-label">Priority</label>
@@ -741,7 +755,7 @@ export default function CustomerSupport() {
                         <option value="high">High</option>
                       </select>
                     </div>
-                    
+
                     <div className="form-group">
                       <label className="form-label">Category</label>
                       <select
@@ -757,7 +771,7 @@ export default function CustomerSupport() {
                       </select>
                     </div>
                   </div>
-                  
+
                   <div className="form-group">
                     <label className="form-label">Description</label>
                     <textarea
@@ -769,7 +783,7 @@ export default function CustomerSupport() {
                       required
                     ></textarea>
                   </div>
-                  
+
                   <button type="submit" className="btn btn-primary">
                     <i className="fas fa-paper-plane me-2"></i>
                     Submit Ticket
@@ -777,7 +791,7 @@ export default function CustomerSupport() {
                 </form>
               )}
             </div>
-            
+
             <div className="tickets-list">
               {tickets.length === 0 ? (
                 <div className="text-center text-muted py-4">
@@ -786,8 +800,8 @@ export default function CustomerSupport() {
                 </div>
               ) : (
                 tickets.map((ticket) => (
-                  <div 
-                    key={ticket.id} 
+                  <div
+                    key={ticket.id}
                     className="ticket-item"
                     onClick={() => setSelectedTicket(ticket)}
                   >
@@ -797,29 +811,38 @@ export default function CustomerSupport() {
                         <div className="ticket-meta">
                           <span>#{ticket.id}</span>
                           <span>•</span>
-                          <span>{new Date(ticket.createdAt).toLocaleDateString()}</span>
+                          <span>
+                            {new Date(ticket.createdAt).toLocaleDateString()}
+                          </span>
                         </div>
                       </div>
                       <div style={{ display: "flex", gap: "8px" }}>
-                        <span 
+                        <span
                           className="ticket-priority"
-                          style={{ backgroundColor: getPriorityColor(ticket.priority) + "20", color: getPriorityColor(ticket.priority) }}
+                          style={{
+                            backgroundColor:
+                              getPriorityColor(ticket.priority) + "20",
+                            color: getPriorityColor(ticket.priority),
+                          }}
                         >
                           {ticket.priority}
                         </span>
-                        <span 
+                        <span
                           className="ticket-status"
-                          style={{ backgroundColor: getStatusColor(ticket.status) + "20", color: getStatusColor(ticket.status) }}
+                          style={{
+                            backgroundColor:
+                              getStatusColor(ticket.status) + "20",
+                            color: getStatusColor(ticket.status),
+                          }}
                         >
                           {ticket.status}
                         </span>
                       </div>
                     </div>
                     <div className="ticket-description">
-                      {ticket.description.length > 100 
-                        ? ticket.description.substring(0, 100) + "..." 
-                        : ticket.description
-                      }
+                      {ticket.description.length > 100
+                        ? ticket.description.substring(0, 100) + "..."
+                        : ticket.description}
                     </div>
                   </div>
                 ))
@@ -833,19 +856,19 @@ export default function CustomerSupport() {
           <div className="faq-container">
             {faqs.map((faq, index) => (
               <div key={index} className="faq-item">
-                <button 
+                <button
                   className="faq-question"
                   onClick={() => {
-                    const item = document.querySelector(`.faq-item:nth-child(${index + 1})`);
+                    const item = document.querySelector(
+                      `.faq-item:nth-child(${index + 1})`
+                    );
                     item.classList.toggle("expanded");
                   }}
                 >
                   {faq.question}
                   <i className="fas fa-chevron-down faq-chevron"></i>
                 </button>
-                <div className="faq-answer">
-                  {faq.answer}
-                </div>
+                <div className="faq-answer">{faq.answer}</div>
               </div>
             ))}
           </div>
