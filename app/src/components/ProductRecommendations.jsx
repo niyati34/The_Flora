@@ -5,60 +5,62 @@ import { useCart } from "../context/CartContext";
 import { useWishlist } from "../context/WishlistContext";
 import ProductCard from "./ProductCard";
 
-export default function ProductRecommendations({ 
-  currentProductId, 
-  category, 
+export default function ProductRecommendations({
+  currentProductId,
+  category,
   maxItems = 8,
   showTitle = true,
   showFilters = true,
-  className = ""
+  className = "",
 }) {
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
-  
+
   const [selectedFilter, setSelectedFilter] = "all";
   const [sortBy, setSortBy] = useState("relevance");
   const [showAll, setShowAll] = useState(false);
 
   // Generate recommendations based on current product and category
   const recommendations = useMemo(() => {
-    let filteredProducts = products.filter(product => 
-      product.id !== currentProductId
+    let filteredProducts = products.filter(
+      (product) => product.id !== currentProductId
     );
 
     // Filter by category if specified
     if (category && category !== "all") {
-      filteredProducts = filteredProducts.filter(product => 
-        product.category === category
+      filteredProducts = filteredProducts.filter(
+        (product) => product.category === category
       );
     }
 
     // Apply additional filtering
     switch (selectedFilter) {
       case "similar-price":
-        const currentProduct = products.find(p => p.id === currentProductId);
+        const currentProduct = products.find((p) => p.id === currentProductId);
         if (currentProduct) {
           const priceRange = currentProduct.price * 0.3; // ±30% price range
-          filteredProducts = filteredProducts.filter(product =>
-            Math.abs(product.price - currentProduct.price) <= priceRange
+          filteredProducts = filteredProducts.filter(
+            (product) =>
+              Math.abs(product.price - currentProduct.price) <= priceRange
           );
         }
         break;
       case "same-category":
         if (category) {
-          filteredProducts = filteredProducts.filter(product => 
-            product.category === category
+          filteredProducts = filteredProducts.filter(
+            (product) => product.category === category
           );
         }
         break;
       case "high-rated":
-        filteredProducts = filteredProducts.filter(product => 
-          product.rating && product.rating >= 4.5
+        filteredProducts = filteredProducts.filter(
+          (product) => product.rating && product.rating >= 4.5
         );
         break;
       case "on-sale":
-        filteredProducts = filteredProducts.filter(product => 
-          product.originalPrice && product.originalPrice > product.price
+        filteredProducts = filteredProducts.filter(
+          (product) =>
+            product.originalPrice && product.originalPrice > product.price
         );
         break;
       default:
@@ -95,7 +97,9 @@ export default function ProductRecommendations({
 
           // Price similarity bonus
           if (currentProductId) {
-            const currentProduct = products.find(p => p.id === currentProductId);
+            const currentProduct = products.find(
+              (p) => p.id === currentProductId
+            );
             if (currentProduct) {
               const priceDiffA = Math.abs(a.price - currentProduct.price);
               const priceDiffB = Math.abs(b.price - currentProduct.price);
@@ -117,7 +121,9 @@ export default function ProductRecommendations({
   }, [currentProductId, category, selectedFilter, sortBy]);
 
   // Limit displayed items
-  const displayedProducts = showAll ? recommendations : recommendations.slice(0, maxItems);
+  const displayedProducts = showAll
+    ? recommendations
+    : recommendations.slice(0, maxItems);
 
   const handleQuickView = (product) => {
     // In a real app, this would open a quick view modal
@@ -138,22 +144,33 @@ export default function ProductRecommendations({
 
   const getFilterLabel = (filter) => {
     switch (filter) {
-      case "similar-price": return "Similar Price";
-      case "same-category": return "Same Category";
-      case "high-rated": return "Highly Rated";
-      case "on-sale": return "On Sale";
-      default: return "All Products";
+      case "similar-price":
+        return "Similar Price";
+      case "same-category":
+        return "Same Category";
+      case "high-rated":
+        return "Highly Rated";
+      case "on-sale":
+        return "On Sale";
+      default:
+        return "All Products";
     }
   };
 
   const getSortLabel = (sort) => {
     switch (sort) {
-      case "price-low": return "Price: Low to High";
-      case "price-high": return "Price: High to Low";
-      case "rating": return "Highest Rated";
-      case "popularity": return "Most Popular";
-      case "newest": return "Newest First";
-      default: return "Most Relevant";
+      case "price-low":
+        return "Price: Low to High";
+      case "price-high":
+        return "Price: High to Low";
+      case "rating":
+        return "Highest Rated";
+      case "popularity":
+        return "Most Popular";
+      case "newest":
+        return "Newest First";
+      default:
+        return "Most Relevant";
     }
   };
 
@@ -372,7 +389,10 @@ export default function ProductRecommendations({
         {showTitle && (
           <div className="recommendations-header">
             <h2 className="recommendations-title">
-              <i className="fas fa-lightbulb me-3" style={{ color: "#ffd700" }}></i>
+              <i
+                className="fas fa-lightbulb me-3"
+                style={{ color: "#ffd700" }}
+              ></i>
               You Might Also Like
             </h2>
             <p className="recommendations-subtitle">
@@ -424,19 +444,34 @@ export default function ProductRecommendations({
             </div>
             <div className="stat-item">
               <div className="stat-value">
-                ₹{Math.round(recommendations.reduce((sum, p) => sum + p.price, 0) / recommendations.length)}
+                ₹
+                {Math.round(
+                  recommendations.reduce((sum, p) => sum + p.price, 0) /
+                    recommendations.length
+                )}
               </div>
               <div className="stat-label">Avg Price</div>
             </div>
             <div className="stat-item">
               <div className="stat-value">
-                {Math.round(recommendations.reduce((sum, p) => sum + (p.rating || 0), 0) / recommendations.length * 10) / 10}
+                {Math.round(
+                  (recommendations.reduce(
+                    (sum, p) => sum + (p.rating || 0),
+                    0
+                  ) /
+                    recommendations.length) *
+                    10
+                ) / 10}
               </div>
               <div className="stat-label">Avg Rating</div>
             </div>
             <div className="stat-item">
               <div className="stat-value">
-                {recommendations.filter(p => p.originalPrice && p.originalPrice > p.price).length}
+                {
+                  recommendations.filter(
+                    (p) => p.originalPrice && p.originalPrice > p.price
+                  ).length
+                }
               </div>
               <div className="stat-label">On Sale</div>
             </div>
@@ -476,7 +511,7 @@ export default function ProductRecommendations({
                     Show Less
                   </button>
                 )}
-                
+
                 <br />
                 <Link to="/category" className="btn-view-all">
                   <i className="fas fa-th-large me-2"></i>
