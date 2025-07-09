@@ -23,7 +23,7 @@ export default function ProductDetail() {
   const [showImageModal, setShowImageModal] = useState(false);
 
   useEffect(() => {
-    const foundProduct = products.find(p => p.id === id);
+    const foundProduct = products.find((p) => p.id === id);
     if (foundProduct) {
       setProduct(foundProduct);
       addToRecentlyViewed(foundProduct);
@@ -509,10 +509,14 @@ export default function ProductDetail() {
         <nav aria-label="breadcrumb" className="mb-4">
           <ol className="breadcrumb">
             <li className="breadcrumb-item">
-              <a href="/" className="text-decoration-none">Home</a>
+              <a href="/" className="text-decoration-none">
+                Home
+              </a>
             </li>
             <li className="breadcrumb-item">
-              <a href="/category" className="text-decoration-none">Products</a>
+              <a href="/category" className="text-decoration-none">
+                Products
+              </a>
             </li>
             <li className="breadcrumb-item active" aria-current="page">
               {product.name}
@@ -524,7 +528,7 @@ export default function ProductDetail() {
           <div className="row g-0">
             <div className="col-lg-6">
               <div className="product-gallery p-4">
-                <div 
+                <div
                   className="main-image-container"
                   onClick={() => setShowImageModal(true)}
                 >
@@ -542,7 +546,9 @@ export default function ProductDetail() {
                   {product.images.map((image, index) => (
                     <div
                       key={index}
-                      className={`thumbnail ${index === selectedImage ? 'active' : ''}`}
+                      className={`thumbnail ${
+                        index === selectedImage ? "active" : ""
+                      }`}
                       onClick={() => setSelectedImage(index)}
                     >
                       <LazyImage
@@ -558,13 +564,15 @@ export default function ProductDetail() {
             <div className="col-lg-6">
               <div className="product-info">
                 <h1 className="product-title">{product.name}</h1>
-                
+
                 <div className="product-rating">
                   <div className="rating-stars">
-                    {[1, 2, 3, 4, 5].map(star => (
-                      <i 
-                        key={star} 
-                        className={`fas fa-star ${star <= (product.rating || 0) ? 'filled' : ''}`}
+                    {[1, 2, 3, 4, 5].map((star) => (
+                      <i
+                        key={star}
+                        className={`fas fa-star ${
+                          star <= (product.rating || 0) ? "filled" : ""
+                        }`}
                       ></i>
                     ))}
                   </div>
@@ -575,14 +583,22 @@ export default function ProductDetail() {
 
                 <div className="product-price">
                   <span className="current-price">₹{product.price}</span>
-                  {product.originalPrice && product.originalPrice > product.price && (
-                    <>
-                      <span className="original-price">₹{product.originalPrice}</span>
-                      <span className="discount-badge">
-                        {Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)}% OFF
-                      </span>
-                    </>
-                  )}
+                  {product.originalPrice &&
+                    product.originalPrice > product.price && (
+                      <>
+                        <span className="original-price">
+                          ₹{product.originalPrice}
+                        </span>
+                        <span className="discount-badge">
+                          {Math.round(
+                            ((product.originalPrice - product.price) /
+                              product.originalPrice) *
+                              100
+                          )}
+                          % OFF
+                        </span>
+                      </>
+                    )}
                 </div>
 
                 <p className="product-description">{product.description}</p>
@@ -605,11 +621,16 @@ export default function ProductDetail() {
                   <div className="option-group">
                     <label className="option-label">Color:</label>
                     <div className="color-options">
-                      {["default", "black", "white", "brown"].map(color => (
+                      {["default", "black", "white", "brown"].map((color) => (
                         <div
                           key={color}
-                          className={`color-option ${selectedColor === color ? 'active' : ''}`}
-                          style={{ backgroundColor: color === 'default' ? '#6A9304' : color }}
+                          className={`color-option ${
+                            selectedColor === color ? "active" : ""
+                          }`}
+                          style={{
+                            backgroundColor:
+                              color === "default" ? "#6A9304" : color,
+                          }}
                           onClick={() => setSelectedColor(color)}
                           title={color}
                         />
@@ -631,7 +652,11 @@ export default function ProductDetail() {
                         type="number"
                         className="quantity-input"
                         value={quantity}
-                        onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                        onChange={(e) =>
+                          setQuantity(
+                            Math.max(1, parseInt(e.target.value) || 1)
+                          )
+                        }
                         min="1"
                         max="99"
                       />
@@ -648,7 +673,9 @@ export default function ProductDetail() {
 
                 <div className="action-buttons">
                   <button
-                    className={`btn-add-to-cart ${isInCart ? 'btn-secondary' : ''}`}
+                    className={`btn-add-to-cart ${
+                      isInCart ? "btn-secondary" : ""
+                    }`}
                     onClick={handleAddToCart}
                     disabled={isInCart}
                   >
@@ -664,56 +691,74 @@ export default function ProductDetail() {
                       </>
                     )}
                   </button>
-                  
+
                   <button
-                    className={`btn-wishlist ${isInWishlist(product.id) ? 'active' : ''}`}
+                    className={`btn-wishlist ${
+                      isInWishlist(product.id) ? "active" : ""
+                    }`}
                     onClick={handleWishlistToggle}
-                    title={isInWishlist(product.id) ? 'Remove from wishlist' : 'Add to wishlist'}
+                    title={
+                      isInWishlist(product.id)
+                        ? "Remove from wishlist"
+                        : "Add to wishlist"
+                    }
                   >
-                    <i className={`fas ${isInWishlist(product.id) ? 'fa-heart' : 'fa-heart'}`}></i>
+                    <i
+                      className={`fas ${
+                        isInWishlist(product.id) ? "fa-heart" : "fa-heart"
+                      }`}
+                    ></i>
                   </button>
                 </div>
 
                 <div className="product-tabs">
                   <div className="tab-navigation">
                     <button
-                      className={`tab-button ${activeTab === 'description' ? 'active' : ''}`}
-                      onClick={() => setActiveTab('description')}
+                      className={`tab-button ${
+                        activeTab === "description" ? "active" : ""
+                      }`}
+                      onClick={() => setActiveTab("description")}
                     >
                       Description
                     </button>
                     <button
-                      className={`tab-button ${activeTab === 'features' ? 'active' : ''}`}
-                      onClick={() => setActiveTab('features')}
+                      className={`tab-button ${
+                        activeTab === "features" ? "active" : ""
+                      }`}
+                      onClick={() => setActiveTab("features")}
                     >
                       Features
                     </button>
                     <button
-                      className={`tab-button ${activeTab === 'faq' ? 'active' : ''}`}
-                      onClick={() => setActiveTab('faq')}
+                      className={`tab-button ${
+                        activeTab === "faq" ? "active" : ""
+                      }`}
+                      onClick={() => setActiveTab("faq")}
                     >
                       FAQ
                     </button>
                   </div>
 
                   <div className="tab-content">
-                    {activeTab === 'description' && (
+                    {activeTab === "description" && (
                       <div>
                         <p>{product.info || product.description}</p>
                       </div>
                     )}
-                    
-                    {activeTab === 'features' && (
+
+                    {activeTab === "features" && (
                       <div>
                         <ul>
                           {product.features?.map((feature, index) => (
-                            <li key={index} className="mb-2">{feature}</li>
+                            <li key={index} className="mb-2">
+                              {feature}
+                            </li>
                           ))}
                         </ul>
                       </div>
                     )}
-                    
-                    {activeTab === 'faq' && (
+
+                    {activeTab === "faq" && (
                       <div>
                         {product.faqs?.map((faq, index) => (
                           <div key={index} className="faq-item">
@@ -730,7 +775,7 @@ export default function ProductDetail() {
           </div>
         </div>
 
-        <ProductRecommendations 
+        <ProductRecommendations
           currentProductId={product.id}
           category={product.category}
         />

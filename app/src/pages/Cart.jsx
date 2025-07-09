@@ -6,29 +6,36 @@ import LazyImage from "../components/LazyImage";
 
 export default function Cart() {
   const navigate = useNavigate();
-  const { 
-    cart, 
-    removeFromCart, 
-    updateQuantity, 
-    clearCart, 
+  const {
+    cart,
+    removeFromCart,
+    updateQuantity,
+    clearCart,
     getCartSummary,
     applyCoupon,
     removeCoupon,
-    setShippingMethod
+    setShippingMethod,
   } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
-  
+
   const [couponCode, setCouponCode] = useState("");
   const [couponMessage, setCouponMessage] = useState("");
   const [isApplyingCoupon, setIsApplyingCoupon] = useState(false);
-  const [selectedShippingMethod, setSelectedShippingMethod] = useState("standard");
+  const [selectedShippingMethod, setSelectedShippingMethod] =
+    useState("standard");
 
   const cartSummary = getCartSummary();
 
   const shippingMethods = [
     { id: "standard", name: "Standard Delivery", price: 99, days: "3-5 days" },
     { id: "express", name: "Express Delivery", price: 199, days: "1-2 days" },
-    { id: "free", name: "Free Delivery", price: 0, days: "5-7 days", minOrder: 999 }
+    {
+      id: "free",
+      name: "Free Delivery",
+      price: 0,
+      days: "5-7 days",
+      minOrder: 999,
+    },
   ];
 
   const handleQuantityChange = (id, color, newQuantity) => {
@@ -38,7 +45,11 @@ export default function Cart() {
   };
 
   const handleRemoveItem = (id, color) => {
-    if (window.confirm("Are you sure you want to remove this item from your cart?")) {
+    if (
+      window.confirm(
+        "Are you sure you want to remove this item from your cart?"
+      )
+    ) {
       removeFromCart(id, color);
     }
   };
@@ -50,10 +61,10 @@ export default function Cart() {
 
   const handleApplyCoupon = async () => {
     if (!couponCode.trim()) return;
-    
+
     setIsApplyingCoupon(true);
     setCouponMessage("");
-    
+
     try {
       const result = applyCoupon(couponCode.trim());
       if (result.success) {
@@ -76,7 +87,7 @@ export default function Cart() {
 
   const handleShippingMethodChange = (methodId) => {
     setSelectedShippingMethod(methodId);
-    const method = shippingMethods.find(m => m.id === methodId);
+    const method = shippingMethods.find((m) => m.id === methodId);
     if (method) {
       setShippingMethod(method);
     }
@@ -87,7 +98,7 @@ export default function Cart() {
       alert("Your cart is empty!");
       return;
     }
-    
+
     // In a real app, this would redirect to checkout
     alert("Redirecting to checkout...");
     // navigate("/checkout");
@@ -178,7 +189,7 @@ export default function Cart() {
             }
           `}
         </style>
-        
+
         <div className="empty-cart-icon">
           <i className="fas fa-shopping-cart"></i>
         </div>
@@ -640,15 +651,20 @@ export default function Cart() {
               <i className="fas fa-shopping-cart me-3"></i>
               Shopping Cart
             </h1>
-            <p>{cart.items.length} item{cart.items.length !== 1 ? 's' : ''} in your cart</p>
+            <p>
+              {cart.items.length} item{cart.items.length !== 1 ? "s" : ""} in
+              your cart
+            </p>
           </div>
 
           <div className="cart-content">
             <div className="cart-actions">
-              <button 
+              <button
                 className="btn-clear-cart"
                 onClick={() => {
-                  if (window.confirm("Are you sure you want to clear your cart?")) {
+                  if (
+                    window.confirm("Are you sure you want to clear your cart?")
+                  ) {
                     clearCart();
                   }
                 }}
@@ -665,32 +681,42 @@ export default function Cart() {
               {cart.items.map((item, index) => (
                 <div key={`${item.id}-${item.color}`} className="cart-item">
                   <div className="item-image">
-                    <LazyImage
-                      src={item.image}
-                      alt={item.name}
-                    />
+                    <LazyImage src={item.image} alt={item.name} />
                   </div>
-                  
+
                   <div className="item-details">
                     <div>
                       <div className="item-name">{item.name}</div>
                       <div className="item-meta">
                         <span className="item-color">
-                          <div 
-                            className="color-dot" 
-                            style={{ backgroundColor: item.color === 'default' ? '#6A9304' : item.color }}
+                          <div
+                            className="color-dot"
+                            style={{
+                              backgroundColor:
+                                item.color === "default"
+                                  ? "#6A9304"
+                                  : item.color,
+                            }}
                           ></div>
-                          {item.color === 'default' ? 'Default' : item.color}
+                          {item.color === "default" ? "Default" : item.color}
                         </span>
-                        <span>SKU: {item.sku || `${item.id}-${item.color}`}</span>
+                        <span>
+                          SKU: {item.sku || `${item.id}-${item.color}`}
+                        </span>
                       </div>
                     </div>
-                    
+
                     <div className="item-actions">
                       <div className="quantity-controls">
                         <button
                           className="quantity-btn"
-                          onClick={() => handleQuantityChange(item.id, item.color, item.quantity - 1)}
+                          onClick={() =>
+                            handleQuantityChange(
+                              item.id,
+                              item.color,
+                              item.quantity - 1
+                            )
+                          }
                           disabled={item.quantity <= 1}
                         >
                           <i className="fas fa-minus"></i>
@@ -699,19 +725,31 @@ export default function Cart() {
                           type="number"
                           className="quantity-input"
                           value={item.quantity}
-                          onChange={(e) => handleQuantityChange(item.id, item.color, parseInt(e.target.value) || 1)}
+                          onChange={(e) =>
+                            handleQuantityChange(
+                              item.id,
+                              item.color,
+                              parseInt(e.target.value) || 1
+                            )
+                          }
                           min="1"
                           max="99"
                         />
                         <button
                           className="quantity-btn"
-                          onClick={() => handleQuantityChange(item.id, item.color, item.quantity + 1)}
+                          onClick={() =>
+                            handleQuantityChange(
+                              item.id,
+                              item.color,
+                              item.quantity + 1
+                            )
+                          }
                           disabled={item.quantity >= 99}
                         >
                           <i className="fas fa-plus"></i>
                         </button>
                       </div>
-                      
+
                       <div className="action-buttons">
                         <button
                           className="btn-action btn-remove"
@@ -730,7 +768,7 @@ export default function Cart() {
                       </div>
                     </div>
                   </div>
-                  
+
                   <div className="item-price">
                     ₹{item.price * item.quantity}
                   </div>
@@ -740,7 +778,7 @@ export default function Cart() {
 
             <div className="cart-summary">
               <h3 className="summary-title">Order Summary</h3>
-              
+
               <div className="coupon-section">
                 <h5>Have a coupon?</h5>
                 <div className="coupon-input-group">
@@ -750,30 +788,34 @@ export default function Cart() {
                     placeholder="Enter coupon code"
                     value={couponCode}
                     onChange={(e) => setCouponCode(e.target.value)}
-                    onKeyPress={(e) => e.key === 'Enter' && handleApplyCoupon()}
+                    onKeyPress={(e) => e.key === "Enter" && handleApplyCoupon()}
                   />
                   <button
                     className="btn-apply-coupon"
                     onClick={handleApplyCoupon}
                     disabled={isApplyingCoupon || !couponCode.trim()}
                   >
-                    {isApplyingCoupon ? 'Applying...' : 'Apply'}
+                    {isApplyingCoupon ? "Applying..." : "Apply"}
                   </button>
                 </div>
-                
+
                 {couponMessage && (
-                  <div className={`coupon-message ${couponMessage.includes('applied') ? 'success' : 'error'}`}>
+                  <div
+                    className={`coupon-message ${
+                      couponMessage.includes("applied") ? "success" : "error"
+                    }`}
+                  >
                     {couponMessage}
-                    {couponMessage.includes('applied') && (
+                    {couponMessage.includes("applied") && (
                       <button
                         onClick={handleRemoveCoupon}
-                        style={{ 
-                          background: 'none', 
-                          border: 'none', 
-                          color: 'inherit', 
-                          textDecoration: 'underline',
-                          cursor: 'pointer',
-                          marginLeft: '8px'
+                        style={{
+                          background: "none",
+                          border: "none",
+                          color: "inherit",
+                          textDecoration: "underline",
+                          cursor: "pointer",
+                          marginLeft: "8px",
                         }}
                       >
                         Remove
@@ -787,7 +829,12 @@ export default function Cart() {
                 <h5>Shipping Method</h5>
                 <div className="shipping-options">
                   {shippingMethods.map((method) => (
-                    <label key={method.id} className={`shipping-option ${selectedShippingMethod === method.id ? 'selected' : ''}`}>
+                    <label
+                      key={method.id}
+                      className={`shipping-option ${
+                        selectedShippingMethod === method.id ? "selected" : ""
+                      }`}
+                    >
                       <input
                         type="radio"
                         name="shipping"
@@ -799,11 +846,12 @@ export default function Cart() {
                         <div className="shipping-name">{method.name}</div>
                         <div className="shipping-details">
                           {method.days}
-                          {method.minOrder && ` • Min order ₹${method.minOrder}`}
+                          {method.minOrder &&
+                            ` • Min order ₹${method.minOrder}`}
                         </div>
                       </div>
                       <div className="shipping-price">
-                        {method.price === 0 ? 'FREE' : `₹${method.price}`}
+                        {method.price === 0 ? "FREE" : `₹${method.price}`}
                       </div>
                     </label>
                   ))}
@@ -821,12 +869,18 @@ export default function Cart() {
                 </div>
                 <div className="summary-row">
                   <span>Shipping</span>
-                  <span>{cartSummary.shipping === 0 ? 'FREE' : `₹${cartSummary.shipping}`}</span>
+                  <span>
+                    {cartSummary.shipping === 0
+                      ? "FREE"
+                      : `₹${cartSummary.shipping}`}
+                  </span>
                 </div>
                 {cartSummary.discount > 0 && (
                   <div className="summary-row">
                     <span>Discount</span>
-                    <span style={{ color: '#28a745' }}>-₹{cartSummary.discount}</span>
+                    <span style={{ color: "#28a745" }}>
+                      -₹{cartSummary.discount}
+                    </span>
                   </div>
                 )}
                 <div className="summary-row total">
@@ -841,7 +895,10 @@ export default function Cart() {
                   Proceed to Checkout
                 </button>
                 <br />
-                <button className="btn-continue-shopping" onClick={handleContinueShopping}>
+                <button
+                  className="btn-continue-shopping"
+                  onClick={handleContinueShopping}
+                >
                   <i className="fas fa-arrow-left me-2"></i>
                   Continue Shopping
                 </button>
