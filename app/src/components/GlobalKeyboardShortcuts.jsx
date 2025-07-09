@@ -8,7 +8,7 @@ export default function GlobalKeyboardShortcuts() {
   const location = useLocation();
   const { addToCart, getCartCount, clearCart } = useCart();
   const { addToWishlist, getWishlistCount, clearWishlist } = useWishlist();
-  
+
   const [showShortcuts, setShowShortcuts] = useState(false);
   const [lastAction, setLastAction] = useState(null);
   const [showHelp, setShowHelp] = useState(false);
@@ -19,43 +19,43 @@ export default function GlobalKeyboardShortcuts() {
       key: "?",
       description: "Show/Hide Keyboard Shortcuts",
       action: () => setShowShortcuts(!showShortcuts),
-      category: "Navigation"
+      category: "Navigation",
     },
     {
       key: "h",
       description: "Go to Home",
       action: () => navigate("/"),
-      category: "Navigation"
+      category: "Navigation",
     },
     {
       key: "s",
       description: "Go to Search",
       action: () => navigate("/search"),
-      category: "Navigation"
+      category: "Navigation",
     },
     {
       key: "c",
       description: "Go to Cart",
       action: () => navigate("/cart"),
-      category: "Navigation"
+      category: "Navigation",
     },
     {
       key: "w",
       description: "Go to Wishlist",
       action: () => navigate("/wishlist"),
-      category: "Navigation"
+      category: "Navigation",
     },
     {
       key: "p",
       description: "Go to Products",
       action: () => navigate("/products"),
-      category: "Navigation"
+      category: "Navigation",
     },
     {
       key: "a",
       description: "Go to About",
       action: () => navigate("/about"),
-      category: "Navigation"
+      category: "Navigation",
     },
     {
       key: "Escape",
@@ -65,7 +65,7 @@ export default function GlobalKeyboardShortcuts() {
         if (showHelp) setShowHelp(false);
         // Add more close actions as needed
       },
-      category: "Navigation"
+      category: "Navigation",
     },
     {
       key: "Ctrl + /",
@@ -74,7 +74,7 @@ export default function GlobalKeyboardShortcuts() {
         // This would need context from the current product
         setLastAction("Quick Add to Cart");
       },
-      category: "Shopping"
+      category: "Shopping",
     },
     {
       key: "Ctrl + w",
@@ -82,7 +82,7 @@ export default function GlobalKeyboardShortcuts() {
       action: () => {
         setLastAction("Quick Add to Wishlist");
       },
-      category: "Shopping"
+      category: "Shopping",
     },
     {
       key: "Ctrl + c",
@@ -93,7 +93,7 @@ export default function GlobalKeyboardShortcuts() {
           setLastAction("Cart Cleared");
         }
       },
-      category: "Shopping"
+      category: "Shopping",
     },
     {
       key: "Ctrl + W",
@@ -104,7 +104,7 @@ export default function GlobalKeyboardShortcuts() {
           setLastAction("Wishlist Cleared");
         }
       },
-      category: "Shopping"
+      category: "Shopping",
     },
     {
       key: "Ctrl + s",
@@ -112,19 +112,21 @@ export default function GlobalKeyboardShortcuts() {
       action: () => {
         setLastAction("Page Saved");
       },
-      category: "Utility"
+      category: "Utility",
     },
     {
       key: "Ctrl + f",
       description: "Focus search bar",
       action: () => {
-        const searchInput = document.querySelector('input[type="search"], input[placeholder*="search"], input[placeholder*="Search"]');
+        const searchInput = document.querySelector(
+          'input[type="search"], input[placeholder*="search"], input[placeholder*="Search"]'
+        );
         if (searchInput) {
           searchInput.focus();
           setLastAction("Search Focused");
         }
       },
-      category: "Utility"
+      category: "Utility",
     },
     {
       key: "Ctrl + k",
@@ -133,13 +135,13 @@ export default function GlobalKeyboardShortcuts() {
         navigate("/search");
         setLastAction("Quick Search Opened");
       },
-      category: "Utility"
+      category: "Utility",
     },
     {
       key: "Ctrl + h",
       description: "Go to Home",
       action: () => navigate("/"),
-      category: "Utility"
+      category: "Utility",
     },
     {
       key: "Ctrl + b",
@@ -147,7 +149,7 @@ export default function GlobalKeyboardShortcuts() {
       action: () => {
         setLastAction("Sidebar Toggled");
       },
-      category: "Utility"
+      category: "Utility",
     },
     {
       key: "Ctrl + m",
@@ -155,7 +157,7 @@ export default function GlobalKeyboardShortcuts() {
       action: () => {
         setLastAction("Mobile Menu Toggled");
       },
-      category: "Utility"
+      category: "Utility",
     },
     {
       key: "Ctrl + t",
@@ -163,7 +165,7 @@ export default function GlobalKeyboardShortcuts() {
       action: () => {
         setLastAction("Theme Toggled");
       },
-      category: "Utility"
+      category: "Utility",
     },
     {
       key: "Ctrl + r",
@@ -171,7 +173,7 @@ export default function GlobalKeyboardShortcuts() {
       action: () => {
         window.location.reload();
       },
-      category: "System"
+      category: "System",
     },
     {
       key: "Ctrl + Shift + R",
@@ -179,7 +181,7 @@ export default function GlobalKeyboardShortcuts() {
       action: () => {
         window.location.reload(true);
       },
-      category: "System"
+      category: "System",
     },
     {
       key: "Ctrl + 0",
@@ -188,7 +190,7 @@ export default function GlobalKeyboardShortcuts() {
         document.body.style.zoom = "100%";
         setLastAction("Zoom Reset");
       },
-      category: "System"
+      category: "System",
     },
     {
       key: "Ctrl + +",
@@ -198,7 +200,7 @@ export default function GlobalKeyboardShortcuts() {
         document.body.style.zoom = Math.min(currentZoom + 10, 200) + "%";
         setLastAction("Zoomed In");
       },
-      category: "System"
+      category: "System",
     },
     {
       key: "Ctrl + -",
@@ -208,8 +210,8 @@ export default function GlobalKeyboardShortcuts() {
         document.body.style.zoom = Math.max(currentZoom - 10, 50) + "%";
         setLastAction("Zoomed Out");
       },
-      category: "System"
-    }
+      category: "System",
+    },
   ];
 
   // Group shortcuts by category
@@ -221,38 +223,45 @@ export default function GlobalKeyboardShortcuts() {
     return acc;
   }, {});
 
-  const handleKeyDown = useCallback((event) => {
-    // Don't trigger shortcuts when typing in input fields
-    if (event.target.tagName === 'INPUT' || event.target.tagName === 'TEXTAREA' || event.target.contentEditable === 'true') {
-      return;
-    }
-
-    const key = event.key;
-    const ctrl = event.ctrlKey;
-    const shift = event.shiftKey;
-    const alt = event.altKey;
-
-    // Find matching shortcut
-    const shortcut = shortcuts.find(s => {
-      if (s.key.includes('Ctrl +')) {
-        return ctrl && !shift && !alt && s.key.includes(key);
-      } else if (s.key.includes('Ctrl + Shift +')) {
-        return ctrl && shift && !alt && s.key.includes(key);
-      } else if (s.key === key) {
-        return !ctrl && !shift && !alt;
+  const handleKeyDown = useCallback(
+    (event) => {
+      // Don't trigger shortcuts when typing in input fields
+      if (
+        event.target.tagName === "INPUT" ||
+        event.target.tagName === "TEXTAREA" ||
+        event.target.contentEditable === "true"
+      ) {
+        return;
       }
-      return false;
-    });
 
-    if (shortcut) {
-      event.preventDefault();
-      shortcut.action();
-    }
-  }, [shortcuts]);
+      const key = event.key;
+      const ctrl = event.ctrlKey;
+      const shift = event.shiftKey;
+      const alt = event.altKey;
+
+      // Find matching shortcut
+      const shortcut = shortcuts.find((s) => {
+        if (s.key.includes("Ctrl +")) {
+          return ctrl && !shift && !alt && s.key.includes(key);
+        } else if (s.key.includes("Ctrl + Shift +")) {
+          return ctrl && shift && !alt && s.key.includes(key);
+        } else if (s.key === key) {
+          return !ctrl && !shift && !alt;
+        }
+        return false;
+      });
+
+      if (shortcut) {
+        event.preventDefault();
+        shortcut.action();
+      }
+    },
+    [shortcuts]
+  );
 
   useEffect(() => {
-    document.addEventListener('keydown', handleKeyDown);
-    return () => document.removeEventListener('keydown', handleKeyDown);
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
   }, [handleKeyDown]);
 
   // Auto-hide last action after 3 seconds
@@ -266,14 +275,15 @@ export default function GlobalKeyboardShortcuts() {
   // Close shortcuts panel when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (showShortcuts && !event.target.closest('.shortcuts-panel')) {
+      if (showShortcuts && !event.target.closest(".shortcuts-panel")) {
         setShowShortcuts(false);
       }
     };
 
     if (showShortcuts) {
-      document.addEventListener('mousedown', handleClickOutside);
-      return () => document.removeEventListener('mousedown', handleClickOutside);
+      document.addEventListener("mousedown", handleClickOutside);
+      return () =>
+        document.removeEventListener("mousedown", handleClickOutside);
     }
   }, [showShortcuts]);
 
@@ -521,10 +531,13 @@ export default function GlobalKeyboardShortcuts() {
 
       <div className="shortcuts-overlay">
         <div className="shortcuts-panel">
-          <button className="shortcuts-close" onClick={() => setShowShortcuts(false)}>
+          <button
+            className="shortcuts-close"
+            onClick={() => setShowShortcuts(false)}
+          >
             <i className="fas fa-times"></i>
           </button>
-          
+
           <div className="shortcuts-header">
             <h2 className="shortcuts-title">
               <i className="fas fa-keyboard" style={{ color: "#6A9304" }}></i>
@@ -532,38 +545,54 @@ export default function GlobalKeyboardShortcuts() {
               <i className="fas fa-magic" style={{ color: "#8BC34A" }}></i>
             </h2>
             <p className="shortcuts-subtitle">
-              Use these keyboard shortcuts to navigate and interact with The Flora faster
+              Use these keyboard shortcuts to navigate and interact with The
+              Flora faster
             </p>
           </div>
 
           <div className="shortcuts-categories">
-            {Object.entries(shortcutsByCategory).map(([category, categoryShortcuts]) => (
-              <div key={category} className="shortcut-category">
-                <h3 className="category-title">
-                  <i className={`fas fa-${getCategoryIcon(category)}`} style={{ color: "#6A9304" }}></i>
-                  {category}
-                </h3>
-                <div className="shortcut-list">
-                  {categoryShortcuts.map((shortcut, index) => (
-                    <div key={index} className="shortcut-item">
-                      <span className="shortcut-description">{shortcut.description}</span>
-                      <span className={`shortcut-key ${getKeyClass(shortcut.key)}`}>
-                        {formatKeyDisplay(shortcut.key)}
-                      </span>
-                    </div>
-                  ))}
+            {Object.entries(shortcutsByCategory).map(
+              ([category, categoryShortcuts]) => (
+                <div key={category} className="shortcut-category">
+                  <h3 className="category-title">
+                    <i
+                      className={`fas fa-${getCategoryIcon(category)}`}
+                      style={{ color: "#6A9304" }}
+                    ></i>
+                    {category}
+                  </h3>
+                  <div className="shortcut-list">
+                    {categoryShortcuts.map((shortcut, index) => (
+                      <div key={index} className="shortcut-item">
+                        <span className="shortcut-description">
+                          {shortcut.description}
+                        </span>
+                        <span
+                          className={`shortcut-key ${getKeyClass(
+                            shortcut.key
+                          )}`}
+                        >
+                          {formatKeyDisplay(shortcut.key)}
+                        </span>
+                      </div>
+                    ))}
+                  </div>
                 </div>
-              </div>
-            ))}
+              )
+            )}
           </div>
 
           <div className="shortcuts-footer">
             <p>
-              <i className="fas fa-lightbulb me-2" style={{ color: "#ffc107" }}></i>
+              <i
+                className="fas fa-lightbulb me-2"
+                style={{ color: "#ffc107" }}
+              ></i>
               Tip: Press <kbd>?</kbd> anytime to show/hide this panel
             </p>
-            <p style={{ marginTop: '10px', fontSize: '0.8rem' }}>
-              Shortcuts work globally across the website, except when typing in input fields
+            <p style={{ marginTop: "10px", fontSize: "0.8rem" }}>
+              Shortcuts work globally across the website, except when typing in
+              input fields
             </p>
           </div>
         </div>
@@ -576,7 +605,7 @@ export default function GlobalKeyboardShortcuts() {
         </div>
       )}
 
-      <button 
+      <button
         className="shortcuts-trigger"
         onClick={() => setShowShortcuts(true)}
         title="Show Keyboard Shortcuts (?)"
@@ -590,29 +619,34 @@ export default function GlobalKeyboardShortcuts() {
 // Helper functions
 function getCategoryIcon(category) {
   const icons = {
-    'Navigation': 'compass',
-    'Shopping': 'shopping-cart',
-    'Utility': 'tools',
-    'System': 'cog'
+    Navigation: "compass",
+    Shopping: "shopping-cart",
+    Utility: "tools",
+    System: "cog",
   };
-  return icons[category] || 'star';
+  return icons[category] || "star";
 }
 
 function getKeyClass(key) {
-  if (key.includes('Ctrl +')) return 'ctrl';
-  if (key.includes('System') || key.includes('Ctrl + r') || key.includes('Ctrl + Shift')) return 'system';
-  return '';
+  if (key.includes("Ctrl +")) return "ctrl";
+  if (
+    key.includes("System") ||
+    key.includes("Ctrl + r") ||
+    key.includes("Ctrl + Shift")
+  )
+    return "system";
+  return "";
 }
 
 function formatKeyDisplay(key) {
-  if (key.includes('Ctrl +')) {
-    return key.replace('Ctrl +', '⌘+');
+  if (key.includes("Ctrl +")) {
+    return key.replace("Ctrl +", "⌘+");
   }
-  if (key.includes('Shift +')) {
-    return key.replace('Shift +', '⇧+');
+  if (key.includes("Shift +")) {
+    return key.replace("Shift +", "⇧+");
   }
-  if (key.includes('Alt +')) {
-    return key.replace('Alt +', '⌥+');
+  if (key.includes("Alt +")) {
+    return key.replace("Alt +", "⌥+");
   }
   return key;
 }

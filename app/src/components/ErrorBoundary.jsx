@@ -9,7 +9,7 @@ class ErrorBoundary extends React.Component {
       errorInfo: null,
       errorId: null,
       showDetails: false,
-      retryCount: 0
+      retryCount: 0,
     };
   }
 
@@ -19,17 +19,19 @@ class ErrorBoundary extends React.Component {
 
   componentDidCatch(error, errorInfo) {
     // Generate unique error ID for tracking
-    const errorId = `error_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
-    
+    const errorId = `error_${Date.now()}_${Math.random()
+      .toString(36)
+      .substr(2, 9)}`;
+
     this.setState({
       error,
       errorInfo,
-      errorId
+      errorId,
     });
 
     // Log error to console in development
-    if (process.env.NODE_ENV === 'development') {
-      console.error('Error Boundary caught an error:', error, errorInfo);
+    if (process.env.NODE_ENV === "development") {
+      console.error("Error Boundary caught an error:", error, errorInfo);
     }
 
     // In production, you would send this to an error reporting service
@@ -52,19 +54,19 @@ class ErrorBoundary extends React.Component {
           page: window.location.pathname,
           referrer: document.referrer,
           viewport: `${window.innerWidth}x${window.innerHeight}`,
-          timeOnPage: this.getTimeOnPage()
-        }
+          timeOnPage: this.getTimeOnPage(),
+        },
       };
 
       // Store in localStorage for now (in real app, send to API)
-      const errors = JSON.parse(localStorage.getItem('flora_errors') || '[]');
+      const errors = JSON.parse(localStorage.getItem("flora_errors") || "[]");
       errors.push(errorData);
-      localStorage.setItem('flora_errors', JSON.stringify(errors.slice(-50))); // Keep last 50 errors
+      localStorage.setItem("flora_errors", JSON.stringify(errors.slice(-50))); // Keep last 50 errors
 
       // Simulate API call
-      console.log('Error logged to service:', errorId);
+      console.log("Error logged to service:", errorId);
     } catch (logError) {
-      console.error('Failed to log error:', logError);
+      console.error("Failed to log error:", logError);
     }
   };
 
@@ -80,12 +82,12 @@ class ErrorBoundary extends React.Component {
   }
 
   handleRetry = () => {
-    this.setState(prevState => ({
+    this.setState((prevState) => ({
       hasError: false,
       error: null,
       errorInfo: null,
       errorId: null,
-      retryCount: prevState.retryCount + 1
+      retryCount: prevState.retryCount + 1,
     }));
   };
 
@@ -94,18 +96,18 @@ class ErrorBoundary extends React.Component {
   };
 
   handleGoHome = () => {
-    window.location.href = '/';
+    window.location.href = "/";
   };
 
   handleToggleDetails = () => {
-    this.setState(prevState => ({
-      showDetails: !prevState.showDetails
+    this.setState((prevState) => ({
+      showDetails: !prevState.showDetails,
     }));
   };
 
   handleReportError = () => {
     const { error, errorInfo, errorId } = this.state;
-    
+
     // Create error report
     const report = `
 Error Report - ID: ${errorId}
@@ -125,18 +127,21 @@ Please describe what you were doing when this error occurred:
     `;
 
     // Copy to clipboard
-    navigator.clipboard.writeText(report).then(() => {
-      alert('Error report copied to clipboard. Please send this to support.');
-    }).catch(() => {
-      // Fallback for older browsers
-      const textArea = document.createElement('textarea');
-      textArea.value = report;
-      document.body.appendChild(textArea);
-      textArea.select();
-      document.execCommand('copy');
-      document.body.removeChild(textArea);
-      alert('Error report copied to clipboard. Please send this to support.');
-    });
+    navigator.clipboard
+      .writeText(report)
+      .then(() => {
+        alert("Error report copied to clipboard. Please send this to support.");
+      })
+      .catch(() => {
+        // Fallback for older browsers
+        const textArea = document.createElement("textarea");
+        textArea.value = report;
+        document.body.appendChild(textArea);
+        textArea.select();
+        document.execCommand("copy");
+        document.body.removeChild(textArea);
+        alert("Error report copied to clipboard. Please send this to support.");
+      });
   };
 
   render() {
@@ -370,12 +375,13 @@ Please describe what you were doing when this error occurred:
             <div className="error-icon">
               <i className="fas fa-exclamation-triangle"></i>
             </div>
-            
+
             <h1 className="error-title">Oops! Something went wrong</h1>
-            
+
             <p className="error-message">
-              We're sorry, but something unexpected happened. Don't worry, your data is safe 
-              and this error has been logged for our team to investigate.
+              We're sorry, but something unexpected happened. Don't worry, your
+              data is safe and this error has been logged for our team to
+              investigate.
             </p>
 
             {errorId && (
@@ -392,31 +398,25 @@ Please describe what you were doing when this error occurred:
             )}
 
             <div className="error-actions">
-              <button 
-                className="error-btn primary"
-                onClick={this.handleRetry}
-              >
+              <button className="error-btn primary" onClick={this.handleRetry}>
                 <i className="fas fa-redo"></i>
                 Try Again
               </button>
-              
-              <button 
+
+              <button
                 className="error-btn secondary"
                 onClick={this.handleReload}
               >
                 <i className="fas fa-sync-alt"></i>
                 Reload Page
               </button>
-              
-              <button 
-                className="error-btn outline"
-                onClick={this.handleGoHome}
-              >
+
+              <button className="error-btn outline" onClick={this.handleGoHome}>
                 <i className="fas fa-home"></i>
                 Go Home
               </button>
-              
-              <button 
+
+              <button
                 className="error-btn danger"
                 onClick={this.handleReportError}
               >
@@ -425,13 +425,13 @@ Please describe what you were doing when this error occurred:
               </button>
             </div>
 
-            <button 
+            <button
               className="error-btn outline"
               onClick={this.handleToggleDetails}
-              style={{ marginTop: '20px' }}
+              style={{ marginTop: "20px" }}
             >
-              <i className={`fas fa-${showDetails ? 'eye-slash' : 'eye'}`}></i>
-              {showDetails ? 'Hide' : 'Show'} Technical Details
+              <i className={`fas fa-${showDetails ? "eye-slash" : "eye"}`}></i>
+              {showDetails ? "Hide" : "Show"} Technical Details
             </button>
 
             {showDetails && (
@@ -440,18 +440,20 @@ Please describe what you were doing when this error occurred:
                   <i className="fas fa-code me-2"></i>
                   Technical Details
                 </h4>
-                
+
                 {error && (
-                  <div style={{ marginBottom: '20px' }}>
+                  <div style={{ marginBottom: "20px" }}>
                     <strong>Error Message:</strong>
-                    <div style={{ 
-                      background: '#f8d7da', 
-                      color: '#721c24', 
-                      padding: '10px', 
-                      borderRadius: '6px', 
-                      marginTop: '5px',
-                      fontFamily: 'monospace'
-                    }}>
+                    <div
+                      style={{
+                        background: "#f8d7da",
+                        color: "#721c24",
+                        padding: "10px",
+                        borderRadius: "6px",
+                        marginTop: "5px",
+                        fontFamily: "monospace",
+                      }}
+                    >
                       {error.message}
                     </div>
                   </div>
@@ -467,11 +469,9 @@ Please describe what you were doing when this error occurred:
                 )}
 
                 {error && error.stack && (
-                  <div style={{ marginTop: '20px' }}>
+                  <div style={{ marginTop: "20px" }}>
                     <strong>Error Stack:</strong>
-                    <div className="error-stack">
-                      {error.stack}
-                    </div>
+                    <div className="error-stack">{error.stack}</div>
                   </div>
                 )}
               </div>
