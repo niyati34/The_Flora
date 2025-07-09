@@ -80,7 +80,10 @@ export default function App() {
                                   element={<ProductDetail />}
                                 />
                                 <Route path="/wallet" element={<Wallet />} />
-                                <Route path="/customer-support" element={<CustomerSupportPage />} />
+                                <Route
+                                  path="/customer-support"
+                                  element={<CustomerSupportPage />}
+                                />
                               </Routes>
                             </ErrorBoundary>
                           </main>
