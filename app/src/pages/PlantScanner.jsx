@@ -8,7 +8,7 @@ export default function PlantScanner() {
   const navigate = useNavigate();
   const { addToCart } = useCart();
   const { addToWishlist, removeFromWishlist, isInWishlist } = useWishlist();
-  
+
   const [isScanning, setIsScanning] = useState(false);
   const [scanResult, setScanResult] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
@@ -17,7 +17,7 @@ export default function PlantScanner() {
   const [selectedImage, setSelectedImage] = useState(null);
   const [showCamera, setShowCamera] = useState(false);
   const [showUpload, setShowUpload] = useState(false);
-  
+
   const videoRef = useRef(null);
   const canvasRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -36,24 +36,25 @@ export default function PlantScanner() {
       water: "moderate",
       humidity: "high",
       temperature: "18-27°C",
-      description: "A popular tropical plant known for its distinctive split leaves. Perfect for adding a jungle vibe to any room.",
+      description:
+        "A popular tropical plant known for its distinctive split leaves. Perfect for adding a jungle vibe to any room.",
       careTips: [
         "Water when top 2-3 inches of soil is dry",
         "Provide bright, indirect light",
         "Mist leaves regularly for humidity",
-        "Fertilize monthly during growing season"
+        "Fertilize monthly during growing season",
       ],
       problems: [
         "Yellow leaves: Usually overwatering",
         "Brown tips: Low humidity",
-        "No splits: Insufficient light"
+        "No splits: Insufficient light",
       ],
       image: "/plant1.gif",
       price: "₹1299",
       originalPrice: "₹1599",
       rating: 4.8,
       inStock: true,
-      onSale: true
+      onSale: true,
     },
     {
       id: 2,
@@ -66,24 +67,25 @@ export default function PlantScanner() {
       water: "low",
       humidity: "low",
       temperature: "15-30°C",
-      description: "An extremely hardy plant that's perfect for beginners. Known for its air-purifying qualities and low maintenance needs.",
+      description:
+        "An extremely hardy plant that's perfect for beginners. Known for its air-purifying qualities and low maintenance needs.",
       careTips: [
         "Water sparingly - let soil dry completely",
         "Tolerates low light conditions",
         "No need for frequent repotting",
-        "Drought-tolerant and forgiving"
+        "Drought-tolerant and forgiving",
       ],
       problems: [
         "Root rot: Overwatering",
         "Soft leaves: Too much water",
-        "Slow growth: Normal in low light"
+        "Slow growth: Normal in low light",
       ],
       image: "/plant1.gif",
       price: "₹899",
       originalPrice: "₹899",
       rating: 4.6,
       inStock: true,
-      onSale: false
+      onSale: false,
     },
     {
       id: 3,
@@ -96,57 +98,60 @@ export default function PlantScanner() {
       water: "high",
       humidity: "high",
       temperature: "18-24°C",
-      description: "A beautiful flowering plant that's excellent for air purification. Known for its elegant white flowers and lush green leaves.",
+      description:
+        "A beautiful flowering plant that's excellent for air purification. Known for its elegant white flowers and lush green leaves.",
       careTips: [
         "Keep soil consistently moist",
         "Provide bright, indirect light",
         "High humidity preferred",
-        "Remove spent flowers regularly"
+        "Remove spent flowers regularly",
       ],
       problems: [
         "Drooping leaves: Needs water",
         "No flowers: Insufficient light",
-        "Brown tips: Low humidity or over-fertilizing"
+        "Brown tips: Low humidity or over-fertilizing",
       ],
       image: "/plant1.gif",
       price: "₹699",
       originalPrice: "₹899",
       rating: 4.7,
       inStock: true,
-      onSale: true
-    }
+      onSale: true,
+    },
   ];
 
   const requestCameraPermission = useCallback(async () => {
     try {
-      const stream = await navigator.mediaDevices.getUserMedia({ 
-        video: { 
-          facingMode: 'environment',
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: "environment",
           width: { ideal: 1280 },
-          height: { ideal: 720 }
-        } 
+          height: { ideal: 720 },
+        },
       });
-      
-      setCameraPermission('granted');
+
+      setCameraPermission("granted");
       streamRef.current = stream;
-      
+
       if (videoRef.current) {
         videoRef.current.srcObject = stream;
         videoRef.current.play();
       }
-      
+
       setShowCamera(true);
       setShowUpload(false);
     } catch (err) {
-      console.error('Camera permission denied:', err);
-      setCameraPermission('denied');
-      setError('Camera access is required for plant scanning. Please enable camera permissions.');
+      console.error("Camera permission denied:", err);
+      setCameraPermission("denied");
+      setError(
+        "Camera access is required for plant scanning. Please enable camera permissions."
+      );
     }
   }, []);
 
   const stopCamera = useCallback(() => {
     if (streamRef.current) {
-      streamRef.current.getTracks().forEach(track => track.stop());
+      streamRef.current.getTracks().forEach((track) => track.stop());
       streamRef.current = null;
     }
     setShowCamera(false);
@@ -155,26 +160,30 @@ export default function PlantScanner() {
 
   const captureImage = useCallback(() => {
     if (videoRef.current && canvasRef.current) {
-      const context = canvasRef.current.getContext('2d');
+      const context = canvasRef.current.getContext("2d");
       canvasRef.current.width = videoRef.current.videoWidth;
       canvasRef.current.height = videoRef.current.videoHeight;
-      
+
       context.drawImage(videoRef.current, 0, 0);
-      
-      canvasRef.current.toBlob((blob) => {
-        if (blob) {
-          const imageUrl = URL.createObjectURL(blob);
-          setSelectedImage(imageUrl);
-          stopCamera();
-          scanPlant(imageUrl);
-        }
-      }, 'image/jpeg', 0.8);
+
+      canvasRef.current.toBlob(
+        (blob) => {
+          if (blob) {
+            const imageUrl = URL.createObjectURL(blob);
+            setSelectedImage(imageUrl);
+            stopCamera();
+            scanPlant(imageUrl);
+          }
+        },
+        "image/jpeg",
+        0.8
+      );
     }
   }, [stopCamera]);
 
   const handleFileUpload = useCallback((event) => {
     const file = event.target.files[0];
-    if (file && file.type.startsWith('image/')) {
+    if (file && file.type.startsWith("image/")) {
       const imageUrl = URL.createObjectURL(file);
       setSelectedImage(imageUrl);
       setShowUpload(false);
@@ -185,18 +194,19 @@ export default function PlantScanner() {
   const scanPlant = useCallback(async (imageUrl) => {
     setIsLoading(true);
     setError(null);
-    
+
     // Simulate API call delay
     setTimeout(() => {
       // Mock plant recognition - in real app, this would send image to plant recognition API
-      const randomPlant = plantDatabase[Math.floor(Math.random() * plantDatabase.length)];
-      
+      const randomPlant =
+        plantDatabase[Math.floor(Math.random() * plantDatabase.length)];
+
       setScanResult({
         plant: randomPlant,
         confidence: Math.random() * 0.3 + 0.7, // 70-100% confidence
-        scanTime: new Date().toISOString()
+        scanTime: new Date().toISOString(),
       });
-      
+
       setIsLoading(false);
     }, 2000);
   }, []);
@@ -706,45 +716,45 @@ export default function PlantScanner() {
           <i className="fas fa-leaf" style={{ color: "#8BC34A" }}></i>
         </h1>
         <p className="scanner-subtitle">
-          Identify plants instantly with our AI-powered scanner. Get detailed care instructions, 
-          care tips, and add plants to your collection with just a photo!
+          Identify plants instantly with our AI-powered scanner. Get detailed
+          care instructions, care tips, and add plants to your collection with
+          just a photo!
         </p>
       </div>
 
       {!scanResult && !isLoading && !error && (
         <div className="scanner-modes">
-          <div className={`scanner-mode ${showCamera ? 'active' : ''}`}>
+          <div className={`scanner-mode ${showCamera ? "active" : ""}`}>
             <div className="mode-icon">
               <i className="fas fa-camera"></i>
             </div>
             <h3 className="mode-title">Camera Scan</h3>
             <p className="mode-description">
-              Use your device's camera to scan plants in real-time. Perfect for identifying 
-              plants while you're out exploring or shopping.
+              Use your device's camera to scan plants in real-time. Perfect for
+              identifying plants while you're out exploring or shopping.
             </p>
-            <button 
+            <button
               className="mode-button"
               onClick={requestCameraPermission}
-              disabled={cameraPermission === 'denied'}
+              disabled={cameraPermission === "denied"}
             >
               <i className="fas fa-camera me-2"></i>
-              {cameraPermission === 'denied' ? 'Camera Blocked' : 'Start Camera'}
+              {cameraPermission === "denied"
+                ? "Camera Blocked"
+                : "Start Camera"}
             </button>
           </div>
 
-          <div className={`scanner-mode ${showUpload ? 'active' : ''}`}>
+          <div className={`scanner-mode ${showUpload ? "active" : ""}`}>
             <div className="mode-icon">
               <i className="fas fa-upload"></i>
             </div>
             <h3 className="mode-title">Upload Image</h3>
             <p className="mode-description">
-              Upload a photo from your gallery to identify plants. Great for photos you've 
-              already taken or images from the internet.
+              Upload a photo from your gallery to identify plants. Great for
+              photos you've already taken or images from the internet.
             </p>
-            <button 
-              className="mode-button"
-              onClick={openUploadDialog}
-            >
+            <button className="mode-button" onClick={openUploadDialog}>
               <i className="fas fa-upload me-2"></i>
               Choose Image
             </button>
@@ -788,7 +798,7 @@ export default function PlantScanner() {
             <i className="fas fa-upload me-2" style={{ color: "#6A9304" }}></i>
             Upload Image
           </h3>
-          <div 
+          <div
             className="upload-area"
             onClick={() => fileInputRef.current?.click()}
           >
@@ -796,9 +806,7 @@ export default function PlantScanner() {
               <i className="fas fa-cloud-upload-alt"></i>
             </div>
             <div className="upload-text">Click to upload an image</div>
-            <div className="upload-hint">
-              Supports JPG, PNG, GIF up to 10MB
-            </div>
+            <div className="upload-hint">Supports JPG, PNG, GIF up to 10MB</div>
           </div>
           <input
             ref={fileInputRef}
@@ -807,7 +815,7 @@ export default function PlantScanner() {
             onChange={handleFileUpload}
             className="hidden-input"
           />
-          <button 
+          <button
             className="camera-btn secondary"
             onClick={() => setShowUpload(false)}
           >
@@ -832,7 +840,7 @@ export default function PlantScanner() {
           </div>
           <h3>Scanning Error</h3>
           <p>{error}</p>
-          <button 
+          <button
             className="action-btn secondary"
             onClick={() => setError(null)}
           >
@@ -853,7 +861,9 @@ export default function PlantScanner() {
             />
             <div className="result-info">
               <h2 className="result-name">{scanResult.plant.name}</h2>
-              <p className="result-scientific">{scanResult.plant.scientificName}</p>
+              <p className="result-scientific">
+                {scanResult.plant.scientificName}
+              </p>
               <div className="result-confidence">
                 {Math.round(scanResult.confidence * 100)}% Confidence
               </div>
@@ -863,13 +873,23 @@ export default function PlantScanner() {
           <div className="result-details">
             <div className="detail-section">
               <h4 className="detail-title">
-                <i className="fas fa-info-circle" style={{ color: "#6A9304" }}></i>
+                <i
+                  className="fas fa-info-circle"
+                  style={{ color: "#6A9304" }}
+                ></i>
                 Plant Information
               </h4>
               <div className="detail-content">
-                <p><strong>Category:</strong> {scanResult.plant.category}</p>
-                <p><strong>Care Level:</strong> {scanResult.plant.careLevel}</p>
-                <p><strong>Common Names:</strong> {scanResult.plant.commonNames.join(", ")}</p>
+                <p>
+                  <strong>Category:</strong> {scanResult.plant.category}
+                </p>
+                <p>
+                  <strong>Care Level:</strong> {scanResult.plant.careLevel}
+                </p>
+                <p>
+                  <strong>Common Names:</strong>{" "}
+                  {scanResult.plant.commonNames.join(", ")}
+                </p>
                 <p>{scanResult.plant.description}</p>
               </div>
             </div>
@@ -880,10 +900,18 @@ export default function PlantScanner() {
                 Care Requirements
               </h4>
               <div className="detail-content">
-                <p><strong>Light:</strong> {scanResult.plant.light}</p>
-                <p><strong>Water:</strong> {scanResult.plant.water}</p>
-                <p><strong>Humidity:</strong> {scanResult.plant.humidity}</p>
-                <p><strong>Temperature:</strong> {scanResult.plant.temperature}</p>
+                <p>
+                  <strong>Light:</strong> {scanResult.plant.light}
+                </p>
+                <p>
+                  <strong>Water:</strong> {scanResult.plant.water}
+                </p>
+                <p>
+                  <strong>Humidity:</strong> {scanResult.plant.humidity}
+                </p>
+                <p>
+                  <strong>Temperature:</strong> {scanResult.plant.temperature}
+                </p>
               </div>
             </div>
           </div>
@@ -901,34 +929,41 @@ export default function PlantScanner() {
           </div>
 
           <div className="result-actions">
-            <button 
+            <button
               className="action-btn primary"
               onClick={() => handleAddToCart(scanResult.plant)}
             >
               <i className="fas fa-shopping-cart"></i>
               Add to Cart - {scanResult.plant.price}
             </button>
-            
-            <button 
-              className={`action-btn ${isInWishlist(scanResult.plant.id) ? 'danger' : 'success'}`}
+
+            <button
+              className={`action-btn ${
+                isInWishlist(scanResult.plant.id) ? "danger" : "success"
+              }`}
               onClick={() => handleWishlistToggle(scanResult.plant)}
             >
-              <i className={`fas ${isInWishlist(scanResult.plant.id) ? 'fa-heart-broken' : 'fa-heart'}`}></i>
-              {isInWishlist(scanResult.plant.id) ? 'Remove from Wishlist' : 'Add to Wishlist'}
+              <i
+                className={`fas ${
+                  isInWishlist(scanResult.plant.id)
+                    ? "fa-heart-broken"
+                    : "fa-heart"
+                }`}
+              ></i>
+              {isInWishlist(scanResult.plant.id)
+                ? "Remove from Wishlist"
+                : "Add to Wishlist"}
             </button>
-            
-            <button 
+
+            <button
               className="action-btn secondary"
               onClick={() => navigate(`/product/${scanResult.plant.id}`)}
             >
               <i className="fas fa-eye"></i>
               View Full Details
             </button>
-            
-            <button 
-              className="action-btn secondary"
-              onClick={resetScanner}
-            >
+
+            <button className="action-btn secondary" onClick={resetScanner}>
               <i className="fas fa-redo"></i>
               Scan Another Plant
             </button>
