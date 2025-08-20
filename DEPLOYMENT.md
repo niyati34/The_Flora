@@ -3,6 +3,7 @@
 ## Quick Vercel Deployment
 
 ### Option 1: Vercel CLI (Recommended)
+
 ```bash
 # Install Vercel CLI globally
 npm install -g vercel
@@ -18,6 +19,7 @@ vercel --prod
 ```
 
 ### Option 2: GitHub Integration
+
 1. Push your code to GitHub
 2. Go to [vercel.com](https://vercel.com)
 3. Click "New Project"
@@ -44,6 +46,7 @@ No environment variables are required for the current implementation.
 ## Post-Deployment
 
 After deployment:
+
 1. Test all routes work correctly
 2. Verify images load properly
 3. Test plant scanner functionality
@@ -58,6 +61,7 @@ After deployment:
 ## Performance
 
 The app includes:
+
 - Code splitting for vendor and router bundles
 - Lazy image loading
 - Minified production builds
